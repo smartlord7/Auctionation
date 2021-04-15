@@ -45,7 +45,6 @@ CREATE TABLE category (
 
 CREATE TABLE auction (
 	auctionid		 BIGINT,
-	hostid		 BIGINT,
 	auctionname	 VARCHAR(128) NOT NULL,
 	description	 VARCHAR(1024),
 	currentbidvaue	 FLOAT(32) NOT NULL,
@@ -56,6 +55,7 @@ CREATE TABLE auction (
 	endtimestamp	 TIMESTAMP NOT NULL,
 	createtimestamp	 TIMESTAMP NOT NULL,
 	deletetimestamp	 TIMESTAMP,
+	user_userid	 BIGINT NOT NULL,
 	item_itemid	 BIGINT NOT NULL,
 	PRIMARY KEY(auctionid)
 );
@@ -81,6 +81,17 @@ CREATE TABLE comment (
 	PRIMARY KEY(commentid)
 );
 
+CREATE TABLE notification (
+	notificationid	 BIGINT,
+	notificationtype SMALLINT NOT NULL,
+	notificationname VARCHAR(128) NOT NULL,
+	description	 VARCHAR(1024),
+	createtimestamp	 TIMESTAMP NOT NULL,
+	deletetimestamp	 TIMESTAMP,
+	user_userid	 BIGINT NOT NULL,
+	PRIMARY KEY(notificationid)
+);
+
 CREATE TABLE user_auction (
 	user_userid	 BIGINT,
 	auction_auctionid BIGINT,
@@ -95,11 +106,13 @@ CREATE TABLE item_category (
 
 ALTER TABLE user ADD CONSTRAINT user_fk1 FOREIGN KEY (role_roleid) REFERENCES role(roleid);
 ALTER TABLE item ADD CONSTRAINT item_fk1 FOREIGN KEY (user_userid) REFERENCES user(userid);
-ALTER TABLE auction ADD CONSTRAINT auction_fk1 FOREIGN KEY (item_itemid) REFERENCES item(itemid);
+ALTER TABLE auction ADD CONSTRAINT auction_fk1 FOREIGN KEY (user_userid) REFERENCES user(userid);
+ALTER TABLE auction ADD CONSTRAINT auction_fk2 FOREIGN KEY (item_itemid) REFERENCES item(itemid);
 ALTER TABLE bid ADD CONSTRAINT bid_fk1 FOREIGN KEY (auction_auctionid) REFERENCES auction(auctionid);
 ALTER TABLE bid ADD CONSTRAINT bid_fk2 FOREIGN KEY (user_userid) REFERENCES user(userid);
 ALTER TABLE comment ADD CONSTRAINT comment_fk1 FOREIGN KEY (user_userid) REFERENCES user(userid);
 ALTER TABLE comment ADD CONSTRAINT comment_fk2 FOREIGN KEY (auction_auctionid) REFERENCES auction(auctionid);
+ALTER TABLE notification ADD CONSTRAINT notification_fk1 FOREIGN KEY (user_userid) REFERENCES user(userid);
 ALTER TABLE user_auction ADD CONSTRAINT user_auction_fk1 FOREIGN KEY (user_userid) REFERENCES user(userid);
 ALTER TABLE user_auction ADD CONSTRAINT user_auction_fk2 FOREIGN KEY (auction_auctionid) REFERENCES auction(auctionid);
 ALTER TABLE item_category ADD CONSTRAINT item_category_fk1 FOREIGN KEY (item_itemid) REFERENCES item(itemid);
