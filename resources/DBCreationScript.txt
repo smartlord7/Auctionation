@@ -9,9 +9,10 @@ CREATE TABLE user (
 	birthdate	 DATE NOT NULL,
 	wallet		 FLOAT(32) NOT NULL DEFAULT 0,
 	passwordhash	 VARCHAR(512) UNIQUE NOT NULL,
-	createtimestamp TIMESTAMP NOT NULL,
-	deletetimestamp TIMESTAMP,
 	bantimestamp	 TIMESTAMP,
+	createtimestamp TIMESTAMP NOT NULL,
+	updatetimestamp TIMESTAMP NOT NULL,
+	deletetimestamp TIMESTAMP,
 	role_roleid	 BIGINT NOT NULL,
 	PRIMARY KEY(userid)
 );
@@ -31,6 +32,7 @@ CREATE TABLE item (
 	quantity	 SMALLINT NOT NULL DEFAULT 1,
 	origin		 VARCHAR(128) NOT NULL,
 	createtimestamp TIMESTAMP NOT NULL,
+	updatetimestamp TIMESTAMP NOT NULL,
 	deletetimestamp TIMESTAMP,
 	user_userid	 BIGINT NOT NULL,
 	PRIMARY KEY(itemid)
@@ -38,7 +40,7 @@ CREATE TABLE item (
 
 CREATE TABLE category (
 	categoryid	 BIGINT,
-	categoryname VARCHAR(128),
+	categoryname VARCHAR(128) UNIQUE NOT NULL,
 	description	 VARCHAR(1024),
 	PRIMARY KEY(categoryid)
 );
@@ -54,6 +56,7 @@ CREATE TABLE auction (
 	expirationtimestamp TIMESTAMP NOT NULL,
 	endtimestamp	 TIMESTAMP NOT NULL,
 	createtimestamp	 TIMESTAMP NOT NULL,
+	updatetimestamp	 TIMESTAMP NOT NULL,
 	deletetimestamp	 TIMESTAMP,
 	user_userid	 BIGINT NOT NULL,
 	item_itemid	 BIGINT NOT NULL,
@@ -62,10 +65,9 @@ CREATE TABLE auction (
 
 CREATE TABLE bid (
 	bidid		 BIGINT,
-	description	 BOOL,
+	description	 VARCHAR(1024),
 	amount		 FLOAT(32) NOT NULL,
 	createtimestamp	 TIMESTAMP NOT NULL,
-	deletetimestamp	 TIMESTAMP,
 	auction_auctionid BIGINT NOT NULL,
 	user_userid	 BIGINT NOT NULL,
 	PRIMARY KEY(bidid)
@@ -75,6 +77,7 @@ CREATE TABLE comment (
 	commentid	 BIGINT,
 	text		 VARCHAR(1024) NOT NULL,
 	createtimestamp	 TIMESTAMP NOT NULL,
+	updatetimestamp	 TIMESTAMP NOT NULL,
 	deletetimestamp	 TIMESTAMP,
 	user_userid	 BIGINT NOT NULL,
 	auction_auctionid BIGINT NOT NULL,
@@ -85,11 +88,22 @@ CREATE TABLE notification (
 	notificationid	 BIGINT,
 	notificationtype SMALLINT NOT NULL,
 	notificationname VARCHAR(128) NOT NULL,
+	seen		 BOOL NOT NULL DEFAULT 0,
 	description	 VARCHAR(1024),
 	createtimestamp	 TIMESTAMP NOT NULL,
 	deletetimestamp	 TIMESTAMP,
 	user_userid	 BIGINT NOT NULL,
 	PRIMARY KEY(notificationid)
+);
+
+CREATE TABLE auctionedithistory (
+	auctionedithistoryid BIGINT,
+	version		 SMALLINT DEFAULT 0,
+	auctionname		 VARCHAR(128) NOT NULL,
+	description		 VARCHAR(1024),
+	edittimestamp	 TIMESTAMP NOT NULL,
+	auction_auctionid	 BIGINT NOT NULL,
+	PRIMARY KEY(auctionedithistoryid)
 );
 
 CREATE TABLE user_auction (
@@ -113,6 +127,7 @@ ALTER TABLE bid ADD CONSTRAINT bid_fk2 FOREIGN KEY (user_userid) REFERENCES user
 ALTER TABLE comment ADD CONSTRAINT comment_fk1 FOREIGN KEY (user_userid) REFERENCES user(userid);
 ALTER TABLE comment ADD CONSTRAINT comment_fk2 FOREIGN KEY (auction_auctionid) REFERENCES auction(auctionid);
 ALTER TABLE notification ADD CONSTRAINT notification_fk1 FOREIGN KEY (user_userid) REFERENCES user(userid);
+ALTER TABLE auctionedithistory ADD CONSTRAINT auctionedithistory_fk1 FOREIGN KEY (auction_auctionid) REFERENCES auction(auctionid);
 ALTER TABLE user_auction ADD CONSTRAINT user_auction_fk1 FOREIGN KEY (user_userid) REFERENCES user(userid);
 ALTER TABLE user_auction ADD CONSTRAINT user_auction_fk2 FOREIGN KEY (auction_auctionid) REFERENCES auction(auctionid);
 ALTER TABLE item_category ADD CONSTRAINT item_category_fk1 FOREIGN KEY (item_itemid) REFERENCES item(itemid);
