@@ -118,25 +118,19 @@ public class DatabaseConnectionConfig implements Serializable{
         return false;
     }
 
-    public boolean uploadBinConfigs(String filePath) {
+    public void writeBinConfigs(String filePath) {
         File file = new File(filePath + ".dat");
-        DatabaseConnectionConfig configs = new DatabaseConnectionConfig();
 
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
             ObjectOutputStream streamWriter = new ObjectOutputStream(outputStream);
 
-            configs.setJDBC_USER(this.getJDBC_USER());
-            configs.setJDBC_PASS(this.getJDBC_PASS());
-            configs.setJDBC_PSQL_CONN_LOCAL(this.getJDBC_PSQL_CONN_LOCAL());
-
-            streamWriter.writeObject(configs);
+            streamWriter.writeObject(this);
 
             streamWriter.close();
 
-            return true;
         } catch (IOException exception) {
-            return false;
+            System.out.println("Error saving database connection settings.");
         }
     }
 
