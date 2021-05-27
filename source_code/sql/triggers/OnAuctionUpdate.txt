@@ -1,0 +1,28 @@
+CREATE FUNCTION updateAuctionEditHistory() RETURNS TRIGGER
+    language plpgsql
+AS
+$$
+DECLARE
+    latestAuctionVersion INTEGER;
+BEGIN
+
+    SELECT COALESCE(MAX(adh.version), 0)
+    INTO latestAuctionVersion
+    FROM AuctionEditHistory adh
+    JOIN Auction ON OLD.auctionId = adh.auctionId;
+
+    INSERT INTO AuctionEditHistory
+    (auctionId, auctionname, description, version, editTimestamp)
+    VALUES
+    (OLD.auctionId, OLD.auctionName, OLD.description, latestAuctionVersion + 1, CURRENT_TIMESTAMP);
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER OnUpdateAuction
+    AFTER UPDATE
+    ON "Auction"
+    FOR EACH ROW
+EXECUTE PROCEDURE updateAuctionEditHistory();
+
