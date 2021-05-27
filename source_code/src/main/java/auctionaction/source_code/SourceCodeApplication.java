@@ -42,7 +42,7 @@ public class SourceCodeApplication {
 
             connectionConfig.writeBinConfigs(filePath);
 
-            SpringApplication.run(SourceCodeApplication.class);
+            //SpringApplication.run(SourceCodeApplication.class);
 
         } else {
             System.out.println("Failed to authenticate database connection.");
@@ -69,7 +69,6 @@ public class SourceCodeApplication {
     public boolean authenticateConnection() throws NoSuchAlgorithmException {
         String filePath = "connection_config", password, user, hash;
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        DatabaseConnectionConfig connectionConfig = new DatabaseConnectionConfig();
 
         byte[] passHash;
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -87,17 +86,20 @@ public class SourceCodeApplication {
 
                 if(connectionConfig.getJDBC_USER().equals(user)) {
 
-                } else {
-                    System.out.println("Username not correct");
-                }
+                    if(connectionConfig.getJDBC_PASS().equals(hash)) {
+                        JDBC_USER = connectionConfig.getJDBC_USER();
+                        JDBC_PASS = password;
+                        jdbcURL = connectionConfig.getJDBC_PSQL_CONN_LOCAL();
 
-                if(connectionConfig.getJDBC_USER().equals(user) && connectionConfig.getJDBC_PASS().equals(hash)) {
-                    JDBC_USER = connectionConfig.getJDBC_USER();
-                    JDBC_PASS = password;
-                    jdbcURL = connectionConfig.getJDBC_PSQL_CONN_LOCAL();
+                        return true;
+                    }
+                    System.out.println("Password not correct.");
 
-                    return true;
+                    System.out.println(hash);
+
+                    return false;
                 }
+                System.out.println("Username not correct");
 
                 return false;
             } catch(IOException exception) {
