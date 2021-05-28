@@ -47,13 +47,6 @@ CREATE TABLE Item (
                       PRIMARY KEY(itemId)
 );
 
-CREATE TABLE Category (
-                          categoryId	 BIGINT,
-                          categoryName VARCHAR(128) UNIQUE NOT NULL,
-                          description	 VARCHAR(1024),
-                          PRIMARY KEY(categoryId)
-);
-
 CREATE TABLE Auction (
                          auctionId		 BIGINT,
                          auctionName	 VARCHAR(128) NOT NULL,
@@ -70,6 +63,19 @@ CREATE TABLE Auction (
                          hostId	 BIGINT NOT NULL,
                          itemId	 BIGINT NOT NULL,
                          PRIMARY KEY(auctionId)
+);
+
+CREATE TABLE "AuctionCategory" (
+                                  auctionId	 BIGINT,
+                                  categoryId BIGINT,
+                                  PRIMARY KEY(auctionId, categoryId)
+);
+
+CREATE TABLE "Category" (
+                          categoryId	 SERIAL,
+                          categoryName VARCHAR(128) UNIQUE NOT NULL,
+                          description	 VARCHAR(1024),
+                          PRIMARY KEY(categoryId)
 );
 
 CREATE TABLE Bid (
@@ -105,13 +111,18 @@ CREATE TABLE Notification (
 );
 
 CREATE TABLE AuctionEditHistory (
-                                    auctionEditHistoryId BIGINT,
-                                    version		 SMALLINT DEFAULT 0,
-                                    auctionName		 VARCHAR(128) NOT NULL,
-                                    description		 VARCHAR(1024),
-                                    editTimestamp	 TIMESTAMP NOT NULL,
-                                    auctionId	 BIGINT NOT NULL,
-                                    PRIMARY KEY(auctionEditHistoryId)
+	auctionEditHistoryId SERIAL,
+	version		 SMALLINT DEFAULT 0,
+	auctionName		 VARCHAR(128) NOT NULL,
+	description		 VARCHAR(1024),
+	editTimestamp	 TIMESTAMP NOT NULL,
+	itemName		 VARCHAR(128) NOT NULL,
+	itemDescription	 VARCHAR(1024),
+	itemOrigin		 VARCHAR(128) NOT NULL,
+	auctionId	 BIGINT,
+	PRIMARY KEY(auctionEditHistoryId)
+);
+
 );
 
 CREATE TABLE CommentsNotification (
@@ -132,28 +143,21 @@ CREATE TABLE UserAuction (
                               PRIMARY KEY(userId,auctionId)
 );
 
-CREATE TABLE ItemCategory (
-                               itemId	 BIGINT,
-                               categoryId BIGINT,
-                               PRIMARY KEY(itemId,categoryId)
-);
-
+ALTER TABLE "Auction" ADD CONSTRAINT auction_fk1 FOREIGN KEY (hostUserId) REFERENCES "User"(userId);
+ALTER TABLE "AuctionEditHistory" ADD CONSTRAINT auctionedithistory_fk1 FOREIGN KEY (auctionId) REFERENCES "Auction"(auctionId);
+ALTER TABLE "AuctionCategory" ADD CONSTRAINT auction_category_fk1 FOREIGN KEY (auctionId) REFERENCES "Auction"(auctionId);
+ALTER TABLE "AuctionCategory" ADD CONSTRAINT auction_category_fk2 FOREIGN KEY (categoryId) REFERENCES "Category"(categoryId);
 ALTER TABLE "User" ADD CONSTRAINT user_fk1 FOREIGN KEY (roleId) REFERENCES role(roleId);
-ALTER TABLE auction ADD CONSTRAINT auction_fk1 FOREIGN KEY (hostId) REFERENCES "User"(userId);
-ALTER TABLE auction ADD CONSTRAINT auction_fk2 FOREIGN KEY (itemId) REFERENCES item(itemid);
 ALTER TABLE bid ADD CONSTRAINT bid_fk1 FOREIGN KEY (auctionId) REFERENCES auction(auctionid);
 ALTER TABLE bid ADD CONSTRAINT bid_fk2 FOREIGN KEY (userId) REFERENCES "User"(userId);
 ALTER TABLE comment ADD CONSTRAINT comment_fk1 FOREIGN KEY (userId) REFERENCES "User"(userId);
 ALTER TABLE comment ADD CONSTRAINT comment_fk2 FOREIGN KEY (auctionId) REFERENCES auction(auctionid);
 ALTER TABLE notification ADD CONSTRAINT notification_fk1 FOREIGN KEY (userId) REFERENCES "User"(userId);
-ALTER TABLE auctionedithistory ADD CONSTRAINT auctionedithistory_fk1 FOREIGN KEY (auctionId) REFERENCES auction(auctionid);
 ALTER TABLE commentsnotification ADD CONSTRAINT commentsnotification_fk1 FOREIGN KEY (auctionId) REFERENCES auction(auctionid);
 ALTER TABLE commentsnotification ADD CONSTRAINT commentsnotification_fk2 FOREIGN KEY (notificationId) REFERENCES notification(notificationid);
 ALTER TABLE auctionnotification ADD CONSTRAINT auctionnotification_fk1 FOREIGN KEY (notificationId) REFERENCES auction(auctionid);
 ALTER TABLE auctionnotification ADD CONSTRAINT auctionnotification_fk2 FOREIGN KEY (notificationId) REFERENCES notification(notificationid);
 ALTER TABLE UserAuction ADD CONSTRAINT user_auction_fk1 FOREIGN KEY (userId) REFERENCES "User"(userId);
 ALTER TABLE UserAuction ADD CONSTRAINT user_auction_fk2 FOREIGN KEY (auctionId) REFERENCES auction(auctionid);
-ALTER TABLE ItemCategory ADD CONSTRAINT item_category_fk1 FOREIGN KEY (itemId) REFERENCES item(itemid);
-ALTER TABLE ItemCategory ADD CONSTRAINT item_category_fk2 FOREIGN KEY (categoryId) REFERENCES category(categoryid);
 
 

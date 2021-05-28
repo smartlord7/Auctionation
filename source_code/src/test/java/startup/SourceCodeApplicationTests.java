@@ -1,4 +1,4 @@
-package auctionaction.source_code;
+package startup;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

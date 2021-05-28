@@ -8,23 +8,23 @@ INSERT INTO "User" VALUES (2, 'josesilva', 'José', 'Silva', 'josesilva@gmail.co
 --password: tudomal
 INSERT INTO "User" VALUES (3, 'sanchosimoes', 'Sancho', 'Simões', 'smartlord7@gmail.com', '967116687', 'Lousã', '23/06/2001', 100, '1e27afecf9a9293efdfd68137a0e7aaf', NULL, '27/05/2021', '27/05/2021', NULL, 1);
 
-INSERT INTO Item VALUES (1, 1234567890000, 'MSIGT72VR Dominator Pro', 'Gaming PC from 2018 - PCMAG Readers choice', 'United States', CURRENT_DATE, CURRENT_DATE, NULL);
-INSERT INTO Item VALUES (2, 4218954098322, 'Golden slide trombone', 'j. Michael brand new slide trombone', 'UK', CURRENT_DATE, CURRENT_DATE, NULL);
-INSERT INTO Item VALUES (3, 3174890723891, 'Spruce wooden deask from the 18th century', 'Old spruce wooden desk well preserverd', 'France', CURRENT_DATE, CURRENT_DATE, NULL);
+INSERT INTO "Category" VALUES (1, 'Music', 'Item category for music instruments, devices, etc.');
+INSERT INTO "Category" VALUES (2, 'Gaming', 'Item category for gaming computers and other devices, videogames, etc.');
+INSERT INTO "Category" VALUES (2, 'Furniture', 'Item category for furniture such as desks, chairs, wardrobes, etc.');
 
-INSERT INTO Category VALUES (1, 'Music', 'Item category for music instruments, devices, etc.');
-INSERT INTO Category VALUES (1, 'Gaming', 'Item category for gaming computers and other devices, videogames, etc.');
-INSERT INTO Category VALUES (1, 'Furniture', 'Item category for furniture such as desks, chairs, wardrobes, etc.');
+INSERT INTO "Auction" VALUES (1, 'First Auction', 'First auction to be done.', 0, 0, 0, 1234567890000,
+                    'MSIGT72VR Dominator Pro', 'Gaming PC from 2018 - PCMAG Readers choice', 'United States', CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, 1);
+INSERT INTO "Auction" VALUES (2, 'Second Auction', 'Second auction to be done.', 0, 0, 0, 4218954098322,
+                              'Golden slide trombone', 'j. Michael brand new slide trombone', 'UK', CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, 2);
+INSERT INTO "Auction" VALUES (3, 'Third Auction', 'Third auction to be done.', 0, 0, 0, 3174890723891,
+                              'Spruce wooden deask from the 18th century', 'Old spruce wooden desk well preserverd', 'France', CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, 3);
 
-INSERT INTO Auction VALUES (1, 'First Auction', 'First auction to be done.', '0', '0', CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, NULL, 1, 1);
-INSERT INTO Auction VALUES (2, 'Second Auction', 'Second auction to be done.', '0', '0', CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, NULL, 2, 2);
-INSERT INTO Auction VALUES (3, 'Third Auction', 'Third auction to be done.', '0', '0', CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, NULL, 3, 3);
-
-INSERT INTO ItemCategory VALUES (1, 2);
-INSERT INTO ItemCategory VALUES (2, 1);
-INSERT INTO ItemCategory VALUES (3, 3);
-
+INSERT INTO "AuctionCategory" VALUES (1, 2);
+INSERT INTO "AuctionCategory" VALUES (2, 1);
+INSERT INTO "AuctionCategory" VALUES (3, 3);
 INSERT INTO "UserAuction"
+INSERT INTO "UserAuction"
+
 VALUES (1, 1);
 INSERT INTO "UserAuction"
 VALUES (1, 2);
