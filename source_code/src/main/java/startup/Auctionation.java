@@ -1,6 +1,7 @@
 package startup;
 
 import auctionaction.config.DatabaseAuthenticator;
+import io.sentry.Sentry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,29 +12,52 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
-public class SourceCodeApplication {
-    private static final Logger logger = LoggerFactory.getLogger(SourceCodeApplication.class);
-    private static DatabaseAuthenticator authenticator;
+public class Auctionation {
+    private static final Logger logger = LoggerFactory.getLogger(Auctionation.class);
+    private final DatabaseAuthenticator authenticator;
 
 
-    public SourceCodeApplication() {
+    public Auctionation() {
         authenticator = new DatabaseAuthenticator();
-        myMain();
+        Connection conn = null;
+
+        try {
+            authenticate();
+            conn = getConnection();
+
+            // other method calls.
+        } catch (Exception ex) {
+            Sentry.captureException(ex);
+            logger.error("Error in database!");
+
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex2) {
+                    logger.warn("Couldn't rollback!");
+                    try {
+                        conn.close();
+                    } catch (SQLException ex3) {
+                        logger.error("Couldn't close connection!");
+                    }
+                }
+            }
+
+        }
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(SourceCodeApplication.class, args);
+        SpringApplication.run(Auctionation.class, args);
     }
 
-    public void myMain() {
+    public void authenticate() {
         String filePath = "connection_config";
 
         if (authenticator.authenticateConnection()) {
             System.out.println("Authentication successful.");
-
             authenticator.connectionConfig.writeBinConfigs(filePath);
         } else {
-            System.out.println("Failed to authenticate database connection.");
+            System.exit(0);
         }
     }
 
