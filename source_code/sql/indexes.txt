@@ -1,0 +1,7 @@
+CREATE INDEX userNameIdx ON "User"(userName);
+CREATE INDEX notificationUserIdIdx ON "Notification"(userId);
+CREATE INDEX bidUserIdIdx ON "Notification"(userId);
+CREATE UNIQUE INDEX auctionItemEANIdx ON "Auction"(itemEAN);
+CREATE INDEX auctionItemDescriptionIDx ON "Auction"(itemDescription);
+CREATE INDEX commentAuctionIdIdx ON "Comment"(auctionId);
+CREATE INDEX auctionUserIdIdx ON "Auction"(hostUserId);

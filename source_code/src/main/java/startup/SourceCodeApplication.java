@@ -1,11 +1,9 @@
-package auctionaction.source_code;
+package startup;
 
 import auctionaction.config.DatabaseAuthenticator;
-import auctionaction.config.DatabaseConnectionConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -55,6 +53,4 @@ public class SourceCodeApplication {
         }
         return null;
     }
-
-
 }
