@@ -2,43 +2,43 @@ INSERT INTO role VALUES (1, 'User', 'Common user.');
 INSERT INTO role VALUES (2, 'Administrator', 'Super user.');
 
 -- password: joniarturito
-INSERT INTO "User" VALUES (1, 'joaoartur', 'João', 'Artur', 'joniarturito@hotmail.com', '962746293', 'Tábua', '31/08/2001', 100, '3502904dd4ca1b46522f17a4e31d8205', NULL, '27/05/2021', '27/05/2021', NULL, 1);
+INSERT INTO User VALUES (1, 'joaoartur', 'João', 'Artur', 'joniarturito@hotmail.com', '962746293', 'Tábua', '31/08/2001', 100, '3502904dd4ca1b46522f17a4e31d8205', NULL, '27/05/2021', '27/05/2021', NULL, 1);
 -- password: excelmaster
-INSERT INTO "User" VALUES (2, 'josesilva', 'José', 'Silva', 'josesilva@gmail.com', '962246323', 'Tarouca', '06/09/2000', 100, '0930bb84e844f84d9915eefc6c3fadf0', NULL, '27/05/2021', '27/05/2021', NULL, 1);
+INSERT INTO User VALUES (2, 'josesilva', 'José', 'Silva', 'josesilva@gmail.com', '962246323', 'Tarouca', '06/09/2000', 100, '0930bb84e844f84d9915eefc6c3fadf0', NULL, '27/05/2021', '27/05/2021', NULL, 1);
 --password: tudomal
-INSERT INTO "User" VALUES (3, 'sanchosimoes', 'Sancho', 'Simões', 'smartlord7@gmail.com', '967116687', 'Lousã', '23/06/2001', 100, '1e27afecf9a9293efdfd68137a0e7aaf', NULL, '27/05/2021', '27/05/2021', NULL, 1);
+INSERT INTO User VALUES (3, 'sanchosimoes', 'Sancho', 'Simões', 'smartlord7@gmail.com', '967116687', 'Lousã', '23/06/2001', 100, '1e27afecf9a9293efdfd68137a0e7aaf', NULL, '27/05/2021', '27/05/2021', NULL, 1);
 
-INSERT INTO "Category" VALUES (1, 'Music', 'Item category for music instruments, devices, etc.');
-INSERT INTO "Category" VALUES (2, 'Gaming', 'Item category for gaming computers and other devices, videogames, etc.');
-INSERT INTO "Category" VALUES (2, 'Furniture', 'Item category for furniture such as desks, chairs, wardrobes, etc.');
+INSERT INTO Category VALUES (1, 'Music', 'Item category for music instruments, devices, etc.');
+INSERT INTO Category VALUES (2, 'Gaming', 'Item category for gaming computers and other devices, videogames, etc.');
+INSERT INTO Category VALUES (2, 'Furniture', 'Item category for furniture such as desks, chairs, wardrobes, etc.');
 
-INSERT INTO "Auction" VALUES (1, 'First Auction', 'First auction to be done.', 0, 0, 0, 1234567890000,
-                    'MSIGT72VR Dominator Pro', 'Gaming PC from 2018 - PCMAG Readers choice', 'United States', CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, 1);
-INSERT INTO "Auction" VALUES (2, 'Second Auction', 'Second auction to be done.', 0, 0, 0, 4218954098322,
+INSERT INTO Auction VALUES (1, 'First Auction', 'First auction to be done.', 0, 0, 0, 1234567890000,
+                              'MSIGT72VR Dominator Pro', 'Gaming PC from 2018 - PCMAG Readers choice', 'United States', CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, 1);
+INSERT INTO Auction VALUES (2, 'Second Auction', 'Second auction to be done.', 0, 0, 0, 4218954098322,
                               'Golden slide trombone', 'j. Michael brand new slide trombone', 'UK', CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, 2);
-INSERT INTO "Auction" VALUES (3, 'Third Auction', 'Third auction to be done.', 0, 0, 0, 3174890723891,
+INSERT INTO Auction VALUES (3, 'Third Auction', 'Third auction to be done.', 0, 0, 0, 3174890723891,
                               'Spruce wooden deask from the 18th century', 'Old spruce wooden desk well preserverd', 'France', CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, 3);
 
-INSERT INTO "AuctionCategory" VALUES (1, 2);
-INSERT INTO "AuctionCategory" VALUES (2, 1);
-INSERT INTO "AuctionCategory" VALUES (3, 3);
-INSERT INTO "UserAuction"
-INSERT INTO "UserAuction"
+INSERT INTO AuctionCategory VALUES (1, 2);
+INSERT INTO AuctionCategory VALUES (2, 1);
+INSERT INTO AuctionCategory VALUES (3, 3);
+INSERT INTO UserAuction
+INSERT INTO UserAuction
 
 VALUES (1, 1);
-INSERT INTO "UserAuction"
+INSERT INTO UserAuction
 VALUES (1, 2);
-INSERT INTO "UserAuction"
+INSERT INTO UserAuction
 VALUES (1, 3);
-INSERT INTO "UserAuction"
+INSERT INTO UserAuction
 VALUES (2, 1);
-INSERT INTO "UserAuction"
+INSERT INTO UserAuction
 VALUES (2, 2);
-INSERT INTO "UserAuction"
+INSERT INTO UserAuction
 VALUES (2, 3);
-INSERT INTO "UserAuction"
+INSERT INTO UserAuction
 VALUES (3, 1);
-INSERT INTO "UserAuction"
+INSERT INTO UserAuction
 VALUES (3, 2);
-INSERT INTO "UserAuction"
+INSERT INTO UserAuction
 VALUES (3, 3);
