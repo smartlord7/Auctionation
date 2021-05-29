@@ -14,9 +14,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ControllerAdvice
 public class GlobalExceptionCollector {
+
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionCollector.class);
 
     @ExceptionHandler(PSQLException.class)
     @ResponseStatus(HttpStatus.BAD_GATEWAY)
@@ -25,6 +29,7 @@ public class GlobalExceptionCollector {
         Connection conn = ConnectionFactory.getConnection();
 
         if (ex.getClass() == PSQLException.class) {
+            logger.error(ex.getMessage());
             SQLException sqlEx = (PSQLException) ex;
             ExceptionDAO exDAO = new ExceptionDAO(conn);
             ExceptionEditDTO dto = new ExceptionEditDTO(sqlEx.getErrorCode(), sqlEx.getSQLState(), sqlEx.getMessage(), Timestamp.from(Instant.now()));

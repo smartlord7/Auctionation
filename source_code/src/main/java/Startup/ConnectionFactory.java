@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
-    private static final Logger logger = LoggerFactory.getLogger(Auctionation.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConnectionFactory.class);
     public static final DatabaseAuthenticator authenticator = new DatabaseAuthenticator();
 
     /**

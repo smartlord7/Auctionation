@@ -12,9 +12,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(@NotNull HttpSecurity http) throws Exception {
-        http
-                //no authentication needed for these context paths
-                .authorizeRequests()
-                .antMatchers("/test/").permitAll();
+        http.authorizeRequests().antMatchers("/**").permitAll();
+        http.csrf().disable();
     }
 }
