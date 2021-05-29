@@ -18,26 +18,22 @@ public class SourceCodeApplication {
     private static DatabaseAuthenticator authenticator;
 
 
-    public SourceCodeApplication() throws NoSuchAlgorithmException {
+    public SourceCodeApplication() {
         authenticator = new DatabaseAuthenticator();
         myMain();
     }
 
-    public static void main(String[] args) throws NoSuchAlgorithmException {
+    public static void main(String[] args) {
         SpringApplication.run(SourceCodeApplication.class, args);
-
-        SourceCodeApplication myApplication = new SourceCodeApplication();
     }
 
-    public void myMain() throws NoSuchAlgorithmException {
+    public void myMain() {
         String filePath = "connection_config";
 
         if (authenticator.authenticateConnection()) {
             System.out.println("Authentication successful.");
 
             authenticator.connectionConfig.writeBinConfigs(filePath);
-
-            System.out.println("done");
         } else {
             System.out.println("Failed to authenticate database connection.");
         }

@@ -39,44 +39,49 @@ public class DatabaseAuthenticator {
 
     }
 
-    public boolean authenticateConnection() throws NoSuchAlgorithmException {
+    public boolean authenticateConnection() {
         String filePath = "connection_config", password, user, hash;
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-
         byte[] passHash;
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
-        if(connectionConfig.loadDatabaseConfigs(filePath)) {
+        try {
 
-            try {
-                System.out.print("Database user: ");
-                user = input.readLine();
-                System.out.print("Password: ");
-                password = input.readLine();
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
-                passHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-                hash = bytesToHex(passHash);
+            if (connectionConfig.loadDatabaseConfigs(filePath)) {
 
-                if(connectionConfig.getJDBC_USER().equals(user)) {
+                try {
+                    System.out.print("Database user: ");
+                    user = input.readLine();
+                    System.out.print("Password: ");
+                    password = input.readLine();
 
-                    if(connectionConfig.getJDBC_PASS().equals(hash)) {
-                        JDBC_USER = connectionConfig.getJDBC_USER();
-                        JDBC_PASS = password;
-                        jdbcURL = connectionConfig.getJDBC_PSQL_CONN_LOCAL();
+                    passHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+                    hash = bytesToHex(passHash);
 
-                        return true;
+                    if (connectionConfig.getJDBC_USER().equals(user)) {
+
+                        if (connectionConfig.getJDBC_PASS().equals(hash)) {
+                            JDBC_USER = connectionConfig.getJDBC_USER();
+                            JDBC_PASS = password;
+                            jdbcURL = connectionConfig.getJDBC_PSQL_CONN_LOCAL();
+
+                            return true;
+                        }
+                        System.out.print("Password not correct. ");
+
+                        return false;
                     }
-                    System.out.print("Password not correct. ");
+                    System.out.print("Username not correct. ");
 
                     return false;
+                } catch (IOException exception) {
+                    return false;
                 }
-                System.out.print("Username not correct. ");
 
-                return false;
-            } catch(IOException exception) {
-                return false;
             }
-
+        } catch (NoSuchAlgorithmException exception) {
+            return false;
         }
 
         return false;
