@@ -7,26 +7,19 @@ public class DatabaseConnectionConfig implements Serializable{
 
     public DatabaseConnectionConfig() {}
 
-    public boolean loadDatabaseConfigs(String filePath) {
+    public void loadDatabaseConfigs(String filePath) throws IOException, ClassNotFoundException {
         File configsTxt = new File(filePath + ".txt");
         File configsBin = new File(filePath + ".dat");
 
-        if(configsBin.isFile() && configsBin.exists()) {
-
-            if(loadBinConfigs(configsBin)) {
-                System.out.println("Connection configurations loaded successfully.");
-
-                return true;
-            }
-
-            return false;
-        } else if(loadTxtConfigs(configsTxt)) {
+        if (configsBin.isFile() && configsBin.exists()) {
+            loadBinConfigs(configsBin);
+            System.out.println("Connection configurations loaded successfully.");
+        } else {
+            loadTxtConfigs(configsTxt);
             System.out.println("Connection configurations loaded successfully.");
 
-            return true;
         }
 
-        return false;
     }
 
     public String getJDBC_PASS() {
@@ -53,12 +46,11 @@ public class DatabaseConnectionConfig implements Serializable{
         this.JDBC_USER = JDBC_USER;
     }
 
-    private boolean loadTxtConfigs(File file) {
+    private void loadTxtConfigs(File file) throws IOException {
         String line;
         int lineNumber = 0;
 
         if(file.exists() && file.isFile()) {
-            try {
                 FileReader fileReader = new FileReader(file);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -77,45 +69,29 @@ public class DatabaseConnectionConfig implements Serializable{
                             break;
                         default:
                             //configurations file is not valid
-                            return false;
+                            return;
                     }
 
                     lineNumber++;
                 }
                 bufferedReader.close();
-
-                return true;
-            } catch (IOException exception){
-                return false;
-
-            }
-
         }
-
-        return false;
     }
 
-    private boolean loadBinConfigs(File file) {
+    private void loadBinConfigs(File file) throws IOException, ClassNotFoundException {
         DatabaseConnectionConfig config;
 
         if(file.isFile() && file.exists()) {
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                ObjectInputStream streamReader = new ObjectInputStream(inputStream);
+            FileInputStream inputStream = new FileInputStream(file);
+            ObjectInputStream streamReader = new ObjectInputStream(inputStream);
 
-                config = (DatabaseConnectionConfig) streamReader.readObject();
+            config = (DatabaseConnectionConfig) streamReader.readObject();
 
-                this.setJDBC_USER(config.getJDBC_USER());
-                this.setJDBC_PASS(config.getJDBC_PASS());
-                this.setJDBC_PSQL_CONN_LOCAL(config.getJDBC_PSQL_CONN_LOCAL());
+            this.setJDBC_USER(config.getJDBC_USER());
+            this.setJDBC_PASS(config.getJDBC_PASS());
+            this.setJDBC_PSQL_CONN_LOCAL(config.getJDBC_PSQL_CONN_LOCAL());
 
-                return true;
-            }  catch (IOException | ClassNotFoundException exception) {
-                return false;
-            }
         }
-
-        return false;
     }
 
     public void writeBinConfigs(String filePath) {

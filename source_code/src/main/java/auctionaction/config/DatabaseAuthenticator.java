@@ -41,7 +41,7 @@ public class DatabaseAuthenticator {
 
     }
 
-    public boolean authenticateConnection() {
+    public boolean authenticateConnection() throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
         String filePath = "connection_config", password, user, hash;
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         byte[] passHash;
@@ -79,6 +79,7 @@ public class DatabaseAuthenticator {
 
         }
 
+        System.out.print("Username not correct. ");
         return false;
     }
 }

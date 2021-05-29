@@ -1,5 +1,6 @@
 package startup;
 
+import BusinessLayer.AuctionBusiness.AuctionDAO;
 import auctionaction.config.DatabaseAuthenticator;
 import io.sentry.Sentry;
 import org.springframework.boot.SpringApplication;
@@ -7,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,7 +23,6 @@ public class Auctionation {
     private static final Logger logger = LoggerFactory.getLogger(Auctionation.class);
     private final DatabaseAuthenticator authenticator;
 
-
     public Auctionation() {
         authenticator = new DatabaseAuthenticator();
         Connection conn = null;
@@ -29,11 +31,11 @@ public class Auctionation {
             authenticate();
             conn = getConnection();
 
-            // other method calls.
+            AuctionDAO dao = new AuctionDAO(conn, "Auction");
+            dao.list();
         } catch (Exception ex) {
             Sentry.captureException(ex);
-            logger.error("Error in database!");
-
+            logger.error(ex.getMessage());
             if (conn != null) {
                 try {
                     conn.rollback();
@@ -54,11 +56,11 @@ public class Auctionation {
         SpringApplication.run(Auctionation.class, args);
     }
 
-    public void authenticate() {
+    public void authenticate() throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
         String filePath = "connection_config";
 
         if (authenticator.authenticateConnection()) {
-            System.out.println("Authentication successful.");
+            System.out.println("Database authentication successful.");
             authenticator.connectionConfig.writeBinConfigs(filePath);
         } else {
             System.exit(0);
