@@ -1,5 +1,9 @@
 package BusinessLayer.UserBusiness.DTO;
 
-public class UserListDTO {
+import BusinessLayer.Base.DTO.BaseListDTO;
 
+public class UserListDTO extends BaseListDTO {
+    public String userName,
+            email,
+            address;
 }

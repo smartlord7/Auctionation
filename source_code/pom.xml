@@ -48,6 +48,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <groupId>org.springframework.boot</groupId>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.30</version>
+        </dependency>
     </dependencies>
 
     <build>

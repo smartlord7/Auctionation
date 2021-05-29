@@ -5,17 +5,12 @@ import BusinessLayer.Base.DTO.BaseEditDTO;
 import java.sql.Timestamp;
 
 public class AuctionEditDTO extends BaseEditDTO {
-    private Long auctionId;
-    private String description;
-    private Float currentBidValue,
+    public Integer auctionId;
+    public String description;
+    public Float currentBidValue,
             initialValue;
-    private Integer currentState;
-    private Timestamp startTimestamp,
+    public Integer currentState;
+    public Timestamp startTimestamp,
             expirationTimestamp,
             endTimestamp;
-
-    @Override
-    public String getTableName() {
-        return "Auction";
-    }
 }

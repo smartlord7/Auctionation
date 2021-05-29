@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.sql.*;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
     public void create(BusinessLayer.Base.DTO.BaseEditDTO dto) throws SQLException, IllegalAccessException {
         int i;
         Field[] fields;
-        String tableName = dto.getTableName();
         Class<?> dtoClass = dto.getClass();
         StringBuilder sb = new StringBuilder("INSERT INTO ");
         fields = dtoClass.getDeclaredFields();
@@ -81,15 +81,17 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
     public List<BaseListDTO> list() throws SQLException, IllegalAccessException {
         int i;
         List<BaseListDTO> result = new ArrayList<>();
-        Class<?> objClass = null;
+        final ParameterizedType dtoType = (ParameterizedType) getClass().getGenericSuperclass();
+        Class<BaseListDTO> dtoClass = (Class<BaseListDTO>) (dtoType).getActualTypeArguments()[1];
+
         StringBuilder sb = new StringBuilder("SELECT ");
-        Field[] fields = objClass.getDeclaredFields();
+        Field[] fields = dtoClass.getDeclaredFields();
         ResultSet rows;
 
         for (i = 0; i < fields.length - 1; i++) {
             sb.append(fields[i].getName()).append(", ");
         }
-        sb.append(fields[i]).append(" FROM ").append(tableName);
+        sb.append(fields[i].getName()).append(" FROM ").append(tableName);
 
         PreparedStatement ps = conn.prepareStatement(sb.toString());
         rows = ps.executeQuery();
@@ -97,9 +99,13 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
         while (rows.next()) {
             for (i = 0; i < fields.length; i++) {
-                fields[i].set(dto, rows.getObject(i + 1));
-                result.add(dto);
+                fields[i].setAccessible(true);
+                Class<?> type = fields[i].getType();
+
+                switch
+
             }
+            result.add(dto);
         }
 
         return result;

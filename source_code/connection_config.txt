@@ -1,3 +1,3 @@
-auctionation
-a5f47e1244417463d1a9953efd6e4ddcfe8ca66fa029931b2b5de1f6c8cf9b66
-jdbc:postgresql://localhost:5432/postgres
+postgres
+a942b37ccfaf5a813b1432caa209a43b9d144e47ad0de1549c289c253e556cd5
+jdbc:postgresql://localhost:5432/auctionation
