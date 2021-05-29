@@ -1,6 +1,8 @@
 package BusinessLayer.AuctionBusiness.DTO;
 
-public class AuctionListDTO {
+import BusinessLayer.Base.DTO.BaseListDTO;
+
+public class AuctionListDTO extends BaseListDTO {
     public Integer auctionId;
     public String description;
 }

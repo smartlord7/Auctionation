@@ -1,5 +1,7 @@
 package BusinessLayer.Base;
 
+import BusinessLayer.AuctionBusiness.DTO.AuctionListDTO;
+import BusinessLayer.Base.DTO.BaseListDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +80,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         }
     }
 
-    public List<BaseListDTO> list() throws SQLException, IllegalAccessException {
+    public List<BaseListDTO> list() throws SQLException, IllegalAccessException, InstantiationException {
         int i;
         List<BaseListDTO> result = new ArrayList<>();
         final ParameterizedType dtoType = (ParameterizedType) getClass().getGenericSuperclass();
@@ -95,14 +97,11 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
         PreparedStatement ps = conn.prepareStatement(sb.toString());
         rows = ps.executeQuery();
-        BaseListDTO dto = (BaseListDTO) new Object();
+        BaseListDTO dto = dtoClass.newInstance();
 
         while (rows.next()) {
             for (i = 0; i < fields.length; i++) {
-                fields[i].setAccessible(true);
-                Class<?> type = fields[i].getType();
-
-                switch
+                fields[i].set(dto, rows.getObject(i + 1));
 
             }
             result.add(dto);
