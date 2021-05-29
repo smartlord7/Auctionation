@@ -1,9 +1,8 @@
 package BusinessLayer.AuctionEditHistoryBusiness;
 
-import BusinessLayer.Base.DTO.BaseEditDTO;
+import BusinessLayer.Base.DTO.BaseListDTO;
 
-public class AuctionEditHistoryEditDTO extends BaseEditDTO {
-
+public class AuctionEditHistoryListDTO extends BaseListDTO {
     public Integer version;
     public String auctionName,
             description,

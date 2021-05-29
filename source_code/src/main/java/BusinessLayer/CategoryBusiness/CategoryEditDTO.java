@@ -1,21 +1,7 @@
 package BusinessLayer.CategoryBusiness;
 
-public class CategoryEditDTO {
-    private Long CategoryId;
-    private String CategoryName;
-    private String Description;
+import BusinessLayer.Base.DTO.BaseEditDTO;
 
-    public CategoryEditDTO(){}
-
-    public java.lang.Long getCategoryId() {
-        return CategoryId;
-    }
-
-    public java.lang.String getCategoryName() {
-        return CategoryName;
-    }
-
-    public java.lang.String getDescription() {
-        return Description;
-    }
+public class CategoryEditDTO extends BaseEditDTO {
+    public String categoryName, description;
 }

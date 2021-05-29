@@ -1,8 +1,7 @@
 package BusinessLayer.CommentBusiness;
 
-public class CommentEditDTO {
+import BusinessLayer.Base.DTO.BaseEditDTO;
 
-    private String Text;
-
-
+public class CommentEditDTO extends BaseEditDTO {
+    public String text;
 }

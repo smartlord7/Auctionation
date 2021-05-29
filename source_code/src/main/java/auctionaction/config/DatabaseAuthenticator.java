@@ -39,51 +39,38 @@ public class DatabaseAuthenticator {
 
     }
 
-    public boolean authenticateConnection() {
+    public boolean authenticateConnection() throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
         String filePath = "connection_config", password, user, hash;
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         byte[] passHash;
 
-        try {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        connectionConfig.loadDatabaseConfigs(filePath);
 
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        System.out.print("Database user: ");
+        //user = input.readLine();
+        user = "postgres";
+        System.out.print("Password: ");
+        //
+        password = "postgres";
 
-            if (connectionConfig.loadDatabaseConfigs(filePath)) {
+        passHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        hash = bytesToHex(passHash);
 
-                try {
-                    System.out.print("Database user: ");
-                    user = input.readLine();
-                    System.out.print("Password: ");
-                    password = input.readLine();
+        if (connectionConfig.getJDBC_USER().equals(user)) {
 
-                    passHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-                    hash = bytesToHex(passHash);
+            if (connectionConfig.getJDBC_PASS().equals(hash)) {
+                JDBC_USER = connectionConfig.getJDBC_USER();
+                JDBC_PASS = password;
+                jdbcURL = connectionConfig.getJDBC_PSQL_CONN_LOCAL();
 
-                    if (connectionConfig.getJDBC_USER().equals(user)) {
-
-                        if (connectionConfig.getJDBC_PASS().equals(hash)) {
-                            JDBC_USER = connectionConfig.getJDBC_USER();
-                            JDBC_PASS = password;
-                            jdbcURL = connectionConfig.getJDBC_PSQL_CONN_LOCAL();
-
-                            return true;
-                        }
-                        System.out.print("Password not correct. ");
-
-                        return false;
-                    }
-                    System.out.print("Username not correct. ");
-
-                    return false;
-                } catch (IOException exception) {
-                    return false;
-                }
-
+                return true;
             }
-        } catch (NoSuchAlgorithmException exception) {
+            System.out.print("Password not correct. ");
             return false;
         }
 
+        System.out.print("Username not correct. ");
         return false;
     }
 
