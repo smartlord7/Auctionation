@@ -4,6 +4,8 @@ import auctionaction.config.DatabaseAuthenticator;
 import io.sentry.Sentry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,6 +13,8 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@EnableAuthorizationServer
+@EnableResourceServer
 @SpringBootApplication
 public class Auctionation {
     private static final Logger logger = LoggerFactory.getLogger(Auctionation.class);

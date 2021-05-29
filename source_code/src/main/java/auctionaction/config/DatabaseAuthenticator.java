@@ -10,8 +10,10 @@ import java.security.NoSuchAlgorithmException;
 public class DatabaseAuthenticator {
     public DatabaseConnectionConfig connectionConfig;
     private String JDBC_USER, JDBC_PASS, jdbcURL;
+    private PasswordEncrypter encoder;
 
     public DatabaseAuthenticator() {
+        encoder = new PasswordEncrypter();
         connectionConfig = new DatabaseConnectionConfig();
     }
 
@@ -44,62 +46,39 @@ public class DatabaseAuthenticator {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         byte[] passHash;
 
-        try {
+        if (connectionConfig.loadDatabaseConfigs(filePath)) {
 
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            try {
+                System.out.print("Database user: ");
+                user = input.readLine();
+                System.out.print("Password: ");
+                password = input.readLine();
 
-            if (connectionConfig.loadDatabaseConfigs(filePath)) {
+                passHash = encoder.getPasswordHash(password);
+                hash = encoder.bytesToHex(passHash);
 
-                try {
-                    System.out.print("Database user: ");
-                    user = input.readLine();
-                    System.out.print("Password: ");
-                    password = input.readLine();
+                if (connectionConfig.getJDBC_USER().equals(user)) {
 
-                    passHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-                    hash = bytesToHex(passHash);
+                    if (connectionConfig.getJDBC_PASS().equals(hash)) {
+                        JDBC_USER = connectionConfig.getJDBC_USER();
+                        JDBC_PASS = password;
+                        jdbcURL = connectionConfig.getJDBC_PSQL_CONN_LOCAL();
 
-                    if (connectionConfig.getJDBC_USER().equals(user)) {
-
-                        if (connectionConfig.getJDBC_PASS().equals(hash)) {
-                            JDBC_USER = connectionConfig.getJDBC_USER();
-                            JDBC_PASS = password;
-                            jdbcURL = connectionConfig.getJDBC_PSQL_CONN_LOCAL();
-
-                            return true;
-                        }
-                        System.out.print("Password not correct. ");
-
-                        return false;
+                        return true;
                     }
-                    System.out.print("Username not correct. ");
+                    System.out.print("Password not correct. ");
 
-                    return false;
-                } catch (IOException exception) {
                     return false;
                 }
+                System.out.print("Username not correct. ");
 
+                return false;
+            } catch (IOException exception) {
+                return false;
             }
-        } catch (NoSuchAlgorithmException exception) {
-            return false;
+
         }
 
         return false;
-    }
-
-    private String bytesToHex(byte[] hash) {
-        StringBuilder builder = new StringBuilder();
-
-        for(byte b: hash){
-            int num = (int) b & 0xff;
-
-            String hex = Integer.toHexString(num);
-            if(hex.length() % 2 == 1) {
-                hex = "0" + hex;
-            }
-            builder.append(hex);
-        }
-
-        return builder.toString();
     }
 }
