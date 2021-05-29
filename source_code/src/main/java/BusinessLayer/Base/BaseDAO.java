@@ -27,7 +27,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
                 .append(tableName)
                 .append("Id = ? ");
 
-        PreparedStatement ps = conn.prepareStatement(sb.toString()))
+        PreparedStatement ps = conn.prepareStatement(sb.toString());
         ps.setTimestamp(1, Timestamp.from(Instant.now()));
         ps.setInt(2, id);
 
@@ -81,7 +81,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
     public List<BaseListDTO> list() throws SQLException, IllegalAccessException {
         int i;
         List<BaseListDTO> result = new ArrayList<>();
-        Class<?> objClass = getBaseListDTO
+        Class<?> objClass = null;
         StringBuilder sb = new StringBuilder("SELECT ");
         Field[] fields = objClass.getDeclaredFields();
         ResultSet rows;
