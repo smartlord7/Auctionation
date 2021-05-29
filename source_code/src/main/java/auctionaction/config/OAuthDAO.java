@@ -1,5 +1,6 @@
 package auctionaction.config;
 
+import Layers.BusinessLayer.UserAuthBusiness.UserAuthListDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,7 +15,7 @@ import java.sql.ResultSet;
 @Repository
 public class OAuthDAO {
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private UserAuthListDTO userAuth;
 
     public UserEntity getUserDetails(String username) {
         Collection<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
