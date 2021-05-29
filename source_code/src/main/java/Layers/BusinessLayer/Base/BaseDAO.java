@@ -1,5 +1,6 @@
 package Layers.BusinessLayer.Base;
 
+import Layers.BusinessLayer.Base.DTO.BaseEditDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
@@ -30,7 +31,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         }
     }
 
-    public boolean deleteById(int id) throws SQLException {
+    public boolean deleteById(int id) {
         StringBuilder sb = new StringBuilder("UPDATE ");
 
         sb.append(tableName)
@@ -38,30 +39,30 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
                 .append(tableName)
                 .append("Id = ? ");
 
-        PreparedStatement ps = conn.prepareStatement(sb.toString());
-        ps.setTimestamp(1, Timestamp.from(Instant.now()));
-        ps.setInt(2, id);
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement(sb.toString());
+            ps.setTimestamp(1, Timestamp.from(Instant.now()));
+            ps.setInt(2, id);
 
 
-        int numAffectedRows = ps.executeUpdate();
+            int numAffectedRows = ps.executeUpdate();
 
-        if (numAffectedRows == 1) {
-            logger.info("Entry on table " + tableName + " successfully soft deleted!");
-            saveChanges();
-            return true;
+            if (numAffectedRows == 1) {
+                logger.info("Entry on table " + tableName + " successfully soft deleted!");
+                saveChanges();
+                return true;
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-
         return false;
     }
 
-    public boolean updateById(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto) throws SQLException, IllegalAccessException {
-        final ParameterizedType dtoType = (ParameterizedType) getClass().getGenericSuperclass();
-        Class<?> expectedClass = (Class<?>) (dtoType).getActualTypeArguments()[0], dtoClass = dto.getClass();
-
-        if (expectedClass != dtoClass) {
-            throw new ClassCastException("Expected class: " + expectedClass + ", have: " + dtoClass);
-        }
-
+    public boolean updateById(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto) {
+        validateClass(dto);
+        Class<?> dtoClass = dto.getClass();
         int i;
         Field[] fields;
         StringBuilder sb = new StringBuilder("UPDATE ");
@@ -79,35 +80,33 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
                 .append(tableName)
                 .append("Id = ?");
 
-        ps = conn.prepareStatement(sb.toString());
-        for (i = 0; i < fields.length; i++) {
-            ps.setObject(i + 1, fields[i].get(dto));
-        }
+        try {
+            ps = conn.prepareStatement(sb.toString());
+            for (i = 0; i < fields.length; i++) {
+                ps.setObject(i + 1, fields[i].get(dto));
+            }
+            ps.setObject(++i, Timestamp.from(Instant.now()));
+            ps.setObject(++i, dto.id);
 
-        ps.setObject(++i, Timestamp.from(Instant.now()));
-        ps.setObject(++i, dto.id);
+            int numAffectedRows = ps.executeUpdate();
+            if (numAffectedRows == 1) {
+                logger.info("Entry on table " + tableName + " successfully updated!");
+                saveChanges();
 
-        int numAffectedRows = ps.executeUpdate();
-        if (numAffectedRows == 1) {
-            logger.info("Entry on table " + tableName + " successfully updated!");
-            saveChanges();
-
-            return true;
+                return true;
+            }
+        } catch (SQLException | IllegalAccessException e) {
+            e.printStackTrace();
         }
 
         return false;
     }
 
-    public Layers.BusinessLayer.Base.DTO.BaseEditDTO create(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto) throws SQLException, IllegalAccessException {
-        final ParameterizedType dtoType = (ParameterizedType) getClass().getGenericSuperclass();
-        Class<?> expectedClass = (Class<?>) (dtoType).getActualTypeArguments()[0], dtoClass = dto.getClass();
-
-        if (expectedClass != dtoClass) {
-            throw new ClassCastException("Expected class: " + expectedClass + ", have: " + dtoClass);
-        }
-
-        int i;
+    public Layers.BusinessLayer.Base.DTO.BaseEditDTO create(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto) {
+        validateClass(dto);
+        Class<?> dtoClass = dto.getClass();
         Field[] fields;
+        int i;
         StringBuilder sb = new StringBuilder("INSERT INTO ");
         fields = dtoClass.getDeclaredFields();
         PreparedStatement ps;
@@ -135,29 +134,47 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         }
         sb.append(")");
 
-        ps = conn.prepareStatement(sb.toString());
-        for (i = 0; i < fields.length; i++) {
-            ps.setObject(i + 1, fields[i].get(dto));
-        }
+        try {
+            ps = conn.prepareStatement(sb.toString());
+            for (i = 0; i < fields.length; i++) {
+                try {
+                    ps.setObject(i + 1, fields[i].get(dto));
+                } catch (SQLException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (auditable) {
+                ps.setObject(++i, Timestamp.from(Instant.now()));
+                ps.setObject(++i, Timestamp.from(Instant.now()));
+                ps.setObject(++i, null);
+            }
 
-        if (auditable) {
-            ps.setObject(++i, Timestamp.from(Instant.now()));
-            ps.setObject(++i, Timestamp.from(Instant.now()));
-            ps.setObject(++i, null);
-        }
+            int numAffectedRows = ps.executeUpdate();
 
-        int numAffectedRows = ps.executeUpdate();
+            if (numAffectedRows == 1) {
+                logger.info("New entry on table " + tableName + " successfully created!");
+                saveChanges();
+                return dto;
+            }
 
-        if (numAffectedRows == 1) {
-            logger.info("New entry on table " + tableName + " successfully created!");
-            saveChanges();
-            return dto;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return null;
     }
 
-    public List<BaseListDTO> getAll(String propertyName, Object propertyValue) throws SQLException, IllegalAccessException, InstantiationException, NoSuchFieldException {
+    private void validateClass(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto) {
+        final ParameterizedType dtoType = (ParameterizedType) getClass().getGenericSuperclass();
+        Class<?> expectedClass = (Class<?>) (dtoType).getActualTypeArguments()[0], dtoClass = dto.getClass();
+
+        if (expectedClass != dtoClass) {
+            throw new ClassCastException("Expected class: " + expectedClass + ", have: " + dtoClass);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<BaseListDTO> getAll(String propertyName, Object propertyValue) {
         int i;
         List<BaseListDTO> result = new ArrayList<>();
         final ParameterizedType dtoType = (ParameterizedType) getClass().getGenericSuperclass();
@@ -179,21 +196,26 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
             sb.append(" WHERE ").append(propertyName).append(" = ?");
         }
 
-        ps = conn.prepareStatement(sb.toString());
-
-        if (propertyName != null) {
-            ps.setObject(1, propertyValue);
-        }
-
-        rows = ps.executeQuery();
-        BaseListDTO dto = dtoClass.newInstance();
-
-        while (rows.next()) {
-            for (i = 0; i < fields.length; i++) {
-                fields[i].set(dto, rows.getObject(i + 1));
-
+        try {
+            ps = conn.prepareStatement(sb.toString());
+            if (propertyName != null) {
+                ps.setObject(1, propertyValue);
             }
-            result.add(dto);
+
+            rows = ps.executeQuery();
+
+            while (rows.next()) {
+                BaseListDTO dto = dtoClass.newInstance();
+                for (i = 0; i < fields.length; i++) {
+                    fields[i].set(dto, rows.getObject(i + 1));
+
+                }
+                result.add(dto);
+            }
+
+            return result;
+        } catch (SQLException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
         }
 
         return result;
