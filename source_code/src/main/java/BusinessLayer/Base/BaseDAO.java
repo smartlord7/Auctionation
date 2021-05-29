@@ -22,7 +22,11 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         this.tableName = tableName;
     }
 
-    public void delete(int id) throws SQLException {
+    public BaseEditDTO getById(int id) {
+        return null;
+    }
+
+    public void deleteById(int id) throws SQLException {
         StringBuilder sb = new StringBuilder("UPDATE ");
 
         sb.append(tableName)
@@ -50,18 +54,18 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         StringBuilder sb = new StringBuilder("INSERT INTO ");
         fields = dtoClass.getDeclaredFields();
 
-        sb.append(tableName).append(" VALUES (");
+        sb.append(tableName).append(" (");
 
         for (i = 0; i < fields.length - 1; i++) {
             sb.append(fields[i].getName()).append(", ");
         }
         sb.append(fields[i].getName()).append(", createTimestamp, updateTimestamp, deleteTimestamp)");
 
-        sb.append("( ");
-        for (i = 0; i < fields.length - 1; i++) {
+        sb.append(" VALUES ( ");
+        for (i = 0; i < fields.length; i++) {
             sb.append("?, ");
         }
-        sb.append("?, ?, ?, ?)");
+        sb.append("?, ?, ?)");
 
         PreparedStatement ps = conn.prepareStatement(sb.toString());
         for (i = 0; i < fields.length; i++) {
@@ -80,7 +84,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         }
     }
 
-    public List<BaseListDTO> list() throws SQLException, IllegalAccessException, InstantiationException {
+    public List<BaseListDTO> listAll() throws SQLException, IllegalAccessException, InstantiationException {
         int i;
         List<BaseListDTO> result = new ArrayList<>();
         final ParameterizedType dtoType = (ParameterizedType) getClass().getGenericSuperclass();

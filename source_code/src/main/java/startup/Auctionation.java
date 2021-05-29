@@ -1,6 +1,7 @@
 package startup;
 
 import BusinessLayer.AuctionBusiness.AuctionDAO;
+import BusinessLayer.AuctionBusiness.DTO.AuctionEditDTO;
 import auctionaction.config.DatabaseAuthenticator;
 import io.sentry.Sentry;
 import org.springframework.boot.SpringApplication;
@@ -28,7 +29,8 @@ public class Auctionation {
             conn = getConnection();
 
             AuctionDAO dao = new AuctionDAO(conn, "Auction");
-            dao.list();
+            AuctionEditDTO dto = new AuctionEditDTO();
+            dao.create(dto);
         } catch (Exception ex) {
             Sentry.captureException(ex);
             logger.error(ex.getMessage());
