@@ -8,7 +8,11 @@ DECLARE
     usersToNotify CURSOR FOR
         SELECT DISTINCT b.userId
         FROM Bid b
-        WHERE b.auctionId = NEW.auctionId AND b.userId != NEW.userId;
+        WHERE b.auctionId = NEW.auctionId AND b.userId != NEW.userId
+        UNION
+        SELECT DISTINCT c.userId
+        FROM Comment c
+        WHERE c.auctionId = NEW.auctionId AND c.userId != NEW.userId;
 BEGIN
     SELECT u.userName INTO userName
     FROM "user" u
