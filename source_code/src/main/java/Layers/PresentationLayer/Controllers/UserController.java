@@ -23,10 +23,11 @@ public class UserController {
          return (UserEditDTO) userDAO.create(payload);
     }
 
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/list", produces = "application/json")
     @ResponseBody
     public List<UserListDTO> list() {
         return userDAO.getAll(null, null);
     }
+
 
 }
