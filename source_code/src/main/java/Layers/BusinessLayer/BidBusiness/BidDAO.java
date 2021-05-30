@@ -9,10 +9,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import static Layers.BusinessLayer.Base.TableNames.BID;
+
 public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
 
-    public BidDAO(Connection conn) {
-        super("Bid", true);
+    public BidDAO() {
+        super(BID, true);
     }
 
     public boolean bid(String description, float amount, int auctionid, int userid) {

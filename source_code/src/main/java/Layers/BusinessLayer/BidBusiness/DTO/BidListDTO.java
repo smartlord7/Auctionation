@@ -1,7 +1,10 @@
 package Layers.BusinessLayer.BidBusiness.DTO;
 
+import java.sql.Timestamp;
+
 public class BidListDTO {
-    public String Description;
-    public Float Amount;
-    public Integer userId;
+    public Integer bidId, userId;
+    public String description;
+    public Float amount;
+    public Timestamp createTimestamp;
 }

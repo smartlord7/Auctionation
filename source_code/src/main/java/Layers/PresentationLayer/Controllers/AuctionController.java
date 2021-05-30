@@ -17,8 +17,19 @@ public class AuctionController {
     @PostMapping(value = "/create", consumes = "application/json")
     @ResponseBody
     public ResponseEntity<?> create(@RequestBody AuctionEditDTO payload) {
-        System.out.println(payload);
         return ResponseEntity.ok(((AuctionEditDTO) auctionDAO.create(payload)));
+    }
+
+    @DeleteMapping(value = "/delete/{auctionId}")
+    @ResponseBody
+    public ResponseEntity<?> delete(@PathVariable("auctionId") int auctionId) {
+        return ResponseEntity.ok(auctionDAO.deleteById(auctionId));
+    }
+
+    @GetMapping(value = "/details/{auctionId}")
+    @ResponseBody
+    public ResponseEntity<?> getDetails(@PathVariable("auctionId") int auctionId) {
+        return ResponseEntity.ok(auctionDAO.getDetails(auctionId));
     }
 
     @PutMapping(value = "/edit/{auctionId}", consumes = "application/json")

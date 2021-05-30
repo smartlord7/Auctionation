@@ -4,8 +4,10 @@ import Layers.BusinessLayer.Base.BaseDAO;
 
 import java.sql.Connection;
 
+import static Layers.BusinessLayer.Base.TableNames.COMMENT;
+
 public class CommentDAO extends BaseDAO<CommentEditDTO,CommentListDTO>{
-    public CommentDAO(Connection conn) {
-        super("Comment", true);
+    public CommentDAO() {
+        super(COMMENT, true);
     }
 }

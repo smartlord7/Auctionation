@@ -198,6 +198,9 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
                     .append(" = '")
                     .append(propertyValue)
                     .append("'");
+            if (auditable) {
+                sb.append(" AND deleteTimestamp IS NOT NULL");
+            }
         }
 
         try {
