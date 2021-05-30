@@ -26,15 +26,16 @@ public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
                 "?, ?, CURRENT_TIMESTAMP,?, ?" +
                 "WHERE NOT EXISTS(" +
                 "SELECT 1 FROM auction a " +
-                "WHERE a.auctionid=auctionid " +
-                "AND (a.currentbidvalue>=? OR CURRENT_TIMESTAMP < a.deleteTimestamp OR CURRENT_TIMESTAMP < a.endTimestamp)" +
+                "WHERE a.auctionid=? " +
+                "AND (a.currentbidvalue>=? OR currentstate=1)" +
                 ");"))
         {
             ps.setString(1, payload.Description);
             ps.setFloat(2, payload.Amount);
             ps.setInt(3, payload.auctionId);
             ps.setInt(4, payload.userId);
-            ps.setFloat(5, payload.Amount);
+            ps.setInt(5, payload.auctionId);
+            ps.setFloat(6, payload.Amount);
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 1) {

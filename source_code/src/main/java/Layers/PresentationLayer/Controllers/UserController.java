@@ -46,4 +46,7 @@ public class UserController {
     public ResponseEntity<?> banUser(@PathVariable("userId") int userId) {
         return ResponseEntity.ok(userDAO.banUser(1, userId));
     }
+
+
+
 }
