@@ -1,6 +1,5 @@
 package Layers.BusinessLayer.Base;
 
-import Layers.BusinessLayer.Base.DTO.BaseEditDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
@@ -174,7 +173,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<BaseListDTO> getAll(String propertyName, Object propertyValue) {
+    public List<BaseListDTO> getbyProp(String propertyName, Object propertyValue) {
         int i;
         List<BaseListDTO> result = new ArrayList<>();
         final ParameterizedType dtoType = (ParameterizedType) getClass().getGenericSuperclass();

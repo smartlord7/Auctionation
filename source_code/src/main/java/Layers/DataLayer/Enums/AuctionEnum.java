@@ -1,7 +1,7 @@
 package Layers.DataLayer.Enums;
 
 public enum AuctionEnum {
-    NOTSTARTED,
+    NOT_STARTED,
     RUNNING,
     INTERRUPTED,
     FINISHED
