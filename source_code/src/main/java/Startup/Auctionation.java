@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan("Layers")
+@ComponentScan("Startup")
 public class Auctionation {
     private static final Logger logger = LoggerFactory.getLogger(Auctionation.class);
 

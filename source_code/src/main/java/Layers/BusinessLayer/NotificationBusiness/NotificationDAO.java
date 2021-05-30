@@ -41,7 +41,10 @@ public class NotificationDAO extends BaseDAO<NotificationEditDTO, NotificationLi
             }
 
             try {
-                ps = conn.prepareStatement()
+                ps = conn.prepareStatement(query2);
+                int nRows = ps.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
 
         } catch (SQLException e) {

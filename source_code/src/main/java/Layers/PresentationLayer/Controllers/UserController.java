@@ -29,7 +29,7 @@ public class UserController {
         return ResponseEntity.ok(userDAO.getbyProp("userId", userId).get(0));
     }
 
-    @GetMapping(value = "/{userId}")
+    @DeleteMapping(value = "/{userId}")
     @ResponseBody
     public ResponseEntity<?> deleteUserById(@PathVariable("userId") int userId) {
         return ResponseEntity.ok(userDAO.deleteById(userId));

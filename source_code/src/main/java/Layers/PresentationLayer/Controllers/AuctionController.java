@@ -16,13 +16,13 @@ public class AuctionController {
     private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
     private static final AuctionDAO auctionDAO = new AuctionDAO(ConnectionFactory.getConnection());
 
-    @PostMapping(value = "/", consumes = "application/json")
+    @PostMapping(value = "/create", consumes = "application/json")
     @ResponseBody
     public ResponseEntity<?> create(@RequestBody AuctionEditDTO payload) {
         return ResponseEntity.ok(((AuctionEditDTO) auctionDAO.create(payload)));
     }
 
-    @PutMapping(value = "/", consumes = "application/json")
+    @PutMapping(value = "/edit", consumes = "application/json")
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody AuctionEditDTO payload) {
         return ResponseEntity.ok((auctionDAO.updateById(payload)));
@@ -34,7 +34,7 @@ public class AuctionController {
         return ResponseEntity.ok(auctionDAO.getbyProp(null, null));
     }
 
-    @GetMapping(value = "/{keyword}", produces = "application/json")
+    @GetMapping(value = "/{keyword}", consumes = "text/plain", produces = "application/json")
     @ResponseBody
     public ResponseEntity<?> listByKeyword(@PathVariable("keyword") String keyword, Object value) {
         return ResponseEntity.ok(auctionDAO.getbyProp(keyword, value));
