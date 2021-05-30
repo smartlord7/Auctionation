@@ -13,28 +13,28 @@ import static Layers.BusinessLayer.Base.TableNames.BID;
 
 public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
 
-    public BidDAO() {
+    public BidDAO(Connection conn) {
         super(BID, false);
     }
 
-    public boolean bid(String description, float amount, int auctionid, int userid) {
+    public boolean bid(BidEditDTO payload) {
         Connection conn = ConnectionFactory.getConnection();
 
         try(PreparedStatement ps = conn.prepareStatement("INSERT " +
-                "INTO BID (description, amount, auctionid, userid)" +
+                "INTO BID (description, amount,createTimestamp, auctionid, userid)" +
                 "SELECT " +
-                "?, ?, ?, ?" +
+                "?, ?, CURRENT_TIMESTAMP,?, ?" +
                 "WHERE NOT EXISTS(" +
                 "SELECT 1 FROM auction a " +
                 "WHERE a.auctionid=auctionid " +
-                "AND (a.currentbidvalue>=? OR CURRENT_TIMESTAMP < a.deleteTimestamp)" +
+                "AND (a.currentbidvalue>=? OR CURRENT_TIMESTAMP < a.deleteTimestamp OR CURRENT_TIMESTAMP < a.endTimestamp)" +
                 ");"))
         {
-            ps.setString(1, description);
-            ps.setFloat(2, amount);
-            ps.setInt(3, auctionid);
-            ps.setInt(4, userid);
-            ps.setFloat(5, amount);
+            ps.setString(1, payload.Description);
+            ps.setFloat(2, payload.Amount);
+            ps.setInt(3, payload.auctionId);
+            ps.setInt(4, payload.userId);
+            ps.setFloat(5, payload.Amount);
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 1) {

@@ -101,7 +101,7 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
                     }
                     auctionFields[i].set(dto, rows.getObject(i + 1));
                 }
-                dto.bidHistory = new BidDAO().getbyProp("auctionId", Integer.toString(auctionId));
+                dto.bidHistory = new BidDAO(conn).getbyProp("auctionId", Integer.toString(auctionId));
                 dto.comments = new CommentDAO().getbyProp("auctionId", Integer.toString(auctionId));
             } else {
                 return null;

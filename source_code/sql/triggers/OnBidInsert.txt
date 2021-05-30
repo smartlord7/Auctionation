@@ -1,0 +1,18 @@
+CREATE OR REPLACE FUNCTION updateCurrentBid() RETURNS TRIGGER
+    language plpgsql
+AS
+$$
+BEGIN
+    UPDATE auction
+    SET currentbidvalue=NEW.amount
+      ,updateTimeStamp=CURRENT_TIMESTAMP
+    WHERE NEW.auctionId = auctionId;
+
+    RETURN NEW;
+END
+$$;
+CREATE TRIGGER OnBidInsert
+    AFTER INSERT
+    ON bid
+    FOR EACH ROW
+EXECUTE PROCEDURE updateCurrentBid();
