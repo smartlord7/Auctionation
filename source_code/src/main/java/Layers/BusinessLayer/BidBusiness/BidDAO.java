@@ -14,7 +14,7 @@ import static Layers.BusinessLayer.Base.TableNames.BID;
 public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
 
     public BidDAO() {
-        super(BID, true);
+        super(BID, false);
     }
 
     public boolean bid(String description, float amount, int auctionid, int userid) {

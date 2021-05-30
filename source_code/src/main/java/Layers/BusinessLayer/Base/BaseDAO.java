@@ -76,7 +76,11 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         }
 
         sb.append(fields[i].getName())
-                .append("= ?,updateTimestamp = ? WHERE ")
+                .append("= ? ");
+        if (auditable) {
+            sb.append(",updateTimestamp = ? ");
+        }
+        sb.append("WHERE ")
                 .append(tableName)
                 .append("Id = ?");
 
@@ -85,7 +89,10 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
             for (i = 0; i < fields.length; i++) {
                 ps.setObject(i + 1, fields[i].get(dto));
             }
-            ps.setObject(++i, Timestamp.from(Instant.now()));
+
+            if (auditable) {
+                ps.setObject(++i, Timestamp.from(Instant.now()));
+            }
             ps.setObject(++i, id);
 
             int numAffectedRows = ps.executeUpdate();
@@ -199,7 +206,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
                     .append(propertyValue)
                     .append("'");
             if (auditable) {
-                sb.append(" AND deleteTimestamp IS NOT NULL");
+                sb.append(" AND deleteTimestamp IS NULL");
             }
         }
 

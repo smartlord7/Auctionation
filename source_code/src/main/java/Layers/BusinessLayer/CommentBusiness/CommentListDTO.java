@@ -3,6 +3,6 @@ package Layers.BusinessLayer.CommentBusiness;
 import Layers.BusinessLayer.Base.DTO.BaseListDTO;
 
 public class CommentListDTO extends BaseListDTO {
-    public Integer userId;
+    public Long userId;
     public String text;
 }

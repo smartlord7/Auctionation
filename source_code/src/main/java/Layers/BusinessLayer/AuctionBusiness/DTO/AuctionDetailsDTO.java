@@ -8,9 +8,10 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class AuctionDetailsDTO {
-    public Integer hostUserId;
+    public Integer auctionId;
+    public Long hostUserId;
     public String auctionName, description, itemEAN, itemName, itemDescription, itemOrigin;
-    public Float initialValue;
+    public Double initialValue;
     public Timestamp startTimestamp,
             expirationTimestamp;
 

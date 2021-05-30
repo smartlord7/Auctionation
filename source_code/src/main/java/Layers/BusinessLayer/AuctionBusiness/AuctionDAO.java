@@ -68,34 +68,49 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
         sb = new StringBuilder("SELECT ");
 
         for (i = 0; i < auctionFields.length - 1; i++) {
-            if (!auctionFields[i].isAnnotationPresent(Subentity.class)) {
-                sb.append(auctionFields[i].getName()).append(", ");
+            if (auctionFields[i].isAnnotationPresent(Subentity.class)) {
+                continue;
             }
+            sb.append(auctionFields[i].getName()).append(",");
+
         }
-        sb.append(auctionFields[i].getName())
-                .append(" FROM ")
+
+        if (!auctionFields[i].isAnnotationPresent(Subentity.class)) {
+            sb.append(auctionFields[i].getName());
+        }
+
+        if (sb.charAt(sb.length() - 1) == ',') {
+            sb.replace(sb.length() - 1, sb.length(), "");
+        }
+                sb.append(" FROM ")
                 .append(AUCTION)
                 .append(" WHERE ")
                 .append(AUCTION)
-                .append(" Id = ? AND")
-                .append("deleteTimestamp IS NOT NULL");
+                .append("Id = ? AND ")
+                .append("deleteTimestamp IS NULL");
 
         try {
             ps = conn.prepareStatement(sb.toString());
+            ps.setInt(1, auctionId);
             rows = ps.executeQuery();
 
             if (rows.next()) {
                 for (i = 0; i < auctionFields.length; i++) {
+                    if (auctionFields[i].isAnnotationPresent(Subentity.class)) {
+                        continue;
+                    }
                     auctionFields[i].set(dto, rows.getObject(i + 1));
                 }
+                dto.bidHistory = new BidDAO().getbyProp("auctionId", Integer.toString(auctionId));
+                dto.comments = new CommentDAO().getbyProp("auctionId", Integer.toString(auctionId));
+            } else {
+                return null;
             }
 
         } catch (SQLException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
-        dto.bidHistory = new BidDAO().getbyProp("auctionId", Integer.toString(auctionId));
-        dto.comments = new CommentDAO().getbyProp("auctionId", Integer.toString(auctionId));
 
         return dto;
     }
