@@ -26,7 +26,7 @@ public class UserController {
     @GetMapping(value = "/{userId}")
     @ResponseBody
     public ResponseEntity<?> getUserById(@PathVariable("userId") int userId) {
-        return ResponseEntity.ok(userDAO.getbyProp("userId", userId).get(0));
+        return ResponseEntity.ok(userDAO.getbyProp("userId", Integer.toString(userId)).get(0));
     }
 
     @DeleteMapping(value = "/{userId}")

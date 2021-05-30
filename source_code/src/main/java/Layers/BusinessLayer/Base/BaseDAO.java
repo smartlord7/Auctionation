@@ -174,7 +174,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<BaseListDTO> getbyProp(String propertyName, Object propertyValue) {
+    public List<BaseListDTO> getbyProp(String propertyName, String propertyValue) {
         int i;
         List<BaseListDTO> result = new ArrayList<>();
         final ParameterizedType dtoType = (ParameterizedType) getClass().getGenericSuperclass();
@@ -194,15 +194,14 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         if (propertyName != null) {
             propertyValue = propertyValue == null ? "NULL" : propertyValue;
 
-            sb.append(" WHERE ").append(propertyName).append(" = ?");
+            sb.append(" WHERE ").append(propertyName)
+                    .append(" = '")
+                    .append(propertyValue)
+                    .append("'");
         }
 
         try {
             ps = conn.prepareStatement(sb.toString());
-            if (propertyName != null) {
-                ps.setObject(1, propertyValue);
-            }
-
             rows = ps.executeQuery();
 
             while (rows.next()) {

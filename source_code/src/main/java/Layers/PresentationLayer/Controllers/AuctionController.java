@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
-
 @RestController
 @RequestMapping("/auction")
 public class AuctionController {
@@ -35,9 +33,9 @@ public class AuctionController {
         return ResponseEntity.ok(auctionDAO.getbyProp(null, null));
     }
 
-    @GetMapping(value = "/{keyword}", consumes = "text/plain", produces = "application/json")
+    @PutMapping(value = "/search/{keyword}", consumes = "text/plain", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<?> listByKeyword(@PathVariable("keyword") String keyword, Object value) {
+    public ResponseEntity<?> listByKeyword(@PathVariable("keyword") String keyword, @RequestBody String value) {
         return ResponseEntity.ok(auctionDAO.getbyProp(keyword, value));
     }
 
