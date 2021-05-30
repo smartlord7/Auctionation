@@ -21,24 +21,29 @@ public class NotificationDAO extends BaseDAO<NotificationEditDTO, NotificationLi
         List<NotificationListDTO> result = new ArrayList<>();
         ResultSet rows;
         PreparedStatement ps;
-        String query = "SELECT notificationTitle, description,  notificationid, userId, createTimestamp " +
+        String query1 = "SELECT notificationTitle, description,  notificationid, userId, createTimestamp " +
                 "FROM Notification n " +
-                "WHERE n.userId = ? AND n.deleteTimestamp IS NULL AND seenTimestamp IS NULL;" +
-                "UPDATE Notification " +
-                "SET updateTimestamp = CURRENT_TIMESTAMP, " +
-                "    seenTimestamp = CURRENT_TIMESTAMP " +
-                "WHERE userId = ? AND deleteTimestamp IS NULL";
+                "WHERE n.userId = ? AND n.deleteTimestamp IS NULL AND seenTimestamp IS NULL;";
+        String query2 = "UPDATE Notification\n" +
+                "SET updateTimestamp = CURRENT_TIMESTAMP,\n" +
+                "    seenTimestamp = CURRENT_TIMESTAMP\n" +
+                "WHERE userId = 3 AND deleteTimestamp IS NULL;";
+
 
         try {
-            ps = conn.prepareStatement(query);
+            ps = conn.prepareStatement(query1);
             ps.setInt(1, userId);
-            ps.setInt(2, userId);
             rows = ps.executeQuery();
 
             while (rows.next()) {
                 result.add(new NotificationListDTO(rows.getString(1), rows.getString(2),
                         rows.getInt(3), rows.getInt(4), rows.getTimestamp(5)));
             }
+
+            try {
+                ps = conn.prepareStatement()
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
