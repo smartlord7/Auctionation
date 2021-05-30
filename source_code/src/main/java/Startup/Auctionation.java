@@ -10,6 +10,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan("Layers")
+@ComponentScan("Startup")
+@ComponentScan("Authentication")
 public class Auctionation {
     private static final Logger logger = LoggerFactory.getLogger(Auctionation.class);
 
@@ -34,4 +36,5 @@ public class Auctionation {
             System.exit(0);
         }
     }
+
 }
