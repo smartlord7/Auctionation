@@ -3,6 +3,7 @@ package Layers.BusinessLayer.BidBusiness;
 import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.BidBusiness.DTO.BidEditDTO;
 import Layers.BusinessLayer.BidBusiness.DTO.BidListDTO;
+import Layers.DataLayer.Enums.AuctionEnum;
 import Startup.ConnectionFactory;
 
 import java.sql.Connection;
@@ -27,7 +28,7 @@ public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
                 "WHERE NOT EXISTS(" +
                 "SELECT 1 FROM auction a " +
                 "WHERE a.auctionid=? " +
-                "AND (a.currentbidvalue>=? OR currentstate=1)" +
+                "AND (a.currentbidvalue>=? OR currentstate=? OR currentstate=?)" +
                 ");"))
         {
             ps.setString(1, payload.Description);
@@ -36,6 +37,8 @@ public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
             ps.setInt(4, payload.userId);
             ps.setInt(5, payload.auctionId);
             ps.setFloat(6, payload.Amount);
+            ps.setInt(7, AuctionEnum.INTERRUPTED.getValue());
+            ps.setInt(8, AuctionEnum.FINISHED.getValue());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 1) {
