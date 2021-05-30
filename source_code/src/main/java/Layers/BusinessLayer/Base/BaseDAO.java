@@ -1,5 +1,6 @@
 package Layers.BusinessLayer.Base;
 
+import Startup.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
@@ -10,27 +11,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaseDAO<BaseEditDTO, BaseListDTO> {
-    protected final Connection conn;
     protected final String tableName;
     protected final boolean auditable;
     private static final Logger logger = LoggerFactory.getLogger(BaseDAO.class);
 
-    public BaseDAO(Connection conn, String tableName, boolean auditable) {
-        this.conn = conn;
+    public BaseDAO(String tableName, boolean auditable) {
         this.tableName = tableName;
         this.auditable = auditable;
     }
 
-    protected void saveChanges() throws SQLException {
+    protected void saveChanges(Connection conn) throws SQLException {
         try {
             conn.commit();
         } catch (SQLException ex1) {
             conn.rollback();
-            conn.close();
         }
+        conn.close();
     }
 
     public boolean deleteById(int id) {
+        Connection conn = ConnectionFactory.getConnection();
         StringBuilder sb = new StringBuilder("UPDATE ");
 
         sb.append(tableName)
@@ -46,10 +46,10 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
 
             int numAffectedRows = ps.executeUpdate();
+            saveChanges(conn);
 
             if (numAffectedRows == 1) {
                 logger.info("Entry on table " + tableName + " successfully soft deleted!");
-                saveChanges();
                 return true;
             }
 
@@ -59,13 +59,14 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         return false;
     }
 
-    public boolean updateById(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto) {
+    public boolean updateById(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto, int id) {
         validateClass(dto);
         Class<?> dtoClass = dto.getClass();
         int i;
         Field[] fields;
         StringBuilder sb = new StringBuilder("UPDATE ");
         fields = dtoClass.getDeclaredFields();
+        Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
 
         sb.append(tableName).append( " SET ");
@@ -85,12 +86,12 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
                 ps.setObject(i + 1, fields[i].get(dto));
             }
             ps.setObject(++i, Timestamp.from(Instant.now()));
-            ps.setObject(++i, dto.id);
+            ps.setObject(++i, id);
 
             int numAffectedRows = ps.executeUpdate();
             if (numAffectedRows == 1) {
                 logger.info("Entry on table " + tableName + " successfully updated!");
-                saveChanges();
+                saveChanges(conn);
 
                 return true;
             }
@@ -108,6 +109,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         int i;
         StringBuilder sb = new StringBuilder("INSERT INTO ");
         fields = dtoClass.getDeclaredFields();
+        Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
 
         sb.append(tableName).append(" (");
@@ -118,7 +120,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
         sb.append(fields[i].getName());
         if (auditable) {
-            sb.append(", createTimestamp, updateTimestamp, deleteTimestamp");
+            sb.append(", createTimestamp, updateTimestamp");
         }
         sb.append(")");
 
@@ -129,7 +131,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
         sb.append("?");
         if (auditable) {
-            sb.append(", ?, ?, ?");
+            sb.append(", ?, ?");
         }
         sb.append(")");
 
@@ -145,14 +147,13 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
             if (auditable) {
                 ps.setObject(++i, Timestamp.from(Instant.now()));
                 ps.setObject(++i, Timestamp.from(Instant.now()));
-                ps.setObject(++i, null);
             }
 
-            int numAffectedRows = ps.executeUpdate();
+            int affectedRows = ps.executeUpdate();
+            saveChanges(conn);
 
-            if (numAffectedRows == 1) {
+            if (affectedRows == 1) {
                 logger.info("New entry on table " + tableName + " successfully created!");
-                saveChanges();
                 return dto;
             }
 
@@ -181,6 +182,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
         StringBuilder sb = new StringBuilder("SELECT ");
         Field[] fields = dtoClass.getDeclaredFields();
+        Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
         ResultSet rows;
 
@@ -218,10 +220,6 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         }
 
         return result;
-    }
-
-    public Connection getConn() {
-        return conn;
     }
 
     public String getTableName() {

@@ -25,7 +25,7 @@ public class ConnectionFactory {
             return conn;
         } catch (ClassNotFoundException | SQLException ex) {
             logger.error("Could not obtain connection to the database: ", ex);
+            return null;
         }
-        return null;
     }
 }

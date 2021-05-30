@@ -6,7 +6,7 @@ import java.sql.Connection;
 
 public class RoleDAO extends BaseDAO<RoleEditDTO,RoleListDTO>{
     public RoleDAO(Connection conn) {
-        super(conn, "Role", false);
+        super("Role", false);
     }
 }
 

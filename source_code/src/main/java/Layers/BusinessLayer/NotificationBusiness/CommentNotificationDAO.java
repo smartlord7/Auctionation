@@ -8,6 +8,6 @@ import java.sql.Connection;
 
 public class CommentNotificationDAO extends BaseDAO<CommentsNotificationEditDTO, CommentsNotificationListDTO> {
     public CommentNotificationDAO(Connection conn) {
-        super(conn, "CommentNotification", false);
+        super("CommentNotification", false);
     }
 }

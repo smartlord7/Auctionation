@@ -6,6 +6,6 @@ import java.sql.Connection;
 
 public class AuctionEditHistoryDAO extends BaseDAO<AuctionEditHistoryEditDTO,AuctionEditHistoryListDTO>{
     public AuctionEditHistoryDAO(Connection conn) {
-        super(conn, "AuctionEditHistory", false);
+        super("AuctionEditHistory", false);
     }
 }

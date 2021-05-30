@@ -19,13 +19,14 @@ public class AuctionController {
     @PostMapping(value = "/create", consumes = "application/json")
     @ResponseBody
     public ResponseEntity<?> create(@RequestBody AuctionEditDTO payload) {
+        System.out.println(payload);
         return ResponseEntity.ok(((AuctionEditDTO) auctionDAO.create(payload)));
     }
 
-    @PutMapping(value = "/edit", consumes = "application/json")
+    @PutMapping(value = "/edit/{auctionId}", consumes = "application/json")
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody AuctionEditDTO payload) {
-        return ResponseEntity.ok((auctionDAO.updateById(payload)));
+    public ResponseEntity<?> update(@RequestBody AuctionEditDTO payload, @PathVariable("auctionId") int auctionId) {
+        return ResponseEntity.ok((auctionDAO.updateById(payload, auctionId)));
     }
 
     @GetMapping(value = "/list", produces = "application/json")

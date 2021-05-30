@@ -3,19 +3,20 @@ package Layers.BusinessLayer.AuctionBusiness;
 import Layers.BusinessLayer.AuctionBusiness.DTO.AuctionEditDTO;
 import Layers.BusinessLayer.AuctionBusiness.DTO.AuctionListDTO;
 import Layers.BusinessLayer.Base.BaseDAO;
+import Startup.ConnectionFactory;
 
-import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
     public AuctionDAO(Connection conn) {
-        super(conn, "Auction", true);
+        super("Auction", true);
     }
 
     public List<AuctionListDTO> getAllByUser(int userId) {
         PreparedStatement ps;
+        Connection conn = ConnectionFactory.getConnection();
         ResultSet rows;
         List<AuctionListDTO> result;
 

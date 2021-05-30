@@ -6,6 +6,6 @@ import java.sql.Connection;
 
 public class CommentDAO extends BaseDAO<CommentEditDTO,CommentListDTO>{
     public CommentDAO(Connection conn) {
-        super(conn, "Comment", true);
+        super("Comment", true);
     }
 }

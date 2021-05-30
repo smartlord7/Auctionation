@@ -8,6 +8,6 @@ import java.sql.Connection;
 
 public class AuctionNotificationDAO extends BaseDAO<AuctionNotificationEditDTO, AuctionEditHistoryListDTO> {
     public AuctionNotificationDAO(Connection conn) {
-        super(conn, "AuctionNotification", true);
+        super("AuctionNotification", true);
     }
 }

@@ -3,30 +3,29 @@ package Layers.BusinessLayer.BidBusiness;
 import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.BidBusiness.DTO.BidEditDTO;
 import Layers.BusinessLayer.BidBusiness.DTO.BidListDTO;
+import Startup.ConnectionFactory;
 
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.Instant;
 
 public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
 
     public BidDAO(Connection conn) {
-        super(conn, "Bid", true);
+        super("Bid", true);
     }
 
-
     public boolean bid(String description, float amount, int auctionid, int userid) {
+        Connection conn = ConnectionFactory.getConnection();
+
         try(PreparedStatement ps = conn.prepareStatement("INSERT " +
-                "INTO BID (description, amount, auctionid,userid)" +
+                "INTO BID (description, amount, auctionid, userid)" +
                 "SELECT " +
-                "?,?,?,?" +
+                "?, ?, ?, ?" +
                 "WHERE NOT EXISTS(" +
-                "SELECT 1 FROM auction au" +
-                "WHERE au.auctionid=auctionid" +
-                "AND (au.currentbidvalue>=? OR CURRENT_TIMESTAMP<au.deleteTimestamp)" +
+                "SELECT 1 FROM auction a " +
+                "WHERE a.auctionid=auctionid " +
+                "AND (a.currentbidvalue>=? OR CURRENT_TIMESTAMP < a.deleteTimestamp)" +
                 ");"))
         {
             ps.setString(1, description);
@@ -37,7 +36,7 @@ public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 1) {
-                saveChanges();
+                saveChanges(conn);
                 return true;
             }
         } catch (SQLException e) {

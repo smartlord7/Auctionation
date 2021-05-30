@@ -3,6 +3,7 @@ package Layers.BusinessLayer.NotificationBusiness;
 import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.NotificationBusiness.DTO.NotificationEditDTO;
 import Layers.BusinessLayer.NotificationBusiness.DTO.NotificationListDTO;
+import Startup.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class NotificationDAO extends BaseDAO<NotificationEditDTO, NotificationListDTO> {
     public NotificationDAO(Connection conn) {
-        super(conn, "Notification", true);
+        super("Notification", true);
     }
 
     public List<NotificationListDTO> listByUser(int userId) {
@@ -21,6 +22,7 @@ public class NotificationDAO extends BaseDAO<NotificationEditDTO, NotificationLi
         List<NotificationListDTO> result = new ArrayList<>();
         ResultSet rows;
         PreparedStatement ps;
+        Connection conn = ConnectionFactory.getConnection();
         String query1 = "SELECT notificationTitle, description,  notificationid, userId, createTimestamp " +
                 "FROM Notification n " +
                 "WHERE n.userId = ? AND n.deleteTimestamp IS NULL AND seenTimestamp IS NULL;";

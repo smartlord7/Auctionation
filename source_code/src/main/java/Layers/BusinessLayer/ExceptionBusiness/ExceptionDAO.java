@@ -9,6 +9,6 @@ import java.sql.Connection;
 public class ExceptionDAO extends BaseDAO<ExceptionEditDTO, ExceptionListDTO> {
 
     public ExceptionDAO(Connection conn) {
-        super(conn, "Exception", false);
+        super("Exception", false);
     }
 }
