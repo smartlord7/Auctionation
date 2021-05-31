@@ -6,11 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import static Helpers.config.Authorization.ROLE_ADMIN;
 import static Helpers.config.Authorization.ROLE_USER;
 
-@RequestMapping(value = "/notification")
+@RequestMapping(value = "/auctionation/api/notification")
 public class NotificationController {
     private static final Logger logger = LoggerFactory.getLogger(NotificationController.class);
     private static final NotificationDAO notificationDAO = new NotificationDAO();

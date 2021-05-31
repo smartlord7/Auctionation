@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import static Helpers.config.Authorization.*;
 
 @RestController
-@RequestMapping("/auction")
+@RequestMapping("/auctionation/api/auction")
 public class AuctionController {
     private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
     private static final AuctionDAO auctionDAO = new AuctionDAO();

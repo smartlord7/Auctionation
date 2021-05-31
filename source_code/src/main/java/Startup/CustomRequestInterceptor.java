@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.UriTemplate;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
@@ -60,7 +59,7 @@ public class CustomRequestInterceptor implements HandlerInterceptor {
 
                     uriTemplate  = new UriTemplate(totalURI);
 
-                    if (!uriTemplate.matches(endpointURI)) {
+                    if (!uriTemplate.matches(endpointURI) || !reqMap.method()[0].toString().equals(reqMethod)) {
                         continue;
                     }
 

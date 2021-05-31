@@ -17,7 +17,7 @@ import static Helpers.config.Authorization.ROLE_ADMIN;
 import static Helpers.config.Authorization.ROLE_USER;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/auctionation/api/comment")
 public class CommentController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AuctionController.class);
     private static final CommentDAO commentDAO = new CommentDAO();

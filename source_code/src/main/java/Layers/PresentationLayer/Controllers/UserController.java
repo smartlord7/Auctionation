@@ -21,7 +21,7 @@ import static Helpers.config.AuthHelper.authenticate;
 import static Helpers.config.Authorization.ROLE_ADMIN;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auctionation/api/user")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);

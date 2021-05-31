@@ -1,11 +1,8 @@
 package Layers.PresentationLayer.Controllers;
 
 import Helpers.config.Authorization;
-import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.BidBusiness.BidDAO;
 import Layers.BusinessLayer.BidBusiness.DTO.BidEditDTO;
-import Layers.BusinessLayer.UserBusiness.DTO.UserEditDTO;
-import Startup.ConnectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +10,7 @@ import static Helpers.config.Authorization.ROLE_ADMIN;
 import static Helpers.config.Authorization.ROLE_USER;
 
 @RestController
-@RequestMapping("/bid")
+@RequestMapping("/auctionation/api/bid")
 public class BidController {
     private static final BidDAO bidDAO = new BidDAO();
 
