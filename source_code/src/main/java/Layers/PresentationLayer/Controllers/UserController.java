@@ -3,14 +3,20 @@ import Layers.BusinessLayer.StatsBusiness.StatsDAO;
 import Helpers.config.Authorization;
 import Helpers.config.ErrorResponse;
 import Helpers.config.TokenResponse;
+import Layers.BusinessLayer.StatsBusiness.StatsEditDTO;
+import Layers.BusinessLayer.StatsBusiness.StatsListDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserAuthDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserEditDTO;
+import Layers.BusinessLayer.UserBusiness.DTO.UserListDTO;
 import Layers.BusinessLayer.UserBusiness.UserDAO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
 import static Helpers.config.AuthHelper.authenticate;
 import static Helpers.config.Authorization.ROLE_ADMIN;
 
@@ -78,14 +84,22 @@ public class UserController {
     @RequestMapping(value = "/list", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> listUsers() {
-        return ResponseEntity.ok(userDAO.getbyProp(null, null));
+        List<UserListDTO> dto;
+        if ((dto = userDAO.getbyProp(null, null)) == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(userDAO.getError());
+        }
+        return ResponseEntity.ok(dto);
     }
 
     @Authorization(roles = {ROLE_ADMIN})
-    @RequestMapping(value ="/ban/{userId}", produces = "application/json", method = RequestMethod.GET)
+    @RequestMapping(value ="/ban/{userId}/{adminId}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> banUser(@PathVariable("userId") int userId) {
-        return ResponseEntity.ok(userDAO.banUser(1, userId));
+    public ResponseEntity<?> banUser(@PathVariable("userId") int userId, @PathVariable("adminId") int adminId) {
+
+        if (!userDAO.banUser(adminId, userId)) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(userDAO.getError());
+        }
+        return ResponseEntity.ok(userId);
     }
 
     /**
@@ -96,6 +110,11 @@ public class UserController {
     @RequestMapping(value = "/stats", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> getStats() {
-        return ResponseEntity.ok(new StatsDAO().getStats());
+        StatsDAO statsDAO = new StatsDAO();
+        StatsListDTO dto;
+        if ((dto = statsDAO.getStats()) == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(dto);
+        }
+        return ResponseEntity.ok(dto);
     }
 }

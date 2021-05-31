@@ -29,7 +29,7 @@ public class UserDAO extends BaseDAO<UserEditDTO, UserListDTO>{
     }
 
     public boolean banUser(int adminUserId, int bannedUserId) {
-        String query = "{CALL banUser(?, ?, ?)}";
+        String query = "CALL banuser(?, ?, ?)";
         CallableStatement cs;
         Connection conn = ConnectionFactory.getConnection();
 
@@ -39,13 +39,13 @@ public class UserDAO extends BaseDAO<UserEditDTO, UserListDTO>{
             cs.setInt(2, bannedUserId);
             cs.setString(3, AUCTION_COMMENT_BAN);
 
-            boolean feedback = cs.execute();
+            cs.execute();
             saveChanges(conn);
-            return feedback;
         } catch (SQLException e) {
             auditError(e, conn);
+            return false;
         }
 
-        return false;
+        return true;
     }
 }

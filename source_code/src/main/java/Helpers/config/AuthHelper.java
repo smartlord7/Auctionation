@@ -3,16 +3,16 @@ package Helpers.config;
 import Layers.BusinessLayer.UserBusiness.DTO.UserAuthDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserListDTO;
 import Layers.BusinessLayer.UserBusiness.UserDAO;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class AuthHelper {
 
     public static HashMap<String, UserSession> sessions = new HashMap<>();
-    private static final int TOKEN_DURATION = ((14 * 60) + 59) * 1000;
+    private static final int TOKEN_DURATION = ((14 * 60) + 59) * 1000, TOKEN_LENGTH = 256;
     public static final String TOKEN_HEADER_KEY_NAME = "custom-token";
     public static ErrorResponse errorResponse;
 
@@ -49,13 +49,20 @@ public class AuthHelper {
                 Date.from(Instant.now()));
 
 
-        token = generateToken(user.userName, user.passwordHash);
+        token = generateToken();
         sessions.putIfAbsent(token, session);
 
         return new TokenResponse(token, TOKEN_DURATION);
     }
 
-    private static String generateToken(String userName, String passwordHash) {
-        return EncryptHelper.sha256Encrypt(Math.random() * 100 + userName +  passwordHash + Timestamp.from(Instant.now()));
+    private static String generateToken() {
+        int leftLimit = 48, rightLimit = 122;
+        Random random = new Random();
+
+        return random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(TOKEN_LENGTH)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 }

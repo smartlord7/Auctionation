@@ -267,9 +267,8 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
             return result;
         } catch (SQLException | InstantiationException | IllegalAccessException e) {
             auditError(e, conn);
+            return null;
         }
-
-        return result;
     }
 
     public String getTableName() {
