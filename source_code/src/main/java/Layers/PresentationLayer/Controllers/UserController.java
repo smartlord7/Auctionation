@@ -24,7 +24,7 @@ public class UserController {
     @Authorization(allowAnonymous = true)
     @RequestMapping(value = "/create", consumes = "application/json", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> createUser(@RequestBody UserEditDTO payload) {
+    public ResponseEntity<?> create(@RequestBody UserEditDTO payload) {
          return ResponseEntity.ok((UserEditDTO) userDAO.create(payload));
     }
 
