@@ -11,10 +11,12 @@ import Startup.ConnectionFactory;
 
 import java.lang.reflect.Field;
 import java.sql.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import static Layers.BusinessLayer.Base.TableNames.AUCTION;
+import static Layers.DataLayer.Enums.AuctionEnum.FINISHED;
 
 public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
     public AuctionDAO(Connection conn) {
@@ -114,4 +116,36 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
 
         return dto;
     }
+
+    public boolean terminateById(int id) {
+        StringBuilder sb = new StringBuilder("UPDATE ");
+        Connection conn = ConnectionFactory.getConnection();
+        PreparedStatement ps;
+
+        sb.append("Auction").append( " SET ");
+        sb.append("currentState = ?, endTimestamp = ? WHERE ");
+        sb.append(tableName).append("Id = ?");
+
+        try {
+            ps = conn.prepareStatement(sb.toString());
+
+            ps.setInt(1, FINISHED.ordinal());
+            ps.setTimestamp(2, Timestamp.from(Instant.now()));
+            ps.setInt(3, id);
+
+            int numAffectedRows = ps.executeUpdate();
+
+            if (numAffectedRows == 1) {
+                logger.info("Auction with ID " + id + " successfully terminated!");
+                saveChanges(conn);
+
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

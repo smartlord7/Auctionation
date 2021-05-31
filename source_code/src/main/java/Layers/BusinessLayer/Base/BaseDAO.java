@@ -13,7 +13,7 @@ import java.util.List;
 public class BaseDAO<BaseEditDTO, BaseListDTO> {
     protected final String tableName;
     protected final boolean auditable;
-    private static final Logger logger = LoggerFactory.getLogger(BaseDAO.class);
+    protected static final Logger logger = LoggerFactory.getLogger(BaseDAO.class);
 
     public BaseDAO(String tableName, boolean auditable) {
         this.tableName = tableName;

@@ -21,6 +21,7 @@ public class ConnectionFactory {
         try {
             Class.forName("org.postgresql.Driver");
             Connection conn = DriverManager.getConnection(authenticator.getJdbcURL(), authenticator.getJDBC_USER(), authenticator.getJDBC_PASS());
+
             conn.setAutoCommit(false);
             return conn;
         } catch (ClassNotFoundException | SQLException ex) {

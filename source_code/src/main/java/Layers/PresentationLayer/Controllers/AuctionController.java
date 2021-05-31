@@ -55,4 +55,10 @@ public class AuctionController {
     public ResponseEntity<?> listByUser(@PathVariable("userId") int userId) {
         return ResponseEntity.ok(auctionDAO.getAllByUser(userId));
     }
+
+    @GetMapping(value = "/terminate/{auctionId}")
+    @ResponseBody
+    public ResponseEntity<?> terminate(@PathVariable("auctionId") int auctionId) {
+        return ResponseEntity.ok(auctionDAO.terminateById(auctionId));
+    }
 }
