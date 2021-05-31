@@ -56,7 +56,7 @@ public class AuctionController {
         return ResponseEntity.ok(auctionDAO.getAllByUser(userId));
     }
 
-    @GetMapping(value = "/terminate/{auctionId}")
+    @GetMapping(value = "/terminate/{auctionId}", produces = "application/json")
     @ResponseBody
     public ResponseEntity<?> terminate(@PathVariable("auctionId") int auctionId) {
         return ResponseEntity.ok(auctionDAO.terminateById(auctionId));

@@ -117,10 +117,11 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
         return dto;
     }
 
-    public boolean terminateById(int id) {
+    public AuctionEndDTO terminateById(int id) {
         StringBuilder sb = new StringBuilder("UPDATE ");
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
+        ResultSet rows;
 
         sb.append("Auction").append( " SET ");
         sb.append("currentState = ?, endTimestamp = ? WHERE ");
@@ -137,15 +138,32 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
 
             if (numAffectedRows == 1) {
                 logger.info("Auction with ID " + id + " successfully terminated!");
-                saveChanges(conn);
 
-                return true;
+                String query = "SELECT u.username, b.amount, b.userid, b.bidid, b.auctionid " +
+                        "FROM \"user\" u , auction a INNER JOIN bid b ON (a.currentbidvalue = b.amount) AND (a.auctionid=b.auctionid)" +
+                        "WHERE currentstate=2 and b.userid=u.userid";
+
+                try {
+                    ps = conn.prepareStatement(query);
+                    rows = ps.executeQuery();
+
+                    while (rows.next()) {
+                        saveChanges(conn);
+                        return new AuctionEndDTO(rows.getString(1), rows.getFloat(2),
+                                rows.getInt(3), rows.getInt(4), rows.getInt(5));
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return false;
+        return null;
     }
 
 }
