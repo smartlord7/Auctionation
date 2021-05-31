@@ -7,7 +7,9 @@ import Layers.BusinessLayer.Base.Subentity;
 import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.BidBusiness.BidDAO;
 import Layers.BusinessLayer.CommentBusiness.CommentDAO;
+import Layers.BusinessLayer.CommentBusiness.CommentEditDTO;
 import Startup.ConnectionFactory;
+import com.jayway.jsonpath.Configuration;
 
 import java.lang.reflect.Field;
 import java.sql.*;
@@ -17,8 +19,12 @@ import java.util.List;
 
 import static Layers.BusinessLayer.Base.TableNames.AUCTION;
 import static Layers.DataLayer.Enums.AuctionEnum.FINISHED;
+import static Layers.DataLayer.Enums.AuctionEnum.INTERRUPTED;
 
 public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
+
+    private static final String AUCTION_COMMENT_CANCEL = "We are sorry to inform that this auction is no longer available.";
+
     public AuctionDAO(Connection conn) {
         super(AUCTION, true);
     }
@@ -36,7 +42,6 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
                     "                      FROM bid b" +
                     "                      WHERE b.userId = ?) OR a.hostuserId = ?) AND" +
                     "      deleteTimestamp IS NULL";
-
 
         try {
             ps = conn.prepareStatement(query);
@@ -164,6 +169,46 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
         }
 
         return null;
+    }
+
+    public boolean cancelById(int auctionId, int adminId) {
+        StringBuilder sb = new StringBuilder("UPDATE ");
+        Connection conn = ConnectionFactory.getConnection();
+        PreparedStatement ps;
+        CommentDAO commentDAO = new CommentDAO();
+        CommentEditDTO commentEditDTO = new CommentEditDTO();
+
+        sb.append("Auction").append( " SET ");
+        sb.append("currentState = ?, endTimestamp = ? WHERE ");
+        sb.append(tableName).append("Id = ?");
+
+        try {
+            ps = conn.prepareStatement(sb.toString());
+
+            ps.setInt(1, INTERRUPTED.ordinal());
+            ps.setTimestamp(2, Timestamp.from(Instant.now()));
+            ps.setInt(3, auctionId);
+
+            int numAffectedRows = ps.executeUpdate();
+
+            if (numAffectedRows == 1) {
+                logger.info("Auction with ID " + auctionId + " successfully canceled!");
+
+                commentEditDTO.text = AUCTION_COMMENT_CANCEL;
+                commentEditDTO.userId = adminId;
+
+                commentDAO.create(commentEditDTO);
+
+                return true;
+            }
+
+            return false;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
 }

@@ -61,4 +61,10 @@ public class AuctionController {
     public ResponseEntity<?> terminate(@PathVariable("auctionId") int auctionId) {
         return ResponseEntity.ok(auctionDAO.terminateById(auctionId));
     }
+
+    @GetMapping(value = "/cancel/{auctionId}/{adminId}")
+    @ResponseBody
+    public ResponseEntity<?> cancel(@PathVariable("auctionId") int auctionId, @PathVariable("adminId") int adminId) {
+        return ResponseEntity.ok(auctionDAO.cancelById(auctionId, adminId));
+    }
 }
