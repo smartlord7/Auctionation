@@ -13,7 +13,6 @@ import java.util.Enumeration;
 public class ClassHelper {
 
 
-    public static boolean isAuthorizedEndpoint() {}
 
     /**
      * Scans all classes accessible from the context class loader which belong

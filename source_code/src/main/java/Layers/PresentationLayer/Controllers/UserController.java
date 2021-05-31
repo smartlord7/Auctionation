@@ -1,7 +1,5 @@
 package Layers.PresentationLayer.Controllers;
-import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.StatsBusiness.StatsDAO;
-import Layers.BusinessLayer.StatsBusiness.StatsListDTO;
 import Helpers.config.Authorization;
 import Helpers.config.ErrorResponse;
 import Helpers.config.TokenResponse;
@@ -15,9 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static Helpers.config.AuthHelper.authenticate;
 import static Helpers.config.Authorization.ROLE_ADMIN;
-import static Helpers.config.Authorization.ROLE_USER;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -26,15 +21,15 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final UserDAO userDAO = new UserDAO();
 
-    @Authorization(roleId = {ROLE_ADMIN, ROLE_USER})
-    @PostMapping(value = "/create", consumes = "application/json")
+    @Authorization(allowAnonymous = true)
+    @RequestMapping(value = "/create", consumes = "application/json", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> createUser(@RequestBody UserEditDTO payload) {
          return ResponseEntity.ok((UserEditDTO) userDAO.create(payload));
     }
 
     @Authorization(allowAnonymous = true)
-    @PutMapping(value = "/login", consumes = "application/json")
+    @RequestMapping(value = "/login", consumes = "application/json", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody UserAuthDTO payload) {
         TokenResponse token;
@@ -47,38 +42,39 @@ public class UserController {
         }
     }
 
-    @Authorization(roleId = {ROLE_ADMIN})
-    @GetMapping(value = "/details/{userId}")
+    @Authorization(roles = {ROLE_ADMIN})
+    @RequestMapping(value = "/details/{userId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> getUserById(@PathVariable("userId") int userId) {
         return ResponseEntity.ok(userDAO.getbyProp("userId", Integer.toString(userId)).get(0));
     }
 
-    @Authorization(roleId = {ROLE_ADMIN})
-    @DeleteMapping(value = "/delete/{userId}")
+    @Authorization(roles = {ROLE_ADMIN})
+    @RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> deleteUserById(@PathVariable("userId") int userId) {
         return ResponseEntity.ok(userDAO.deleteById(userId));
     }
 
-    @Authorization(roleId = {ROLE_ADMIN})
-    @GetMapping(value = "/list", produces = "application/json")
+    @Authorization(roles = {ROLE_ADMIN})
+    @RequestMapping(value = "/list", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> listUsers() {
         return ResponseEntity.ok(userDAO.getbyProp(null, null));
     }
 
-    @Authorization(roleId = {ROLE_ADMIN})
-    @GetMapping(value ="/ban/{userId}", produces = "application/json")
+    @Authorization(roles = {ROLE_ADMIN})
+    @RequestMapping(value ="/ban/{userId}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> banUser(@PathVariable("userId") int userId) {
         return ResponseEntity.ok(userDAO.banUser(1, userId));
     }
 
-    @GetMapping(value = "/stats", produces = "application/json")
+    @Authorization(roles = {ROLE_ADMIN})
+    @RequestMapping(value = "/stats", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> listAuctionsWon() {
-        return ResponseEntity.ok(StatsDAO.getStats());
+        return ResponseEntity.ok(new StatsDAO().getStats());
     }
 
 

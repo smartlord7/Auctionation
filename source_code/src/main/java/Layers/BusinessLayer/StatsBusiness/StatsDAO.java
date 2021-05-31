@@ -14,12 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StatsDAO extends BaseDAO<StatsEditDTO, StatsListDTO> {
-    public StatsDAO(Connection conn) {
+    public StatsDAO() {
         super("User", true);
     }
 
-
-    public static StatsListDTO getStats() {
+    public StatsListDTO getStats() {
         Connection conn = ConnectionFactory.getConnection();
         StatsListDTO result = new StatsListDTO();
         try (Statement stmt = conn.createStatement()) {

@@ -15,7 +15,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){
-        registry.addInterceptor(new CustomRequestInterceptor()).addPathPatterns("/**");
+        try {
+            registry.addInterceptor(new CustomRequestInterceptor()).addPathPatterns("/**");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

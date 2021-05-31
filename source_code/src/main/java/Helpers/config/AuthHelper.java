@@ -55,6 +55,6 @@ public class AuthHelper {
     }
 
     private static String generateToken(String userName, String passwordHash) {
-        return EncryptHelper.sha256Encrypt(Double.toString(Math.random() * 100) + userName +  passwordHash + Timestamp.from(Instant.now()));
+        return EncryptHelper.sha256Encrypt(Math.random() * 100 + userName +  passwordHash + Timestamp.from(Instant.now()));
     }
 }

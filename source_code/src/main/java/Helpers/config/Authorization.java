@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Authorization {
-    int ROLE_ADMIN = 0, ROLE_USER = 1;
+    int ROLE_ADMIN = 0, ROLE_USER = 1, ROLE_SCHEDULER = 2;
 
-    int[] roleId() default {};
+    int[] roles() default {};
     boolean allowAnonymous() default false;
 }

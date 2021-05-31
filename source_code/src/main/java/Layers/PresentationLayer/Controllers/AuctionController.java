@@ -9,8 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static Helpers.config.Authorization.ROLE_ADMIN;
-import static Helpers.config.Authorization.ROLE_USER;
+import static Helpers.config.Authorization.*;
 
 @RestController
 @RequestMapping("/auction")
@@ -19,61 +18,63 @@ public class AuctionController {
     private static final AuctionDAO auctionDAO = new AuctionDAO(ConnectionFactory.getConnection());
 
     @Authorization(allowAnonymous = true)
-    @PostMapping(value = "/create", consumes = "application/json")
+    @RequestMapping(value = "/create", consumes = "application/json", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> create(@RequestBody AuctionEditDTO payload) {
         return ResponseEntity.ok(((AuctionEditDTO) auctionDAO.create(payload)));
     }
 
-    @Authorization(roleId = {ROLE_ADMIN})
-    @DeleteMapping(value = "/delete/{auctionId}")
+    @Authorization(roles = {ROLE_ADMIN})
+    @RequestMapping(value = "/delete/{auctionId}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable("auctionId") int auctionId) {
         return ResponseEntity.ok(auctionDAO.deleteById(auctionId));
     }
 
-    @Authorization(roleId = {ROLE_ADMIN, ROLE_USER})
-    @GetMapping(value = "/details/{auctionId}")
+    @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
+    @RequestMapping(value = "/details/{auctionId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> getDetails(@PathVariable("auctionId") int auctionId) {
         return ResponseEntity.ok(auctionDAO.getDetails(auctionId));
     }
 
-    @Authorization(roleId = {ROLE_ADMIN, ROLE_USER})
-    @PutMapping(value = "/edit/{auctionId}", consumes = "application/json")
+    @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
+    @RequestMapping(value = "/edit/{auctionId}", consumes = "application/json", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody AuctionEditDTO payload, @PathVariable("auctionId") int auctionId) {
         return ResponseEntity.ok((auctionDAO.updateById(payload, auctionId)));
     }
 
-    @Authorization(roleId = {ROLE_ADMIN, ROLE_USER})
-    @GetMapping(value = "/list", produces = "application/json")
+    @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
+    @RequestMapping(value = "/list", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> listAll() {
         return ResponseEntity.ok(auctionDAO.getbyProp(null, null));
     }
 
-    @Authorization(roleId = {ROLE_ADMIN, ROLE_USER})
-    @PutMapping(value = "/search/{keyword}", consumes = "text/plain", produces = "application/json")
+    @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
+    @RequestMapping(value = "/search/{keyword}", consumes = "text/plain", produces = "application/json", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<?> listByKeyword(@PathVariable("keyword") String keyword, @RequestBody String value) {
         return ResponseEntity.ok(auctionDAO.getbyProp(keyword, value));
     }
 
-    @Authorization(roleId = {ROLE_ADMIN, ROLE_USER})
-    @GetMapping(value = "/user/{userId}", produces = "application/json")
+    @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
+    @RequestMapping(value = "/user/{userId}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> listByUser(@PathVariable("userId") int userId) {
         return ResponseEntity.ok(auctionDAO.getAllByUser(userId));
     }
 
-    @GetMapping(value = "/terminate/{auctionId}", produces = "application/json")
+    @Authorization(roles = {ROLE_SCHEDULER})
+    @RequestMapping(value = "/terminate/{auctionId}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> terminate(@PathVariable("auctionId") int auctionId) {
         return ResponseEntity.ok(auctionDAO.terminateById(auctionId));
     }
 
-    @GetMapping(value = "/cancel/{auctionId}/{adminId}")
+    @Authorization(roles = {ROLE_ADMIN})
+    @RequestMapping(value = "/cancel/{auctionId}/{adminId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> cancel(@PathVariable("auctionId") int auctionId, @PathVariable("adminId") int adminId) {
         return ResponseEntity.ok(auctionDAO.cancelById(auctionId, adminId));
