@@ -9,8 +9,9 @@ import java.sql.Timestamp;
  */
 public class AuctionEditDTO extends BaseEditDTO {
     public Integer hostUserId;
-    public String auctionName, description, itemEAN, itemName, itemDescription, itemOrigin;
+    public String auctionName, description, itemName, itemDescription, itemOrigin;
     public Float initialValue;
+    public Long itemEAN;
     public Timestamp expirationTimestamp;
 
     /**
