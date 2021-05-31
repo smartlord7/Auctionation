@@ -10,4 +10,8 @@ public class CommentDAO extends BaseDAO<CommentEditDTO,CommentListDTO>{
     public CommentDAO() {
         super(COMMENT, true);
     }
+
+    public CommentDAO(Connection connection) {
+        super(COMMENT, true);
+    }
 }
