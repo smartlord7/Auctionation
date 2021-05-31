@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationDAO extends BaseDAO<NotificationEditDTO, NotificationListDTO> {
-    public NotificationDAO(Connection conn, ErrorResponse errorResponse) {
+    public NotificationDAO() {
         super("Notification", true);
     }
 
@@ -45,13 +45,13 @@ public class NotificationDAO extends BaseDAO<NotificationEditDTO, NotificationLi
 
             try {
                 ps = conn.prepareStatement(query2);
-                int nRows = ps.executeUpdate();
+                ps.executeUpdate();
             } catch (SQLException e) {
-                e.printStackTrace();
+                auditError(e, conn);
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            auditError(e, conn);
         }
 
         return result;

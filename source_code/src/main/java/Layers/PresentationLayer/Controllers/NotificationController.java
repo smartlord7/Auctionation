@@ -1,9 +1,7 @@
 package Layers.PresentationLayer.Controllers;
 
 import Helpers.config.Authorization;
-import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.NotificationBusiness.NotificationDAO;
-import Startup.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import static Helpers.config.Authorization.ROLE_ADMIN;
 import static Helpers.config.Authorization.ROLE_USER;
 
+@RequestMapping(value = "/notification")
 public class NotificationController {
     private static final Logger logger = LoggerFactory.getLogger(NotificationController.class);
-    private static ErrorResponse errorResponse = new ErrorResponse();
-    private static final NotificationDAO notificationDAO = new NotificationDAO(ConnectionFactory.getConnection(), errorResponse);
+    private static final NotificationDAO notificationDAO = new NotificationDAO();
 
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/list", produces = "application/json", method = RequestMethod.GET)

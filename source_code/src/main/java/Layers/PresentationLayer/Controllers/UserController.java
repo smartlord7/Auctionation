@@ -113,7 +113,7 @@ public class UserController {
         StatsDAO statsDAO = new StatsDAO();
         StatsListDTO dto;
         if ((dto = statsDAO.getStats()) == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(dto);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(statsDAO.getError());
         }
         return ResponseEntity.ok(dto);
     }
