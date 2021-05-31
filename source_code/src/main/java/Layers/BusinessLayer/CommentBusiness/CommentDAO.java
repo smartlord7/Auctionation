@@ -1,5 +1,6 @@
 package Layers.BusinessLayer.CommentBusiness;
 
+import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.Base.BaseDAO;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ public class CommentDAO extends BaseDAO<CommentEditDTO,CommentListDTO>{
         super(COMMENT, true);
     }
 
-    public CommentDAO(Connection connection) {
+    public CommentDAO(Connection connection, ErrorResponse errorResponse) {
         super(COMMENT, true);
     }
 }

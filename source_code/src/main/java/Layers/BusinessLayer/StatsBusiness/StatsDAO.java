@@ -1,6 +1,7 @@
 package Layers.BusinessLayer.StatsBusiness;
 
 
+import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserEditDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserListDTO;

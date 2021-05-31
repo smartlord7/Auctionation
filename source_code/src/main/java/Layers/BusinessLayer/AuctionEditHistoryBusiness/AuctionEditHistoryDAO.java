@@ -1,5 +1,6 @@
 package Layers.BusinessLayer.AuctionEditHistoryBusiness;
 
+import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.Base.BaseDAO;
 
 import java.sql.Connection;

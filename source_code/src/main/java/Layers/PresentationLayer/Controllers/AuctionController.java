@@ -1,6 +1,7 @@
 package Layers.PresentationLayer.Controllers;
 
 import Helpers.config.Authorization;
+import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.AuctionBusiness.AuctionDAO;
 import Layers.BusinessLayer.AuctionBusiness.DTO.AuctionEditDTO;
 import Startup.ConnectionFactory;
@@ -14,8 +15,9 @@ import static Helpers.config.Authorization.*;
 @RestController
 @RequestMapping("/auction")
 public class AuctionController {
+    private static ErrorResponse errorResponse = new ErrorResponse();
     private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
-    private static final AuctionDAO auctionDAO = new AuctionDAO(ConnectionFactory.getConnection());
+    private static final AuctionDAO auctionDAO = new AuctionDAO(ConnectionFactory.getConnection(), errorResponse);
 
     @Authorization(allowAnonymous = true)
     @RequestMapping(value = "/create", consumes = "application/json", method = RequestMethod.POST)

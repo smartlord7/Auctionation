@@ -19,13 +19,22 @@ import static Helpers.config.Authorization.ROLE_ADMIN;
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    private static final UserDAO userDAO = new UserDAO();
+    private UserDAO userDAO = new UserDAO();
 
+    /**
+     *
+     * @param payload
+     * @return
+     */
     @Authorization(allowAnonymous = true)
     @RequestMapping(value = "/create", consumes = "application/json", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> create(@RequestBody UserEditDTO payload) {
-         return ResponseEntity.ok((UserEditDTO) userDAO.create(payload));
+    public ResponseEntity<?> createUser(@RequestBody UserEditDTO payload) {
+        UserEditDTO result = (UserEditDTO) userDAO.create(payload);
+        if(result == null) {
+            return ResponseEntity.ok(userDAO.getError());
+        }
+        return ResponseEntity.ok((result.id));
     }
 
     @Authorization(allowAnonymous = true)

@@ -1,5 +1,6 @@
 package Layers.BusinessLayer.AuctionBusiness;
 
+import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.AuctionBusiness.DTO.AuctionDetailsDTO;
 import Layers.BusinessLayer.AuctionBusiness.DTO.AuctionEditDTO;
 import Layers.BusinessLayer.AuctionBusiness.DTO.AuctionListDTO;
@@ -25,7 +26,7 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
 
     private static final String AUCTION_COMMENT_CANCEL = "We are sorry to inform that this auction is no longer available.";
 
-    public AuctionDAO(Connection conn) {
+    public AuctionDAO(Connection conn, ErrorResponse errorResponse) {
         super(AUCTION, true);
     }
 

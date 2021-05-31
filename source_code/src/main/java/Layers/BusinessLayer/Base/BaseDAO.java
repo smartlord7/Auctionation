@@ -1,5 +1,6 @@
 package Layers.BusinessLayer.Base;
 
+import Helpers.config.ErrorResponse;
 import Startup.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +17,12 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
     protected final String tableName;
     protected final boolean auditable;
     protected static final Logger logger = LoggerFactory.getLogger(BaseDAO.class);
+    protected ErrorResponse error;
 
     public BaseDAO(String tableName, boolean auditable) {
         this.tableName = tableName;
         this.auditable = auditable;
+        this.error = new ErrorResponse();
     }
 
     protected void saveChanges(Connection conn) throws SQLException {
@@ -65,19 +68,19 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         validateClass(dto);
         Class<?> dtoClass = dto.getClass();
         int i;
-        Field[] fields;
+        List<Field> fields;
         StringBuilder sb = new StringBuilder("UPDATE ");
-        fields = dtoClass.getDeclaredFields();
+        fields = Arrays.stream(dto.getClass().getDeclaredFields()).filter(filter -> !filter.isAnnotationPresent(InsertIgnore.class)).collect(Collectors.toList());
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
 
         sb.append(tableName).append( " SET ");
 
-        for (i = 0; i < fields.length - 1; i++) {
-            sb.append(fields[i].getName()).append(" = ?,");
+        for (i = 0; i < fields.size() - 1; i++) {
+            sb.append(fields.get(i).getName()).append(" = ?,");
         }
 
-        sb.append(fields[i].getName())
+        sb.append(fields.get(i).getName())
                 .append("= ? ");
         if (auditable) {
             sb.append(",updateTimestamp = ? ");
@@ -88,8 +91,8 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
         try {
             ps = conn.prepareStatement(sb.toString());
-            for (i = 0; i < fields.length; i++) {
-                ps.setObject(i + 1, fields[i].get(dto));
+            for (i = 0; i < fields.size(); i++) {
+                ps.setObject(i + 1, fields.get(i).get(dto));
             }
 
             if (auditable) {
@@ -144,12 +147,15 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         sb.append(")");
 
         try {
-            ps = conn.prepareStatement(sb.toString());
+            ps = conn.prepareStatement(sb.toString(), Statement.RETURN_GENERATED_KEYS);
             for (i = 0; i < fields.size(); i++) {
                 try {
                     ps.setObject(i + 1, fields.get(i).get(dto));
-                } catch (SQLException | IllegalAccessException e) {
+                } catch (SQLException e) {
                     e.printStackTrace();
+                    error = new ErrorResponse(((SQLException)e).getErrorCode(), ((SQLException)e).getMessage());
+                } catch (IllegalAccessException e) {
+                    error = new ErrorResponse(-1, e.getMessage());
                 }
             }
             if (auditable) {
@@ -158,15 +164,24 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
             }
 
             int affectedRows = ps.executeUpdate();
-            saveChanges(conn);
 
             if (affectedRows == 1) {
                 logger.info("New entry on table " + tableName + " successfully created!");
+                ResultSet rs = ps.getGeneratedKeys();
+
+                if(rs.next())
+                {
+                    dto.id = rs.getInt(1);
+                }
+
+                saveChanges(conn);
+
                 return dto;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            error = new ErrorResponse(e.getErrorCode(), e.getMessage());
         }
 
         return null;
@@ -238,5 +253,9 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
     public boolean isAuditable() {
         return auditable;
+    }
+
+    public ErrorResponse getError() {
+        return error;
     }
 }

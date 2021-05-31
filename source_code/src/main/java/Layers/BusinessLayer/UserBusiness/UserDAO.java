@@ -1,17 +1,12 @@
 package Layers.BusinessLayer.UserBusiness;
 
-import Helpers.config.AuthHelper;
 import Helpers.config.EncryptHelper;
+import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.Base.DTO.BaseEditDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserEditDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserListDTO;
 import Startup.ConnectionFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import javax.xml.bind.DatatypeConverter;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;

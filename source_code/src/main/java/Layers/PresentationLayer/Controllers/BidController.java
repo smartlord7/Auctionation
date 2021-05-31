@@ -1,6 +1,7 @@
 package Layers.PresentationLayer.Controllers;
 
 import Helpers.config.Authorization;
+import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.BidBusiness.BidDAO;
 import Layers.BusinessLayer.BidBusiness.DTO.BidEditDTO;
 import Startup.ConnectionFactory;

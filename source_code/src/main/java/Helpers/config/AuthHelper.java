@@ -14,6 +14,7 @@ public class AuthHelper {
     public static HashMap<String, UserSession> sessions = new HashMap<>();
     private static final int TOKEN_DURATION = ((14 * 60) + 59) * 1000;
     public static final String TOKEN_HEADER_KEY_NAME = "custom-token";
+    public static ErrorResponse errorResponse;
 
     public static TokenResponse authenticate(UserAuthDTO dto, ErrorResponse response) {
         UserListDTO user;
@@ -23,7 +24,7 @@ public class AuthHelper {
         List<UserListDTO> result = new UserDAO().getbyProp("userName", dto.userName);
 
         if (result.size() == 0) {
-            response.error = "autherror";
+            response.error = -1;
             response.errorMessage = "wrong username";
 
             return null;
@@ -34,7 +35,7 @@ public class AuthHelper {
         hash = EncryptHelper.sha256Encrypt(dto.password);
 
         if (!hash.equals(user.passwordHash)) {
-            response.error = "autherror";
+            response.error = -1;
             response.errorMessage = "wrong password";
             return null;
         }

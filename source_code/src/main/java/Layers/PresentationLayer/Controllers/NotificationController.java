@@ -1,6 +1,7 @@
 package Layers.PresentationLayer.Controllers;
 
 import Helpers.config.Authorization;
+import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.NotificationBusiness.NotificationDAO;
 import Startup.ConnectionFactory;
 import org.slf4j.Logger;
@@ -13,7 +14,8 @@ import static Helpers.config.Authorization.ROLE_USER;
 
 public class NotificationController {
     private static final Logger logger = LoggerFactory.getLogger(NotificationController.class);
-    private static final NotificationDAO notificationDAO = new NotificationDAO(ConnectionFactory.getConnection());
+    private static ErrorResponse errorResponse = new ErrorResponse();
+    private static final NotificationDAO notificationDAO = new NotificationDAO(ConnectionFactory.getConnection(), errorResponse);
 
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/list", produces = "application/json", method = RequestMethod.GET)

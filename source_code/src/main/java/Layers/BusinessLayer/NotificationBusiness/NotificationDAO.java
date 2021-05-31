@@ -1,5 +1,6 @@
 package Layers.BusinessLayer.NotificationBusiness;
 
+import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.NotificationBusiness.DTO.NotificationEditDTO;
 import Layers.BusinessLayer.NotificationBusiness.DTO.NotificationListDTO;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationDAO extends BaseDAO<NotificationEditDTO, NotificationListDTO> {
-    public NotificationDAO(Connection conn) {
+    public NotificationDAO(Connection conn, ErrorResponse errorResponse) {
         super("Notification", true);
     }
 

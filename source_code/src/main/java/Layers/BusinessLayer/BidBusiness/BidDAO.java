@@ -1,5 +1,6 @@
 package Layers.BusinessLayer.BidBusiness;
 
+import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.BidBusiness.DTO.BidEditDTO;
 import Layers.BusinessLayer.BidBusiness.DTO.BidListDTO;
