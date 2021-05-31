@@ -21,7 +21,7 @@ public class AuthHelper {
         UserSession session;
         String token, hash;
 
-        List<UserListDTO> result = new UserDAO().getbyProp("userName", dto.userName);
+        List<UserListDTO> result = new UserDAO().getbyProp("userName", dto.username);
 
         if (result.size() == 0) {
             response.error = -1;
@@ -40,7 +40,7 @@ public class AuthHelper {
             return null;
         }
 
-        System.out.println("User " + dto.userName + " successfully logged!");
+        System.out.println("User " + dto.username + " successfully logged!");
 
         session = new UserSession(user.userId,
                 user.roleId,

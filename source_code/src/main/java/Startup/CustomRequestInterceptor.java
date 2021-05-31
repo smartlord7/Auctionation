@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.util.UriTemplate;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
@@ -41,26 +43,34 @@ public class CustomRequestInterceptor implements HandlerInterceptor {
     }
 
     private static boolean isAuthorizedEndpoint(String endpointURI, String reqMethod, long roleId) {
+        String totalURI;
+        RequestMapping reqMap;
+        UriTemplate uriTemplate;
+        Authorization auth;
+        int[] allowedRoles;
+
         for (Class<?> controller : controllers) {
             if (!controller.isAnnotationPresent(RequestMapping.class)) {
                 continue;
             }
             for (Method endpoint : controller.getDeclaredMethods()) {
                 if (endpoint.isAnnotationPresent(RequestMapping.class) && endpoint.isAnnotationPresent(Authorization.class)) {
-                    RequestMapping reqMap = endpoint.getAnnotation(RequestMapping.class);
-                    String totalURI = controller.getAnnotation(RequestMapping.class).value()[0] + reqMap.value()[0];
+                    reqMap = endpoint.getAnnotation(RequestMapping.class);
+                    totalURI = controller.getAnnotation(RequestMapping.class).value()[0] + reqMap.value()[0];
 
-                    if (!totalURI.contains(endpointURI) || !reqMap.method()[0].toString().equals(reqMethod)) {
+                    uriTemplate  = new UriTemplate(totalURI);
+
+                    if (!uriTemplate.matches(endpointURI)) {
                         continue;
                     }
 
-                    Authorization auth = endpoint.getAnnotation(Authorization.class);
+                    auth = endpoint.getAnnotation(Authorization.class);
 
                     if (auth.allowAnonymous()) {
                         return true;
                     }
 
-                    int[] allowedRoles = auth.roles();
+                    allowedRoles = auth.roles();
 
                     for (int role : allowedRoles) {
                         if (role == roleId) {
