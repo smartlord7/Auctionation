@@ -39,15 +39,19 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
         result = new ArrayList<>();
         String query = "SELECT a.auctionId, a.description " +
                     "FROM auction a " +
-                    "WHERE (a.auctionId IN (SELECT DISTINCT b.auctionId" +
+                    "WHERE a.hostuserId = ? OR EXISTS (SELECT DISTINCT b.auctionId" +
                     "                      FROM bid b" +
-                    "                      WHERE b.userId = ?) OR a.hostuserId = ?) AND" +
-                    "      deleteTimestamp IS NULL";
+                    "                      WHERE b.userId = ?) " +
+                    "OR a.auctionId IN (SELECT DISTINCT c.auctionId" +
+                    "                   FROM comment c " +
+                    "                   WHERE c.userId = ?)" +
+                    "AND deleteTimestamp IS NULL";
 
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, userId);
             ps.setInt(2, userId);
+            ps.setInt(3, userId);
             rows = ps.executeQuery();
 
             while (rows.next()) {

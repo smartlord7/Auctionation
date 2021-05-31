@@ -88,7 +88,6 @@ public class UserController {
         return ResponseEntity.ok(userDAO.banUser(1, userId));
     }
 
-
     /**
      *
      * @return
@@ -96,12 +95,7 @@ public class UserController {
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/stats", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> listAuctionsWon() {
+    public ResponseEntity<?> getStats() {
         return ResponseEntity.ok(new StatsDAO().getStats());
     }
-
-
-
-
-
 }

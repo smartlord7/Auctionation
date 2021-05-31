@@ -14,6 +14,5 @@ public class Auctionation {
 
     public static void main(String[] args) {
         SpringApplication.run(Auctionation.class, args);
-
     }
 }
