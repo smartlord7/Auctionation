@@ -1,6 +1,5 @@
 package Startup;
 
-import Helpers.config.DatabaseAuthenticator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +9,10 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionFactory.class);
-    public static final DatabaseAuthenticator authenticator = new DatabaseAuthenticator();
+
+    private static final String JDBC_PSQL_CONN_LOCAL = "jdbc:postgresql://localhost:5432/auctionation",
+                                JDBC_USER = "postgres",
+                                JDBC_PASS = "postgres";
 
     /**
      * Connection is started with {@code AUTO_COMMIT = false}
@@ -20,8 +22,7 @@ public class ConnectionFactory {
     public static Connection getConnection() {
         try {
             Class.forName("org.postgresql.Driver");
-            Connection conn = DriverManager.getConnection(authenticator.getJdbcURL(), authenticator.getJDBC_USER(), authenticator.getJDBC_PASS());
-
+            Connection conn = DriverManager.getConnection(JDBC_PSQL_CONN_LOCAL, JDBC_USER, JDBC_PASS);
             conn.setAutoCommit(false);
             return conn;
         } catch (ClassNotFoundException | SQLException ex) {

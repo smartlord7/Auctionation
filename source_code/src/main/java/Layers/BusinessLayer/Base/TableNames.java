@@ -9,7 +9,7 @@ public class TableNames {
             NOTIFICATION = "notification",
             COMMENT = "comment",
             BID = "bid",
-            USER = "user",
+            USER = "\"user\"",
             ROLE = "role",
             CATEGORY = "category";
 

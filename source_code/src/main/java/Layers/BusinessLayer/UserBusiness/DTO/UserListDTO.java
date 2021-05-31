@@ -5,5 +5,8 @@ import Layers.BusinessLayer.Base.DTO.BaseListDTO;
 public class UserListDTO extends BaseListDTO {
     public String userName,
             email,
-            address;
+            address,
+            passwordHash;
+    public Integer userId;
+    public Long roleId;
 }

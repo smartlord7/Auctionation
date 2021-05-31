@@ -8,7 +8,9 @@ import java.lang.reflect.ParameterizedType;
 import java.sql.*;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BaseDAO<BaseEditDTO, BaseListDTO> {
     protected final String tableName;
@@ -33,10 +35,10 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         Connection conn = ConnectionFactory.getConnection();
         StringBuilder sb = new StringBuilder("UPDATE ");
 
-        sb.append(tableName)
+        StringBuilder append = sb.append(tableName)
                 .append(" SET deleteTimestamp = ? WHERE ")
-                .append(tableName)
-                .append("Id = ? ");
+                .append(tableName.replace("\"", ""))
+                        .append("Id = ? ");
 
         PreparedStatement ps = null;
         try {
@@ -81,7 +83,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
             sb.append(",updateTimestamp = ? ");
         }
         sb.append("WHERE ")
-                .append(tableName)
+                .append(tableName.replace("\"", ""))
                 .append("Id = ?");
 
         try {
@@ -111,28 +113,27 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
     public Layers.BusinessLayer.Base.DTO.BaseEditDTO create(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto) {
         validateClass(dto);
-        Class<?> dtoClass = dto.getClass();
-        Field[] fields;
+        List<Field> fields;
         int i;
         StringBuilder sb = new StringBuilder("INSERT INTO ");
-        fields = dtoClass.getDeclaredFields();
+        fields = Arrays.stream(dto.getClass().getDeclaredFields()).filter(filter -> !filter.isAnnotationPresent(InsertIgnore.class)).collect(Collectors.toList());
         Connection conn = ConnectionFactory.getConnection();
         PreparedStatement ps;
 
         sb.append(tableName).append(" (");
 
-        for (i = 0; i < fields.length - 1; i++) {
-            sb.append(fields[i].getName()).append(", ");
+        for (i = 0; i < fields.size() - 1; i++) {
+            sb.append(fields.get(i).getName()).append(", ");
         }
 
-        sb.append(fields[i].getName());
+        sb.append(fields.get(i).getName());
         if (auditable) {
             sb.append(", createTimestamp, updateTimestamp");
         }
         sb.append(")");
 
         sb.append(" VALUES ( ");
-        for (i = 0; i < fields.length - 1; i++) {
+        for (i = 0; i < fields.size() - 1; i++) {
             sb.append("?, ");
         }
 
@@ -144,9 +145,9 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
         try {
             ps = conn.prepareStatement(sb.toString());
-            for (i = 0; i < fields.length; i++) {
+            for (i = 0; i < fields.size(); i++) {
                 try {
-                    ps.setObject(i + 1, fields[i].get(dto));
+                    ps.setObject(i + 1, fields.get(i).get(dto));
                 } catch (SQLException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
