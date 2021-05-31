@@ -21,10 +21,10 @@ public class AuthHelper {
         UserSession session;
         String token, hash;
 
-        List<UserListDTO> result = new UserDAO().getbyProp("userName", dto.username);
+        List<UserListDTO> result = new UserDAO().getbyProp("username", dto.username);
 
         if (result.size() == 0) {
-            response.error = -1;
+            response.error = "autherror";
             response.errorMessage = "wrong username";
 
             return null;
@@ -35,7 +35,7 @@ public class AuthHelper {
         hash = EncryptHelper.sha256Encrypt(dto.password);
 
         if (!hash.equals(user.passwordHash)) {
-            response.error = -1;
+            response.error = "autherror";
             response.errorMessage = "wrong password";
             return null;
         }

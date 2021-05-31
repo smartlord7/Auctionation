@@ -153,9 +153,9 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
                     ps.setObject(i + 1, fields.get(i).get(dto));
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    error = new ErrorResponse(((SQLException)e).getErrorCode(), ((SQLException)e).getMessage());
+                    error = new ErrorResponse(e.getSQLState(), e.getMessage());
                 } catch (IllegalAccessException e) {
-                    error = new ErrorResponse(-1, e.getMessage());
+                    error = new ErrorResponse("statementError", e.getMessage());
                 }
             }
             if (auditable) {
@@ -181,7 +181,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            error = new ErrorResponse(e.getErrorCode(), e.getMessage());
+            error = new ErrorResponse(e.getSQLState(), e.getMessage());
         }
 
         return null;

@@ -37,6 +37,11 @@ public class UserController {
         return ResponseEntity.ok((result.id));
     }
 
+    /**
+     *
+     * @param payload
+     * @return
+     */
     @Authorization(allowAnonymous = true)
     @RequestMapping(value = "/login", consumes = "application/json", method = RequestMethod.PUT)
     @ResponseBody
@@ -65,6 +70,10 @@ public class UserController {
         return ResponseEntity.ok(userDAO.deleteById(userId));
     }
 
+    /**
+     *
+     * @return
+     */
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/list", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
@@ -79,6 +88,11 @@ public class UserController {
         return ResponseEntity.ok(userDAO.banUser(1, userId));
     }
 
+
+    /**
+     *
+     * @return
+     */
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/stats", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody

@@ -1,7 +1,6 @@
 package Layers.BusinessLayer.UserBusiness;
 
 import Helpers.config.EncryptHelper;
-import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.Base.DTO.BaseEditDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserEditDTO;

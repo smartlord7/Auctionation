@@ -1,10 +1,8 @@
 package Layers.PresentationLayer.Controllers;
 
 import Helpers.config.Authorization;
-import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.AuctionBusiness.AuctionDAO;
 import Layers.BusinessLayer.AuctionBusiness.DTO.AuctionEditDTO;
-import Startup.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +13,23 @@ import static Helpers.config.Authorization.*;
 @RestController
 @RequestMapping("/auction")
 public class AuctionController {
-    private static ErrorResponse errorResponse = new ErrorResponse();
     private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
-    private static final AuctionDAO auctionDAO = new AuctionDAO(ConnectionFactory.getConnection(), errorResponse);
+    private static final AuctionDAO auctionDAO = new AuctionDAO();
 
+    /**
+     *
+     * @param payload
+     * @return
+     */
     @Authorization(allowAnonymous = true)
     @RequestMapping(value = "/create", consumes = "application/json", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> create(@RequestBody AuctionEditDTO payload) {
-        return ResponseEntity.ok(((AuctionEditDTO) auctionDAO.create(payload)));
+        AuctionEditDTO result = (AuctionEditDTO) auctionDAO.create(payload);
+        if(result == null) {
+            return ResponseEntity.ok(auctionDAO.getError());
+        }
+        return ResponseEntity.ok((result.id));
     }
 
     @Authorization(roles = {ROLE_ADMIN})
@@ -47,6 +53,10 @@ public class AuctionController {
         return ResponseEntity.ok((auctionDAO.updateById(payload, auctionId)));
     }
 
+    /**
+     *
+     * @return
+     */
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/list", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
