@@ -9,8 +9,7 @@ public class AuctionEditDTO extends BaseEditDTO {
     public Integer hostUserId;
     public String auctionName, description, itemEAN, itemName, itemDescription, itemOrigin;
     public Float initialValue;
-    public Timestamp startTimestamp,
-            expirationTimestamp;
+    public Timestamp expirationTimestamp;
 
     @Override
     public String toString() {
@@ -23,7 +22,6 @@ public class AuctionEditDTO extends BaseEditDTO {
                 ", itemOrigin='" + itemOrigin + '\'' +
                 ", itemEAN=" + itemEAN +
                 ", initialValue=" + initialValue +
-                ", startTimestamp=" + startTimestamp +
                 ", expirationTimestamp=" + expirationTimestamp +
                 '}';
     }

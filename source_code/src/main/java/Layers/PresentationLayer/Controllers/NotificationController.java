@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import static Helpers.config.Authorization.ROLE_ADMIN;
 import static Helpers.config.Authorization.ROLE_USER;
 
-@RequestMapping(value = "/auctionation/api/notification")
+@RestController
+@RequestMapping("/auctionation/api/notification")
 public class NotificationController {
     private static final Logger logger = LoggerFactory.getLogger(NotificationController.class);
     private static final NotificationDAO notificationDAO = new NotificationDAO();
@@ -22,9 +23,9 @@ public class NotificationController {
     }
 
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
-    @RequestMapping(value = "/{userId}", produces = "application/json", method = RequestMethod.GET)
+    @RequestMapping(value = "/listByUser/{userId}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> listByUser(@PathVariable("userId") int userId) {
-        return ResponseEntity.ok(notificationDAO.getbyProp("userId", Integer.toString(userId)));
+        return ResponseEntity.ok(notificationDAO.listByUser(userId));
     }
 }

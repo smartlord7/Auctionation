@@ -30,7 +30,7 @@ public class NotificationDAO extends BaseDAO<NotificationEditDTO, NotificationLi
         String query2 = "UPDATE Notification\n" +
                 "SET updateTimestamp = CURRENT_TIMESTAMP,\n" +
                 "    seenTimestamp = CURRENT_TIMESTAMP\n" +
-                "WHERE userId = 3 AND deleteTimestamp IS NULL;";
+                "WHERE userId = ? AND deleteTimestamp IS NULL AND seenTimestamp IS NULL";
 
 
         try {
@@ -45,7 +45,12 @@ public class NotificationDAO extends BaseDAO<NotificationEditDTO, NotificationLi
 
             try {
                 ps = conn.prepareStatement(query2);
+                ps.setInt(1, userId);
+                int read = ps.executeUpdate();
+                logger.info("User " + userId + " has seen " + read + " notifications!");
                 ps.executeUpdate();
+
+                saveChanges(conn);
             } catch (SQLException e) {
                 auditError(e, conn);
             }
