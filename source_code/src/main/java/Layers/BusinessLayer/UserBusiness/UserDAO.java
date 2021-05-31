@@ -1,6 +1,7 @@
 package Layers.BusinessLayer.UserBusiness;
 
 import Helpers.config.AuthHelper;
+import Helpers.config.EncryptHelper;
 import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.Base.DTO.BaseEditDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserEditDTO;
@@ -28,16 +29,7 @@ public class UserDAO extends BaseDAO<UserEditDTO, UserListDTO>{
     @Override
     public BaseEditDTO create(BaseEditDTO dto) {
         UserEditDTO createDTO = (UserEditDTO) dto;
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        md.update(createDTO.password.getBytes());
-        byte[] digest = md.digest();
-
-        createDTO.passwordHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+        createDTO.passwordHash = EncryptHelper.sha256Encrypt(createDTO.password);
 
         return super.create(createDTO);
     }

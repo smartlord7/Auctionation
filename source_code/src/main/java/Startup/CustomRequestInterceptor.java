@@ -1,17 +1,11 @@
 package Startup;
 
 import Helpers.config.AuthHelper;
-import Layers.PresentationLayer.Controllers.AuctionController;
-import Layers.PresentationLayer.Controllers.BidController;
-import Layers.PresentationLayer.Controllers.NotificationController;
-import Layers.PresentationLayer.Controllers.UserController;
-import com.jayway.jsonpath.Configuration;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +29,7 @@ public class CustomRequestInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(@NotNull HttpServletRequest requestServlet, @NotNull HttpServletResponse responseServlet, Object handler) throws Exception {
+    public boolean preHandle(@NotNull HttpServletRequest requestServlet, @NotNull HttpServletResponse responseServlet, Object handler){
 
         String requestURI = requestServlet.getRequestURI(), customToken;
 
@@ -56,6 +50,7 @@ public class CustomRequestInterceptor implements HandlerInterceptor {
             responseServlet.setStatus(HttpStatus.UNAUTHORIZED.value());
             return false;
         }
+
 
         return true;
     }

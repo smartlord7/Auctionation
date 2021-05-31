@@ -3,10 +3,6 @@ package Helpers.config;
 import Layers.BusinessLayer.UserBusiness.DTO.UserAuthDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserListDTO;
 import Layers.BusinessLayer.UserBusiness.UserDAO;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import javax.xml.bind.DatatypeConverter;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
@@ -34,16 +30,8 @@ public class AuthHelper {
         }
 
         user = result.get(0);
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        md.update(dto.password.getBytes());
-        byte[] digest = md.digest();
 
-        hash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+        hash = EncryptHelper.sha256Encrypt(dto.password);
 
         if (!hash.equals(user.passwordHash)) {
             response.error = "autherror";
@@ -67,6 +55,6 @@ public class AuthHelper {
     }
 
     private static String generateToken(String userName, String passwordHash) {
-        return new BCryptPasswordEncoder().encode(Double.toString(Math.random() * 100) + userName +  passwordHash + Timestamp.from(Instant.now()));
+        return EncryptHelper.sha256Encrypt(Double.toString(Math.random() * 100) + userName +  passwordHash + Timestamp.from(Instant.now()));
     }
 }
