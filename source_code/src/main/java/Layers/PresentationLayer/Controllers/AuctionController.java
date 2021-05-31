@@ -85,6 +85,8 @@ public class AuctionController {
         return ResponseEntity.ok(auctionDAO.terminateById(auctionId));
     }
 
+    // It is obvious that this method (passing the adminId through the route) is not the most correct,
+    // but we did it that way since the implementation of a more complex session structure would require extra time to do it :-).
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/cancel/{auctionId}/{adminId}", method = RequestMethod.GET)
     @ResponseBody

@@ -26,7 +26,7 @@ public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
                 "?, ?, CURRENT_TIMESTAMP,?, ?" +
                 "WHERE NOT EXISTS(" +
                 "SELECT 1 FROM auction a " +
-                "WHERE a.auctionid=? " +
+                "WHERE a.auctionid=? AND a.deleteTimestamp IS NULL " +
                 "AND (a.currentbidvalue>=? OR currentstate=? OR currentstate=?)" +
                 ");", Statement.RETURN_GENERATED_KEYS))
         {
@@ -52,6 +52,11 @@ public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
 
                 saveChanges(conn);
                 return payload;
+            } else {
+                BidEditDTO dummy = new BidEditDTO();
+                dummy.id = -1;
+
+                return dummy;
             }
         } catch (SQLException e) {
             auditError(e, conn);

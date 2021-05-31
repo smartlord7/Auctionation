@@ -15,7 +15,7 @@ public class NotificationController {
     private static final Logger logger = LoggerFactory.getLogger(NotificationController.class);
     private static final NotificationDAO notificationDAO = new NotificationDAO();
 
-    @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
+    @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/list", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> listALl() {
