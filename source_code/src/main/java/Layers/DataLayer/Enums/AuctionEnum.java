@@ -1,5 +1,8 @@
 package Layers.DataLayer.Enums;
 
+/**
+ * Enum with possible auction states.
+ */
 public enum AuctionEnum {
     RUNNING(0),
     INTERRUPTED(1),

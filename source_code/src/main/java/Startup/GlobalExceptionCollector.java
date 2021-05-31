@@ -17,11 +17,21 @@ import java.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class to collect exceptions.
+ */
 @ControllerAdvice
 public class GlobalExceptionCollector {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionCollector.class);
 
+    /**
+     * Handles a exception.
+     * @param ex Exception to be handled.
+     * @return Returns a response entity.
+     * @throws SQLException in case of error.
+     * @throws IllegalAccessException in case of error.
+     */
     @ExceptionHandler(PSQLException.class)
     @ResponseStatus(HttpStatus.BAD_GATEWAY)
     @ResponseBody

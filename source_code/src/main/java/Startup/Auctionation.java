@@ -6,6 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.ComponentScan;
 
+/**
+ * Main class of the application.
+ */
 @SpringBootApplication
 @ComponentScan("Layers")
 @ComponentScan("Startup")

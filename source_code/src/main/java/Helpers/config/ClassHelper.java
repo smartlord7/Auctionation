@@ -12,8 +12,6 @@ import java.util.Enumeration;
 
 public class ClassHelper {
 
-
-
     /**
      * Scans all classes accessible from the context class loader which belong
      * to the given package and subpackages.

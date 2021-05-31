@@ -1,5 +1,8 @@
 package Helpers.config;
 
+/**
+ * Class used to implement a token response.
+ */
 public class TokenResponse {
     public String token;
     public int expirationTime;

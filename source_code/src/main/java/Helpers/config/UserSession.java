@@ -2,6 +2,9 @@ package Helpers.config;
 
 import java.util.Date;
 
+/**
+ * Class used to implement a user session.
+ */
 public class UserSession {
     private Integer userId;
     private Long roleId;

@@ -1,5 +1,8 @@
 package Helpers.config;
 
+/**
+ * Class used to support error responses.
+ */
 public class ErrorResponse {
     public String errorMessage;
     public String errorCode;

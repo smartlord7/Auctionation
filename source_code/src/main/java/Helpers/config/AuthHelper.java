@@ -9,16 +9,23 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Logger;
 
+/**
+ * Class used in token authentication.
+ */
 public class AuthHelper {
 
     public static HashMap<String, UserSession> sessions = new HashMap<>();
     private static final int TOKEN_DURATION = ((14 * 60) + 59) * 1000, TOKEN_LENGTH = 256;
     public static final String TOKEN_HEADER_KEY_NAME = "custom-token";
-    public static ErrorResponse errorResponse;
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AuthHelper.class);
 
+    /**
+     * Function that authenticates a certain user.
+     * @param dto Data about the user.
+     * @param response Object to store the error code in case of error.
+     * @return Returns a token response.
+     */
     public static TokenResponse authenticate(UserAuthDTO dto, ErrorResponse response) {
         UserListDTO user;
         UserSession session;
@@ -26,6 +33,7 @@ public class AuthHelper {
 
         List<UserListDTO> result = new UserDAO().getbyProp("username", dto.username);
 
+        //check the username
         if (result.size() == 0) {
             response.errorCode = "autherror";
             response.errorMessage = "wrong username";
@@ -35,6 +43,7 @@ public class AuthHelper {
 
         user = result.get(0);
 
+        //check the password by hash matching
         hash = EncryptHelper.sha256Encrypt(dto.password);
 
         if (!hash.equals(user.passwordHash)) {
@@ -58,6 +67,10 @@ public class AuthHelper {
         return new TokenResponse(token, TOKEN_DURATION);
     }
 
+    /**
+     * Function that generates a token.
+     * @return Returns the generated token.
+     */
     private static String generateToken() {
         int leftLimit = 48, rightLimit = 122;
         Random random = new Random();

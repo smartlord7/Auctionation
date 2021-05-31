@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Class to implement a connection to the DB.
+ */
 public class ConnectionFactory {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionFactory.class);
 

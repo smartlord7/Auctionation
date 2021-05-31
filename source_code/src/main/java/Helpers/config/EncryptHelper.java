@@ -4,7 +4,15 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Class used to encrypt strings.
+ */
 public class EncryptHelper {
+    /**
+     * Function that generates an encrypted string.
+     * @param str String to be encrypted.
+     * @return Returns the encrypted string.
+     */
     public static String sha256Encrypt(String str) {
         MessageDigest md = null;
         try {

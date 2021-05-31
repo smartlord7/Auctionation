@@ -63,9 +63,9 @@ public class UserController {
     }
 
     /**
-     * Endoint to search an user.
+     * Endoint to search a user.
      * @param userId ID of the user.
-     * @return
+     * @return Returns the data about the user.
      */
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/details/{userId}", method = RequestMethod.GET)
@@ -74,6 +74,11 @@ public class UserController {
         return ResponseEntity.ok(userDAO.getbyProp("userId", Integer.toString(userId)).get(0));
     }
 
+    /**
+     * Endpoint to delete a user.
+     * @param userId
+     * @return
+     */
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE)
     @ResponseBody
@@ -82,8 +87,8 @@ public class UserController {
     }
 
     /**
-     *
-     * @return
+     * Endpoint to list of all of the users.
+     * @return List with of all of the users.
      */
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/list", produces = "application/json", method = RequestMethod.GET)
@@ -96,6 +101,12 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
+    /**
+     * Endpoint to ban a user.
+     * @param userId ID of the user.
+     * @param adminId ID of the admin.
+     * @return
+     */
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value ="/ban/{userId}/{adminId}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
@@ -108,8 +119,8 @@ public class UserController {
     }
 
     /**
-     *
-     * @return
+     * Endpoint to get the stats about a user.
+     * @return Returns stats about the user.
      */
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/stats", produces = "application/json", method = RequestMethod.GET)

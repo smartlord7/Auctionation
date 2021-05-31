@@ -16,13 +16,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
-    //TODO: Finish documentation
-
     /**
-     * @def
-     * @brief
-     *
-     * @param registry
+     * Function to add a customized interceptor for requests before reaching the endpoints themselves.
+     * @param registry Entity.
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry){
@@ -33,6 +29,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         }
     }
 
+    /**
+     * Function to configure http security.
+     * @param http Http entity.
+     * @throws Exception Exception thrown in case of error.
+     */
     @Override
     protected void configure(@NotNull HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -41,6 +42,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         http.csrf().disable();
     }
 
+    /**
+     * Function that add a mapping to the allowed methods.
+     * @param registry Entity.
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*");

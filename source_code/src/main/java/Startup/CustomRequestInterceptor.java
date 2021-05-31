@@ -19,6 +19,9 @@ import java.util.Map;
 import static Helpers.config.AuthHelper.TOKEN_HEADER_KEY_NAME;
 import static Helpers.config.AuthHelper.sessions;
 
+/**
+ * Class to implement a custom request interceptor.
+ */
 public class CustomRequestInterceptor implements HandlerInterceptor {
 
     private static Iterable<Class<?>> controllers = null;
@@ -27,6 +30,11 @@ public class CustomRequestInterceptor implements HandlerInterceptor {
         controllers = ClassHelper.getClasses("Layers.PresentationLayer.Controllers");
     }
 
+    /**
+     * Function that retrieves the headers of a certain request.
+     * @param request Request.
+     * @return Headers retrieved.
+     */
     private Map<String, String> getHeadersInfo(HttpServletRequest request) {
 
         Map<String, String> map = new HashMap<String, String>();
@@ -41,6 +49,13 @@ public class CustomRequestInterceptor implements HandlerInterceptor {
         return map;
     }
 
+    /**
+     * Function that checks if an endpoint has authorization.
+     * @param endpointURI URI of the endpoint.
+     * @param reqMethod Request method.
+     * @param roleId ID of the role.
+     * @return Return true if it has the authorization.
+     */
     private static boolean isAuthorizedEndpoint(String endpointURI, String reqMethod, long roleId) {
         String totalURI;
         RequestMapping reqMap;
@@ -85,6 +100,13 @@ public class CustomRequestInterceptor implements HandlerInterceptor {
         return false;
     }
 
+    /**
+     * Function that prehandles a request.
+     * @param requestServlet Request servlet.
+     * @param responseServlet Response servlet.
+     * @param handler Handler to the request.
+     * @return True if the request if the request is authorized.
+     */
     @Override
     public boolean preHandle(@NotNull HttpServletRequest requestServlet, @NotNull HttpServletResponse responseServlet, Object handler){
 
