@@ -34,7 +34,7 @@ public class StatsDAO extends BaseDAO<StatsEditDTO, StatsListDTO> {
                 result.topAuctionWinners.add(new StatsListDTO.UserAuction(rows.getInt("userid"),rows.getInt("aw")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            auditError(e, conn);
         }
         try (Statement stmt = conn.createStatement()) {
             ResultSet rows = stmt.executeQuery("" +
@@ -47,7 +47,7 @@ public class StatsDAO extends BaseDAO<StatsEditDTO, StatsListDTO> {
                 result.topAuctionOpeners.add(new StatsListDTO.UserAuction(rows.getInt("hostuserid"),rows.getInt("ac")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            auditError(e, conn);
         }
         try (Statement stmt = conn.createStatement()) {
             ResultSet rows = stmt.executeQuery("" +
@@ -60,7 +60,7 @@ public class StatsDAO extends BaseDAO<StatsEditDTO, StatsListDTO> {
 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            auditError(e, conn);
         }
         return result;
     }

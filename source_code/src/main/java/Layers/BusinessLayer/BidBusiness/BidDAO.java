@@ -54,8 +54,7 @@ public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
                 return payload;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            error = new ErrorResponse(e.getSQLState(), e.getMessage());
+            auditError(e, conn);
         }
         return null;
     }

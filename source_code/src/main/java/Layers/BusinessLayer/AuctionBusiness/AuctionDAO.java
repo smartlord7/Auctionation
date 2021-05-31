@@ -59,7 +59,7 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            auditError(e, conn);
         }
 
         return result;
@@ -120,7 +120,7 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
             }
 
         } catch (SQLException | IllegalAccessException e) {
-            e.printStackTrace();
+            auditError(e, conn);
         }
 
 
@@ -164,13 +164,13 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
                     }
 
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    auditError(e, conn);
                 }
 
                 return null;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            auditError(e, conn);
         }
 
         return null;
@@ -210,7 +210,7 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
             return false;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            auditError(e, conn);
         }
 
         return false;

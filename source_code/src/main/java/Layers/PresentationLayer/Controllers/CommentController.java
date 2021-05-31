@@ -17,8 +17,7 @@ import static Helpers.config.Authorization.ROLE_USER;
 @RequestMapping("comment")
 public class CommentController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AuctionController.class);
-    private static ErrorResponse errorResponse;
-    private static final CommentDAO commentDAO = new CommentDAO(ConnectionFactory.getConnection(), errorResponse);
+    private static final CommentDAO commentDAO = new CommentDAO();
 
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/create", consumes = "application/json", method = RequestMethod.POST)

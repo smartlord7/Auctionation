@@ -1,7 +1,10 @@
 package Layers.BusinessLayer.Base;
 
 import Helpers.config.ErrorResponse;
+import Layers.BusinessLayer.ExceptionBusiness.DTO.ExceptionEditDTO;
+import Layers.BusinessLayer.ExceptionBusiness.ExceptionDAO;
 import Startup.ConnectionFactory;
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
@@ -23,6 +26,32 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         this.tableName = tableName;
         this.auditable = auditable;
         this.error = new ErrorResponse();
+    }
+
+    protected void auditError(Exception e, Connection conn) {
+        e.printStackTrace();
+        if (e instanceof SQLException) {
+            logger.error(e.getMessage());
+
+            SQLException sqlEx = (SQLException) e;
+            ExceptionDAO exDAO = new ExceptionDAO(conn);
+            ExceptionEditDTO dto = new ExceptionEditDTO(sqlEx.getErrorCode(), sqlEx.getSQLState(), sqlEx.getMessage(), Timestamp.from(Instant.now()));
+            exDAO.create(dto);
+            error = new ErrorResponse(sqlEx.getSQLState(), sqlEx.getMessage());
+        } else {
+            error = new ErrorResponse(e.getCause().getMessage(), e.getMessage());
+        }
+
+        try {
+            conn.rollback();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            try {
+                conn.close();
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+            }
+        }
     }
 
     protected void saveChanges(Connection conn) throws SQLException {
@@ -58,15 +87,14 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
                 return true;
             }
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            auditError(e, conn);
         }
         return false;
     }
 
     public boolean updateById(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto, int id) {
         validateClass(dto);
-        Class<?> dtoClass = dto.getClass();
         int i;
         List<Field> fields;
         StringBuilder sb = new StringBuilder("UPDATE ");
@@ -108,7 +136,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
                 return true;
             }
         } catch (SQLException | IllegalAccessException e) {
-            e.printStackTrace();
+            auditError(e, conn);
         }
 
         return false;
@@ -151,11 +179,9 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
             for (i = 0; i < fields.size(); i++) {
                 try {
                     ps.setObject(i + 1, fields.get(i).get(dto));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    error = new ErrorResponse(e.getSQLState(), e.getMessage());
-                } catch (IllegalAccessException e) {
-                    error = new ErrorResponse("statementError", e.getMessage());
+                } catch (SQLException | IllegalAccessException e) {
+                    auditError(e, conn);
+                    return null;
                 }
             }
             if (auditable) {
@@ -180,8 +206,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            error = new ErrorResponse(e.getSQLState(), e.getMessage());
+            auditError(e, conn);
         }
 
         return null;
@@ -241,7 +266,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
 
             return result;
         } catch (SQLException | InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+            auditError(e, conn);
         }
 
         return result;
