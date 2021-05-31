@@ -5,6 +5,10 @@ import Layers.BusinessLayer.Base.DTO.BaseListDTO;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * DTO object to transfer data of stats in listing operations.
+ */
 public class StatsListDTO extends BaseListDTO {
     public ArrayList<UserAuction> topAuctionOpeners, topAuctionWinners;
     public int totalLastAuctions;

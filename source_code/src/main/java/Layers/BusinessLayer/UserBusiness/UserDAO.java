@@ -12,6 +12,9 @@ import java.sql.SQLException;
 
 import static Layers.BusinessLayer.Base.TableNames.USER;
 
+/**
+ * DAO object to access data of an user.
+ */
 public class UserDAO extends BaseDAO<UserEditDTO, UserListDTO>{
 
     private static final String AUCTION_COMMENT_BAN = "We are sorry to inform that this auction is no longer active.";
@@ -20,6 +23,11 @@ public class UserDAO extends BaseDAO<UserEditDTO, UserListDTO>{
         super(USER, true);
     }
 
+    /**
+     * Function that creates an user.
+     * @param dto DTO object with data required.
+     * @return Returns the ID assigned.
+     */
     @Override
     public BaseEditDTO create(BaseEditDTO dto) {
         UserEditDTO createDTO = (UserEditDTO) dto;
@@ -28,6 +36,12 @@ public class UserDAO extends BaseDAO<UserEditDTO, UserListDTO>{
         return super.create(createDTO);
     }
 
+    /**
+     * Function that bans a user.
+     * @param adminUserId ID of the admin.
+     * @param bannedUserId ID of the user.
+     * @return Returns true if successful.
+     */
     public boolean banUser(int adminUserId, int bannedUserId) {
         String query = "CALL banuser(?, ?, ?)";
         CallableStatement cs;

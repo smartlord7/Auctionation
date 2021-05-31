@@ -1,24 +1,23 @@
 package Layers.BusinessLayer.StatsBusiness;
 
 
-import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.Base.BaseDAO;
-import Layers.BusinessLayer.UserBusiness.DTO.UserEditDTO;
-import Layers.BusinessLayer.UserBusiness.DTO.UserListDTO;
-import Layers.DataLayer.Enums.AuctionEnum;
 import Startup.ConnectionFactory;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * DAO object to access data of a role.
+ */
 public class StatsDAO extends BaseDAO<StatsEditDTO, StatsListDTO> {
     public StatsDAO() {
         super("User", true);
     }
 
+    /**
+     * Function that gets all of the stats
+     * @return List with the stats
+     */
     public StatsListDTO getStats() {
         Connection conn = ConnectionFactory.getConnection();
         StatsListDTO result = new StatsListDTO();

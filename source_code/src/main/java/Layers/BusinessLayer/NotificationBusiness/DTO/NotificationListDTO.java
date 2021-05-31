@@ -4,6 +4,9 @@ import Layers.BusinessLayer.Base.DTO.BaseListDTO;
 
 import java.sql.Timestamp;
 
+/**
+ * DTO object to transfer data of a notification in listing operations.
+ */
 public class NotificationListDTO extends BaseListDTO {
     public String notificationTitle, description;
     public Integer notificationId, userId;

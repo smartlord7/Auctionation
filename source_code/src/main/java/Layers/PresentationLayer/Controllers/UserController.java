@@ -28,9 +28,9 @@ public class UserController {
     private UserDAO userDAO = new UserDAO();
 
     /**
-     *
-     * @param payload
-     * @return
+     * Endpoint to create a user.
+     * @param payload Data of the user.
+     * @return Returns the ID assigned.
      */
     @Authorization(allowAnonymous = true)
     @RequestMapping(value = "/create", consumes = "application/json", method = RequestMethod.POST)
@@ -44,9 +44,9 @@ public class UserController {
     }
 
     /**
-     *
-     * @param payload
-     * @return
+     * Endpoint to login a user.
+     * @param payload Data required for the login.
+     * @return Returns a token response.
      */
     @Authorization(allowAnonymous = true)
     @RequestMapping(value = "/login", consumes = "application/json", method = RequestMethod.PUT)
@@ -62,6 +62,11 @@ public class UserController {
         }
     }
 
+    /**
+     * Endoint to search an user.
+     * @param userId ID of the user.
+     * @return
+     */
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/details/{userId}", method = RequestMethod.GET)
     @ResponseBody

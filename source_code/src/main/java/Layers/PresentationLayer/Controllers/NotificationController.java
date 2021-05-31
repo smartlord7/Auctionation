@@ -15,6 +15,10 @@ public class NotificationController {
     private static final Logger logger = LoggerFactory.getLogger(NotificationController.class);
     private static final NotificationDAO notificationDAO = new NotificationDAO();
 
+    /**
+     * Endpoint to list of the notifications.
+     * @return List of notifications.
+     */
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/list", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
@@ -22,6 +26,11 @@ public class NotificationController {
         return ResponseEntity.ok(notificationDAO.getbyProp(null, null));
     }
 
+    /**
+     * Endpoint to list notifications by user.
+     * @param userId ID of the user.
+     * @return List of notifications.
+     */
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/listByUser/{userId}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody

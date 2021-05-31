@@ -1,5 +1,8 @@
 package Layers.BusinessLayer.AuctionBusiness;
 
+/**
+ * DTO object that contains info about a terminated auction.
+ */
 public class AuctionEndDTO {
     public String username;
     public float bidValue;

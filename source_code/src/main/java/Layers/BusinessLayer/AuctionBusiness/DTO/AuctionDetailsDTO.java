@@ -7,6 +7,9 @@ import Layers.BusinessLayer.CommentBusiness.CommentListDTO;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * @Class DTO object used to transfer details about a certain auction.
+ */
 public class AuctionDetailsDTO {
     public Integer auctionId;
     public Long hostUserId;

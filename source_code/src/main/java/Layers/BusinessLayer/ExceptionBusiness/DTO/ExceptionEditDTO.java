@@ -4,6 +4,9 @@ import Layers.BusinessLayer.Base.DTO.BaseEditDTO;
 
 import java.sql.Timestamp;
 
+/**
+ * DTO object to transfer data of an exception.
+ */
 public class ExceptionEditDTO extends BaseEditDTO {
     public Integer errorCode;
     public String errorState, description;

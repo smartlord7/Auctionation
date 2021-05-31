@@ -15,9 +15,9 @@ public class BidController {
     private static final BidDAO bidDAO = new BidDAO();
 
     /**
-     *
-     * @param payload
-     * @return
+     * Endpoint to create a bid.
+     * @param payload Data of the bid.
+     * @return Returns data about the bid.
      */
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/create", consumes = "application/json", method = RequestMethod.POST)
@@ -34,8 +34,8 @@ public class BidController {
     }
 
     /**
-     *
-     * @return
+     * Endpoint to list all of the bids.
+     * @return List of all of the bids.
      */
     @Authorization(roles = {ROLE_ADMIN})
     @RequestMapping(value = "/list", produces = "application/json", method = RequestMethod.GET)

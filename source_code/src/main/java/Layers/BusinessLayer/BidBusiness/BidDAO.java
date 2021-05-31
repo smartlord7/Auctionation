@@ -11,12 +11,20 @@ import java.sql.*;
 
 import static Layers.BusinessLayer.Base.TableNames.BID;
 
+/**
+ * DAO object to access and manipulate data about bids.
+ */
 public class BidDAO extends BaseDAO<BidEditDTO, BidListDTO>{
 
     public BidDAO() {
         super(BID, false);
     }
 
+    /**
+     * Function that creates a bid.
+     * @param payload Data about the bid.
+     * @return Returns the data about the bid.
+     */
     public BidEditDTO bid(BidEditDTO payload) {
         Connection conn = ConnectionFactory.getConnection();
 

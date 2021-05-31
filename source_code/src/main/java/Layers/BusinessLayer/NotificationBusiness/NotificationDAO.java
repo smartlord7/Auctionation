@@ -12,11 +12,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO object to access data of a notification.
+ */
 public class NotificationDAO extends BaseDAO<NotificationEditDTO, NotificationListDTO> {
     public NotificationDAO() {
         super("Notification", true);
     }
 
+    /**
+     * Function that lists all of the notifications associated to a user.
+     * @param userId ID of the user.
+     * @return List of NotificationListDTO objects that contains all of the notifications associated to a user.
+     */
     public List<NotificationListDTO> listByUser(int userId) {
         int i = 0;
         List<NotificationListDTO> result = new ArrayList<>();

@@ -1,13 +1,8 @@
 package Layers.PresentationLayer.Controllers;
 
 import Helpers.config.Authorization;
-import Helpers.config.ErrorResponse;
-import Layers.BusinessLayer.AuctionBusiness.DTO.AuctionEditDTO;
-import Layers.BusinessLayer.BidBusiness.DTO.BidEditDTO;
 import Layers.BusinessLayer.CommentBusiness.CommentDAO;
 import Layers.BusinessLayer.CommentBusiness.CommentEditDTO;
-import Layers.BusinessLayer.UserBusiness.DTO.UserEditDTO;
-import Startup.ConnectionFactory;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +19,9 @@ public class CommentController {
 
 
     /**
-     *
-     * @param payload
-     * @return
+     * Endpoint to create a comment.
+     * @param payload Data of the comment-
+     * @return Data of the comment.
      */
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/create", consumes = "application/json", method = RequestMethod.POST)

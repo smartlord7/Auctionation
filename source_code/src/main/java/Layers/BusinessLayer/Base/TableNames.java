@@ -1,5 +1,8 @@
 package Layers.BusinessLayer.Base;
 
+/**
+ * Class that contains the names of the relations existent in the DB.
+ */
 public class TableNames {
     public static final String AUCTION = "auction",
             AUCTION_EDIT_HISTORY = "auctionedithistory",

@@ -9,10 +9,21 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * @Class Class used for Web Security configurations required for the tokens' functionality.
+ */
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
+    //TODO: Finish documentation
+
+    /**
+     * @def
+     * @brief
+     *
+     * @param registry
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry){
         try {

@@ -17,6 +17,12 @@ public class AuctionHistoryController {
     private static final Logger logger = LoggerFactory.getLogger(AuctionHistoryController.class);
     private static final AuctionEditHistoryDAO historyDAO = new AuctionEditHistoryDAO();
 
+    /**
+     * Endpoint to list the history of auction.
+     * @param keyword Field to be used in the search.
+     * @param value Value to be used in the search.
+     * @return List of all of the previous versions of an auction.
+     */
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/search/{keyword}", consumes = "text/plain", produces = "application/json", method = RequestMethod.PUT)
     @ResponseBody
