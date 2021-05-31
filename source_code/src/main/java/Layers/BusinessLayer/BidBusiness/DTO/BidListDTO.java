@@ -8,4 +8,5 @@ public class BidListDTO {
     public String description;
     public Double amount;
     public Timestamp createTimestamp;
+
 }

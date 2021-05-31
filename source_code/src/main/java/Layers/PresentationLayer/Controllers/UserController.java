@@ -1,5 +1,7 @@
 package Layers.PresentationLayer.Controllers;
 import Layers.BusinessLayer.Base.BaseDAO;
+import Layers.BusinessLayer.StatsBusiness.StatsDAO;
+import Layers.BusinessLayer.StatsBusiness.StatsListDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserEditDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserListDTO;
 import Layers.BusinessLayer.UserBusiness.UserDAO;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import Startup.ConnectionFactory;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -46,6 +50,14 @@ public class UserController {
     public ResponseEntity<?> banUser(@PathVariable("userId") int userId) {
         return ResponseEntity.ok(userDAO.banUser(1, userId));
     }
+
+    @GetMapping(value = "/stats", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<?> listAuctionsWon() {
+        return ResponseEntity.ok(StatsDAO.getStats());
+    }
+
+
 
 
 
