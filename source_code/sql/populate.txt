@@ -2,7 +2,6 @@ INSERT INTO role VALUES (1, 'User', 'Common user.');
 INSERT INTO role VALUES (2, 'Administrator', 'Super user.');
 INSERT INTO role VALUES (3, 'Scheduler', 'Auction scheduler');
 
-
 -- password: joniarturito
 INSERT INTO "user" VALUES (1, 'joaoartur', 'João', 'Artur', 'joniarturito@hotmail.com', '962746293', 'Tábua', '31/08/2001','59A7B10192413D64709D544DF97207DD7DD0CB3EC098BFF518FD96D91F824734', NULL, '27/05/2021', '27/05/2021', NULL, 1);
 -- password: excelmaster
@@ -23,15 +22,12 @@ INSERT INTO "user" VALUES (8, 'SchedulerBot', 'Scheduler', 'Bot', 'admin@hotmail
 INSERT INTO "user" VALUES (9, 'admin', 'admin', '', 'adminadmin@hotmail.com', '1', 'ADMIN', '01/01/1900', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 2);
 
 
-
 INSERT INTO Category VALUES (1, 'Music', 'Item category for music instruments, devices, etc.');
 INSERT INTO Category VALUES (2, 'Gaming', 'Item category for gaming computers and other devices, videogames, etc.');
 INSERT INTO Category VALUES (3, 'Furniture', 'Item category for furniture such as desks, chairs, wardrobes, etc.');
 INSERT INTO Category VALUES (4, 'Movies', 'Item category for movies memorabilia.');
 INSERT INTO Category VALUES (5, 'Art', 'Item category for Art work.');
 INSERT INTO Category VALUES (6, 'Vehicles', 'Item category for cars, bikes, etc.');
-
-
 
 INSERT INTO Auction VALUES (1, 'First Auction', 'First auction to be done.', 1000, 1000, 0, 1234567890000,
                             'MSIGT72VR Dominator Pro', 'Gaming PC from 2018 - PCMAG Readers choice', 'United States', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 4);
@@ -45,7 +41,6 @@ INSERT INTO Auction VALUES (5, 'Fifht Auction', 'Fifht auction to be done.', 100
                             'Monalisa', 'Painting by Leonardo da Vinci', 'France', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 7);
 INSERT INTO Auction VALUES (6, 'Sixth Auction', 'Sixth auction to be done.', 199999, 199999, 0, 213546879645,
                             'JAGUAR E-TYPE', 'Well preserverd car from 1966, recently restored', 'Portugal', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 6);
-
 
 
 INSERT INTO AuctionCategory VALUES (1, 2);
@@ -69,19 +64,9 @@ INSERT INTO Bid VALUES(10,'Quero isto mais',350000,CURRENT_TIMESTAMP,4,5,NULL);
 INSERT INTO Bid VALUES(11,'Quero isto mais',2000000,CURRENT_TIMESTAMP,5,4,NULL);
 INSERT INTO Bid VALUES(12,'Quero isto mais',300000,CURRENT_TIMESTAMP,6,5,NULL);
 
-
-
 --comments
 INSERT INTO "comment" VALUES (1,'Pode baixar o preco?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,5,1);
 INSERT INTO "comment" VALUES (2,'Bom artigo',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,3,3);
 INSERT INTO "comment" VALUES (3,'Tem mais?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,6,5);
 INSERT INTO "comment" VALUES (4,'Da para pagar as prestaçoes?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,4,6);
 INSERT INTO "comment" VALUES (5,'Nao presta',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,5,4);
-
-
-
-
-
-
-
-

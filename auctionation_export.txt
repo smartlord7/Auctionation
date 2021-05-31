@@ -1,0 +1,473 @@
+create table if not exists exception
+(
+    exceptionid serial not null
+        constraint exception_pkey
+            primary key,
+    errorcode integer not null,
+    errorstate varchar(16) not null,
+    description varchar(1024),
+    errortimestamp timestamp not null
+);
+
+create table if not exists role
+(
+    roleid serial not null
+        constraint role_pkey
+            primary key,
+    rolename varchar(128) not null
+        constraint role_rolename_key
+            unique,
+    description varchar(1024)
+);
+
+create table if not exists "user"
+(
+    userid serial not null
+        constraint "User_pkey"
+            primary key,
+    username varchar(128) not null
+        constraint "User_username_key"
+            unique,
+    firstname varchar(64) not null,
+    lastname varchar(64),
+    email varchar(128) not null
+        constraint "User_email_key"
+            unique,
+    phonenumber varchar(32) not null
+        constraint "User_phonenumber_key"
+            unique,
+    address varchar(256) not null,
+    birthdate date not null,
+    passwordhash varchar(512) not null,
+    bantimestamp timestamp,
+    createtimestamp timestamp not null,
+    updatetimestamp timestamp not null,
+    deletetimestamp timestamp,
+    roleid bigint not null
+        constraint user_fk1
+            references role
+);
+
+
+create index if not exists usernameidx
+    on "user" (username);
+
+create table if not exists comment
+(
+    commentid serial not null
+        constraint comment_pkey
+            primary key,
+    text varchar(1024) not null,
+    createtimestamp timestamp not null,
+    updatetimestamp timestamp not null,
+    deletetimestamp timestamp,
+    userid bigint not null
+        constraint comment_fk1
+            references "user",
+    auctionid bigint not null
+);
+
+
+create index if not exists commentauctionididx
+    on comment (auctionid);
+
+
+create table if not exists notification
+(
+    notificationid serial not null
+        constraint notification_pkey
+            primary key,
+    notificationtitle varchar(128) not null,
+    description varchar(1024),
+    seentimestamp timestamp,
+    createtimestamp timestamp not null,
+    deletetimestamp timestamp,
+    userid bigint not null
+        constraint notification_fk1
+            references "user",
+    updatetimestamp timestamp not null
+);
+
+
+create index if not exists notificationuserididx
+    on notification (userid);
+
+create index if not exists biduserididx
+    on notification (userid);
+
+create table if not exists commentnotification
+(
+    auctionid bigint not null,
+    notificationid bigint not null
+        constraint commentsnotification_pkey
+            primary key
+        constraint commentsnotification_fk2
+            references notification
+);
+
+
+create table if not exists auctionnotification
+(
+    auctionid bigint not null,
+    notificationid bigint not null
+        constraint auctionnotification_pkey
+            primary key
+        constraint auctionnotification_fk2
+            references notification
+);
+
+
+create table if not exists category
+(
+    categoryid serial not null
+        constraint "Category_pkey"
+            primary key,
+    categoryname varchar(128) not null
+        constraint "Category_categoryname_key"
+            unique,
+    description varchar(1024)
+);
+
+
+create table if not exists auctionedithistory
+(
+    auctionedithistoryid serial not null
+        constraint auctionedithistory_pkey1
+            primary key,
+    version smallint default 0,
+    auctionname varchar(128) not null,
+    description varchar(1024),
+    edittimestamp timestamp not null,
+    itemname varchar(128) not null,
+    itemdescription varchar(1024),
+    itemorigin varchar(128) not null,
+    auctionid bigint
+);
+
+
+create table if not exists auction
+(
+    auctionid serial not null
+        constraint "Auction_pkey"
+            primary key,
+    auctionname varchar(128) not null,
+    description varchar(1024),
+    currentbidvalue double precision default 0 not null,
+    initialvalue double precision not null,
+    currentstate integer default 0 not null,
+    itemean bigint not null
+        constraint "Auction_itemean_key"
+            unique,
+    itemname varchar(128) not null,
+    itemdescription varchar(1024),
+    itemorigin varchar(128) not null,
+    expirationtimestamp timestamp not null,
+    endtimestamp timestamp,
+    createtimestamp timestamp not null,
+    updatetimestamp timestamp not null,
+    deletetimestamp timestamp,
+    hostuserid bigint not null
+        constraint auction_fk1
+            references "user"
+);
+
+
+create table if not exists bid
+(
+    bidid serial not null
+        constraint bid_pkey
+            primary key,
+    description varchar(1024),
+    amount double precision not null,
+    createtimestamp timestamp not null,
+    auctionid bigint not null
+        constraint bid_auction__fk
+            references auction,
+    userid bigint not null
+        constraint bid_fk2
+            references "user",
+    invalidationtimestamp timestamp
+);
+
+
+create table if not exists auctioncategory
+(
+    auctionid bigint not null
+        constraint auction_category_fk1
+            references auction,
+    categoryid bigint not null
+        constraint auction_category_fk2
+            references category,
+    constraint "AuctionCategory_pkey"
+        primary key (auctionid, categoryid)
+);
+
+
+create unique index if not exists auctionitemeanidx
+    on auction (itemean);
+
+create index if not exists auctionitemdescriptionidx
+    on auction (itemdescription);
+
+create index if not exists auctionuserididx
+    on auction (hostuserid);
+
+--populate
+
+INSERT INTO role VALUES (1, 'User', 'Common user.');
+INSERT INTO role VALUES (2, 'Administrator', 'Super user.');
+INSERT INTO role VALUES (3, 'Scheduler', 'Auction scheduler');
+
+-- password: joniarturito
+INSERT INTO "user" VALUES (1, 'joaoartur', 'João', 'Artur', 'joniarturito@hotmail.com', '962746293', 'Tábua', '31/08/2001','59A7B10192413D64709D544DF97207DD7DD0CB3EC098BFF518FD96D91F824734', NULL, '27/05/2021', '27/05/2021', NULL, 1);
+-- password: excelmaster
+INSERT INTO "user" VALUES (2, 'josesilva', 'José', 'Silva', 'josesilva@gmail.com', '962246323', 'Tarouca', '06/09/2000', 'F151A747339CE9A7E3A913B9FA4D11BE2EEFD73488AEAEAFACA2CD13AF87B351', NULL, '27/05/2021', '27/05/2021', NULL, 1);
+--password: tudomal
+INSERT INTO "user" VALUES (3, 'sanchosimoes', 'Sancho', 'Simões', 'smartlord7@gmail.com', '967116687', 'Lousã', '23/06/2001', '20CE23F11155A1994F88E37F14173472413AFF4941F397BBD72EE5F2199E6B81', NULL, '27/05/2021', '27/05/2021', NULL, 1);
+--password cr8
+INSERT INTO "user" VALUES (4, 'cr7', 'Cristiano', 'Ronaldo', 'cr7@hotmail.com', '935462142', 'Milao, Italia', '05/02/1985', '99DDD3CAE62AFF2BBF8E15541EBDEE0F54ADBD8D97D67078F7CD861A4461E5FC', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1);
+--password tesla
+INSERT INTO "user" VALUES (5, 'muskT', 'Elon', 'Musk', 'muskT@hotmail.com', '921254552', 'Austin,Texas', '28/06/1971', '7358BD4EC877E1B622397AB4F9706B76680348A2886BFC0A675ED0555085D0EA', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1);
+--password bezos123
+INSERT INTO "user" VALUES (6, 'jeffB', 'Jeff', 'Bezos', 'jeffbzs@hotmail.com', '931542511', 'Medina, Washington', '12/01/1964', 'E80DE29DBCF28194ABF4A85B8294B2D0600F39A93F293B3704D822481635B237', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1);
+--password gatesMicro
+INSERT INTO "user" VALUES (7, 'BillyGaties', 'Bill', 'Gates', 'bill555@hotmail.com', '93545698', 'Seattle, Washington', '28/10/1955', '55911F0A09C674A3F8BCB854D433BB584B78078CC794A21BC35726CED046203B', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1);
+--password admin
+INSERT INTO "user" VALUES (8, 'SchedulerBot', 'Scheduler', 'Bot', 'admin@hotmail.com', '0', 'SERVER', '01/01/1900', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 3);
+--password admin
+INSERT INTO "user" VALUES (9, 'admin', 'admin', '', 'adminadmin@hotmail.com', '1', 'ADMIN', '01/01/1900', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 2);
+
+
+INSERT INTO Category VALUES (1, 'Music', 'Item category for music instruments, devices, etc.');
+INSERT INTO Category VALUES (2, 'Gaming', 'Item category for gaming computers and other devices, videogames, etc.');
+INSERT INTO Category VALUES (3, 'Furniture', 'Item category for furniture such as desks, chairs, wardrobes, etc.');
+INSERT INTO Category VALUES (4, 'Movies', 'Item category for movies memorabilia.');
+INSERT INTO Category VALUES (5, 'Art', 'Item category for Art work.');
+INSERT INTO Category VALUES (6, 'Vehicles', 'Item category for cars, bikes, etc.');
+
+INSERT INTO Auction VALUES (1, 'First Auction', 'First auction to be done.', 1000, 1000, 0, 1234567890000,
+                            'MSIGT72VR Dominator Pro', 'Gaming PC from 2018 - PCMAG Readers choice', 'United States', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 4);
+INSERT INTO Auction VALUES (2, 'Second Auction', 'Second auction to be done.', 250, 250, 0, 4218954098322,
+                            'Golden slide trombone', 'j. Michael brand new slide trombone', 'UK', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 5);
+INSERT INTO Auction VALUES (3, 'Third Auction', 'Third auction to be done.', 200, 200, 0, 3174890723891,
+                            'Spruce wooden deask from the 18th century', 'Old spruce wooden desk well preserverd', 'France', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 4);
+INSERT INTO Auction VALUES (4, 'Forth Auction', 'Forth auction to be done.', 300000, 300000, 0, 5489589645645,
+                            'Shoes', 'pair of the ruby slippers from The Wizard of Oz', 'United States', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 4);
+INSERT INTO Auction VALUES (5, 'Fifht Auction', 'Fifht auction to be done.', 1000000, 1000000, 0, 894562131564,
+                            'Monalisa', 'Painting by Leonardo da Vinci', 'France', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 7);
+INSERT INTO Auction VALUES (6, 'Sixth Auction', 'Sixth auction to be done.', 199999, 199999, 0, 213546879645,
+                            'JAGUAR E-TYPE', 'Well preserverd car from 1966, recently restored', 'Portugal', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 6);
+
+
+INSERT INTO AuctionCategory VALUES (1, 2);
+INSERT INTO AuctionCategory VALUES (2, 1);
+INSERT INTO AuctionCategory VALUES (3, 3);
+INSERT INTO AuctionCategory VALUES (4, 4);
+INSERT INTO AuctionCategory VALUES (5, 5);
+INSERT INTO AuctionCategory VALUES (6, 6);
+
+--bids
+INSERT INTO Bid VALUES(1,'Quero isto',1500,CURRENT_TIMESTAMP,1,6,NULL);
+INSERT INTO Bid VALUES(2,'Quero isto',300,CURRENT_TIMESTAMP,2,4,NULL);
+INSERT INTO Bid VALUES(3,'Quero isto',250,CURRENT_TIMESTAMP,3,5,NULL);
+INSERT INTO Bid VALUES(4,'Quero isto',300500,CURRENT_TIMESTAMP,4,7,NULL);
+INSERT INTO Bid VALUES(5,'Quero isto',1500000,CURRENT_TIMESTAMP,5,6,NULL);
+INSERT INTO Bid VALUES(6,'Quero isto',250000,CURRENT_TIMESTAMP,6,7,NULL);
+INSERT INTO Bid VALUES(7,'Quero isto mais',3000,CURRENT_TIMESTAMP,1,5,NULL);
+INSERT INTO Bid VALUES(8,'Quero isto mais',400,CURRENT_TIMESTAMP,2,6,NULL);
+INSERT INTO Bid VALUES(9,'Quero isto mais',300,CURRENT_TIMESTAMP,3,7,NULL);
+INSERT INTO Bid VALUES(10,'Quero isto mais',350000,CURRENT_TIMESTAMP,4,5,NULL);
+INSERT INTO Bid VALUES(11,'Quero isto mais',2000000,CURRENT_TIMESTAMP,5,4,NULL);
+INSERT INTO Bid VALUES(12,'Quero isto mais',300000,CURRENT_TIMESTAMP,6,5,NULL);
+
+--comments
+INSERT INTO "comment" VALUES (1,'Pode baixar o preco?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,5,1);
+INSERT INTO "comment" VALUES (2,'Bom artigo',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,3,3);
+INSERT INTO "comment" VALUES (3,'Tem mais?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,6,5);
+INSERT INTO "comment" VALUES (4,'Da para pagar as prestaçoes?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,4,6);
+INSERT INTO "comment" VALUES (5,'Nao presta',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,5,4);
+
+
+--procedures/functions
+
+create procedure banuser(adminuserid integer, banneduserid integer, auctionmsg character varying)
+    language plpgsql
+as
+$$
+DECLARE
+    bannedUserHostedAuctions CURSOR FOR -- Cursor for the auctions hosted by the banned user.
+        SELECT a.auctionId
+        FROM Auction a
+        WHERE a.hostUserId = bannedUserId;
+    bannedUserEnrolledAuctions CURSOR FOR -- Cursor for the auctions in which the banned user is / was enrolled in.
+        SELECT DISTINCT b.auctionId
+        FROM Bid b
+        WHERE b.userId = bannedUserId;
+    maxUserBid Bid.amount%TYPE; -- Will hold the max bid done by the banned user in the current Auction.
+    maxAuctionBid Auction.currentBidValue%TYPE; -- Will hold the max bix performed in the current Auction.
+BEGIN
+    UPDATE "user" -- mark the specified user as banned.
+    SET banTimestamp = CURRENT_TIMESTAMP
+    WHERE userId = bannedUserId;
+
+    FOR currAuction IN bannedUserHostedAuctions
+        LOOP
+            UPDATE Auction
+            SET endTimestamp = CURRENT_TIMESTAMP, -- Cancel the current auction hosted by the banned user.
+                currentState = 2
+            WHERE auctionId = currAuction.auctionid;
+
+            INSERT INTO Comment (text, createTimestamp, updateTimestamp, userId, auctionId)
+                -- Warn all the enrolled users in the comments section that the auction has been cancelled.
+            VALUES (auctionMsg,
+                    CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, adminUserId, currAuction.auctionId);
+        END LOOP;
+
+    FOR currAuction IN bannedUserEnrolledAuctions
+        LOOP
+            SELECT a.currentBidValue -- Get the highest bid of the auction
+            INTO maxAuctionBid
+            FROM Auction a
+            WHERE a.auctionId = currAuction.auctionId;
+
+            UPDATE Bid
+            SET invalidationTimestamp = CURRENT_TIMESTAMP
+                -- Invalidate all the bids performed by the user and those which are smaller than the highest one of the Auction
+            WHERE auctionId = currAuction.auctionId AND
+                (userId = bannedUserId OR
+                 amount < maxAuctionBid);
+
+            SELECT MAX(b.amount) -- Get the max bid done by the user done in the current auction.
+            INTO maxUserBid
+            FROM Bid b
+            WHERE b.auctionId = currAuction.auctionId AND
+                    b.userId = bannedUserId;
+
+            UPDATE Auction -- The highest bid in the current auction is now the highest bid performed by banned user.
+            SET currentBidValue = maxUserBid
+            WHERE auctionId = currAuction.auctionId;
+        END LOOP;
+
+    COMMIT;
+END
+$$;
+
+CREATE OR REPLACE FUNCTION updateCurrentBid() RETURNS TRIGGER
+    language plpgsql
+AS
+$$
+DECLARE
+    userToNotify INTEGER;
+    auctionName VARCHAR(128);
+    oldAmount INTEGER;
+BEGIN
+
+    select b.userid, a.auctionname,b.amount INTO userToNotify,auctionName,oldAmount
+    from auction a inner join bid b on (currentbidvalue = amount) AND (a.auctionid=b.auctionid)
+    WHERE a.auctionid=NEW.auctionid;
+
+
+
+    if found and oldAmount!=NEW.amount
+    then
+        INSERT INTO notification
+        (notificationTitle, description, createTimestamp, updatetimestamp, userId)
+        VALUES (FORMAT('Bid surpassed in auction %s', auctionName),
+                FORMAT('Your bid of %s in auction %s was surpassed, Current Bid=%s', oldAmount,auctionName, NEW.amount),
+                CURRENT_TIMESTAMP,
+                CURRENT_TIMESTAMP,
+                userToNotify);
+    end if;
+
+    UPDATE auction
+    SET currentbidvalue=NEW.amount
+      ,updateTimeStamp=CURRENT_TIMESTAMP
+    WHERE NEW.auctionId = auctionId;
+
+    RETURN NEW;
+END
+$$;
+
+create function notifyusercomment() returns trigger
+    language plpgsql
+as
+$$
+DECLARE
+    userName VARCHAR(128);
+    auctionName VARCHAR(128);
+    usersToNotify CURSOR FOR
+        SELECT DISTINCT b.userId
+        FROM Bid b
+        WHERE b.auctionId = NEW.auctionId AND b.userId != NEW.userId
+        UNION
+        SELECT DISTINCT c.userId
+        FROM Comment c
+        WHERE c.auctionId = NEW.auctionId AND c.userId != NEW.userId;
+BEGIN
+    SELECT u.userName INTO userName
+    FROM "user" u
+    WHERE u.userId = NEW.userId;
+
+    SELECT a.auctionName INTO auctionName
+    FROM auction a
+             JOIN comment ON NEW.auctionId = a.auctionId;
+
+    FOR userToNotify IN usersToNotify
+        LOOP
+            INSERT INTO notification
+            (notificationTitle, description, createTimestamp, updatetimestamp, userId)
+            VALUES (FORMAT('New comment in auction %s', auctionName),
+                    FORMAT('User [%s] has commented in auction %s', userName, auctionName),
+                    CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, userToNotify.userId);
+
+            INSERT INTO commentnotification
+            VALUES (NEW.auctionId, CURRVAL(PG_GET_SERIAL_SEQUENCE('notification', 'notificationid')));
+        END LOOP;
+
+    RETURN NEW;
+END
+$$;
+
+CREATE FUNCTION updateAuctionEditHistory() RETURNS TRIGGER
+    language plpgsql
+AS
+$$
+DECLARE
+    latestAuctionVersion INTEGER;
+BEGIN
+
+    SELECT COALESCE(MAX(adh.version), 0)
+    INTO latestAuctionVersion
+    FROM AuctionEditHistory adh
+             JOIN auction ON OLD.auctionId = adh.auctionId;
+
+    INSERT INTO AuctionEditHistory
+    (auctionId, auctionname, description, itemName, itemDescription, itemOrigin, version, editTimestamp)
+    VALUES
+    (OLD.auctionId, OLD.auctionName, OLD.description, OLD.itemName, OLD.itemDescription,
+     OLD.itemOrigin, latestAuctionVersion + 1, CURRENT_TIMESTAMP);
+
+    RETURN NEW;
+END
+$$;
+
+-- triggers
+
+CREATE TRIGGER OnInsertBid
+    AFTER INSERT
+    ON bid
+    FOR EACH ROW
+EXECUTE PROCEDURE updateCurrentBid();
+
+create trigger oninsertcomment
+    after insert
+    on comment
+    for each row
+execute procedure notifyusercomment();
+
+CREATE TRIGGER onUpdateAuction
+    AFTER UPDATE OF auctionName, description, itemEAN, itemName, itemdescription, itemOrigin
+    ON Auction
+    FOR EACH ROW
+EXECUTE PROCEDURE updateauctionEditHistory();
+
