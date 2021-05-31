@@ -5,6 +5,7 @@ import Layers.BusinessLayer.AuctionBusiness.AuctionDAO;
 import Layers.BusinessLayer.AuctionBusiness.DTO.AuctionEditDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class AuctionController {
     public ResponseEntity<?> create(@RequestBody AuctionEditDTO payload) {
         AuctionEditDTO result = (AuctionEditDTO) auctionDAO.create(payload);
         if(result == null) {
-            return ResponseEntity.ok(auctionDAO.getError());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(auctionDAO.getError());
         }
         return ResponseEntity.ok((result.id));
     }
@@ -39,6 +40,12 @@ public class AuctionController {
         return ResponseEntity.ok(auctionDAO.deleteById(auctionId));
     }
 
+
+    /**
+     *
+     * @param auctionId
+     * @return
+     */
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/details/{auctionId}", method = RequestMethod.GET)
     @ResponseBody
@@ -46,11 +53,21 @@ public class AuctionController {
         return ResponseEntity.ok(auctionDAO.getDetails(auctionId));
     }
 
+    /**
+     *
+     * @param payload
+     * @param auctionId
+     * @return
+     */
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/edit/{auctionId}", consumes = "application/json", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody AuctionEditDTO payload, @PathVariable("auctionId") int auctionId) {
-        return ResponseEntity.ok((auctionDAO.updateById(payload, auctionId)));
+        AuctionEditDTO result = (AuctionEditDTO) auctionDAO.updateById(payload, auctionId);
+        if(result == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(auctionDAO.getError());
+        }
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -71,6 +88,11 @@ public class AuctionController {
         return ResponseEntity.ok(auctionDAO.getbyProp(keyword, value));
     }
 
+    /**
+     *
+     * @param userId
+     * @return
+     */
     @Authorization(roles = {ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/user/{userId}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody

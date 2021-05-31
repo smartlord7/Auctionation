@@ -93,7 +93,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
         return false;
     }
 
-    public boolean updateById(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto, int id) {
+    public Layers.BusinessLayer.Base.DTO.BaseEditDTO updateById(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto, int id) {
         validateClass(dto);
         int i;
         List<Field> fields;
@@ -118,7 +118,7 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
                 .append("Id = ?");
 
         try {
-            ps = conn.prepareStatement(sb.toString());
+            ps = conn.prepareStatement(sb.toString(), Statement.RETURN_GENERATED_KEYS);
             for (i = 0; i < fields.size(); i++) {
                 ps.setObject(i + 1, fields.get(i).get(dto));
             }
@@ -131,15 +131,23 @@ public class BaseDAO<BaseEditDTO, BaseListDTO> {
             int numAffectedRows = ps.executeUpdate();
             if (numAffectedRows == 1) {
                 logger.info("Entry on table " + tableName + " successfully updated!");
+
+                ResultSet rs = ps.getGeneratedKeys();
+
+                if(rs.next())
+                {
+                    dto.id = rs.getInt(1);
+                }
+
                 saveChanges(conn);
 
-                return true;
+                return dto;
             }
         } catch (SQLException | IllegalAccessException e) {
             auditError(e, conn);
         }
 
-        return false;
+        return null;
     }
 
     public Layers.BusinessLayer.Base.DTO.BaseEditDTO create(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto) {

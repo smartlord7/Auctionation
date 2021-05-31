@@ -38,7 +38,7 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody UserEditDTO payload) {
         UserEditDTO result = (UserEditDTO) userDAO.create(payload);
         if(result == null) {
-            return ResponseEntity.ok(userDAO.getError());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userDAO.getError());
         }
         return ResponseEntity.ok((result.id));
     }

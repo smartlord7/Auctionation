@@ -1,6 +1,5 @@
 package Layers.BusinessLayer.NotificationBusiness;
 
-import Helpers.config.ErrorResponse;
 import Layers.BusinessLayer.Base.BaseDAO;
 import Layers.BusinessLayer.NotificationBusiness.DTO.NotificationEditDTO;
 import Layers.BusinessLayer.NotificationBusiness.DTO.NotificationListDTO;

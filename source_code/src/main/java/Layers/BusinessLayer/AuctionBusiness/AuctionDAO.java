@@ -216,4 +216,33 @@ public class AuctionDAO extends BaseDAO<AuctionEditDTO, AuctionListDTO> {
         return false;
     }
 
+    @Override
+    public Layers.BusinessLayer.Base.DTO.BaseEditDTO updateById(Layers.BusinessLayer.Base.DTO.BaseEditDTO dto, int id){
+        AuctionEditDTO editDTO = (AuctionEditDTO) dto;
+        Connection conn = ConnectionFactory.getConnection();
+        PreparedStatement ps;
+
+        String query = "SELECT * FROM auction a WHERE a.hostuserid = ? AND a.auctionid = ?";
+
+        try {
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, editDTO.hostUserId);
+            ps.setInt(2, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()) {
+
+                return super.updateById(editDTO, id);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            error = new ErrorResponse(e.getSQLState(), e.getMessage());
+        }
+
+        return null;
+    }
+
 }

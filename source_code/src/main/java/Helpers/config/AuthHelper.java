@@ -3,11 +3,13 @@ package Helpers.config;
 import Layers.BusinessLayer.UserBusiness.DTO.UserAuthDTO;
 import Layers.BusinessLayer.UserBusiness.DTO.UserListDTO;
 import Layers.BusinessLayer.UserBusiness.UserDAO;
+import org.slf4j.LoggerFactory;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class AuthHelper {
 
@@ -15,6 +17,7 @@ public class AuthHelper {
     private static final int TOKEN_DURATION = ((14 * 60) + 59) * 1000, TOKEN_LENGTH = 256;
     public static final String TOKEN_HEADER_KEY_NAME = "custom-token";
     public static ErrorResponse errorResponse;
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AuthHelper.class);
 
     public static TokenResponse authenticate(UserAuthDTO dto, ErrorResponse response) {
         UserListDTO user;
@@ -40,7 +43,7 @@ public class AuthHelper {
             return null;
         }
 
-        System.out.println("User " + dto.username + " successfully logged!");
+        logger.info("User " + dto.username + " successfully logged!");
 
         session = new UserSession(user.userId,
                 user.roleId,
