@@ -214,49 +214,70 @@ create index if not exists auctionuserididx
 
 --populate
 
-INSERT INTO role VALUES (1, 'User', 'Common user.');
-INSERT INTO role VALUES (2, 'Administrator', 'Super user.');
-INSERT INTO role VALUES (3, 'Scheduler', 'Auction scheduler');
+INSERT INTO role (rolename, description) VALUES ('User', 'Common user.');
+INSERT INTO role (rolename, description)VALUES ('Administrator', 'Super user.');
+INSERT INTO role (rolename, description)VALUES ('Scheduler', 'Auction scheduler');
 
 -- password: joniarturito
-INSERT INTO "user" VALUES (1, 'joaoartur', 'João', 'Artur', 'joniarturito@hotmail.com', '962746293', 'Tábua', '31/08/2001','59A7B10192413D64709D544DF97207DD7DD0CB3EC098BFF518FD96D91F824734', NULL, '27/05/2021', '27/05/2021', NULL, 1);
+INSERT INTO "user" (username, firstname, lastname, email, phonenumber, address, birthdate, passwordhash, createtimestamp, updatetimestamp, roleid)
+VALUES ('joaoartur', 'João', 'Artur', 'joniarturito@hotmail.com', '962746293', 'Tábua', '31/08/2001','59A7B10192413D64709D544DF97207DD7DD0CB3EC098BFF518FD96D91F824734', '27/05/2021', '27/05/2021', 1);
 -- password: excelmaster
-INSERT INTO "user" VALUES (2, 'josesilva', 'José', 'Silva', 'josesilva@gmail.com', '962246323', 'Tarouca', '06/09/2000', 'F151A747339CE9A7E3A913B9FA4D11BE2EEFD73488AEAEAFACA2CD13AF87B351', NULL, '27/05/2021', '27/05/2021', NULL, 1);
+INSERT INTO "user" (username, firstname, lastname, email, phonenumber, address, birthdate, passwordhash, createtimestamp, updatetimestamp, roleid)
+VALUES ('josesilva', 'José', 'Silva', 'josesilva@gmail.com', '962246323', 'Tarouca', '06/09/2000', 'F151A747339CE9A7E3A913B9FA4D11BE2EEFD73488AEAEAFACA2CD13AF87B351', '27/05/2021', '27/05/2021', 1);
 --password: tudomal
-INSERT INTO "user" VALUES (3, 'sanchosimoes', 'Sancho', 'Simões', 'smartlord7@gmail.com', '967116687', 'Lousã', '23/06/2001', '20CE23F11155A1994F88E37F14173472413AFF4941F397BBD72EE5F2199E6B81', NULL, '27/05/2021', '27/05/2021', NULL, 1);
+INSERT INTO "user" (username, firstname, lastname, email, phonenumber, address, birthdate, passwordhash, createtimestamp, updatetimestamp, roleid)
+VALUES ('sanchosimoes', 'Sancho', 'Simões', 'smartlord7@gmail.com', '967116687', 'Lousã', '23/06/2001', '20CE23F11155A1994F88E37F14173472413AFF4941F397BBD72EE5F2199E6B81', '27/05/2021', '27/05/2021', 1);
 --password cr8
-INSERT INTO "user" VALUES (4, 'cr7', 'Cristiano', 'Ronaldo', 'cr7@hotmail.com', '935462142', 'Milao, Italia', '05/02/1985', '99DDD3CAE62AFF2BBF8E15541EBDEE0F54ADBD8D97D67078F7CD861A4461E5FC', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1);
+INSERT INTO "user" (username, firstname, lastname, email, phonenumber, address, birthdate, passwordhash, createtimestamp, updatetimestamp, roleid)
+VALUES ('cr7', 'Cristiano', 'Ronaldo', 'cr7@hotmail.com', '935462142', 'Milao, Italia', '05/02/1985', '99DDD3CAE62AFF2BBF8E15541EBDEE0F54ADBD8D97D67078F7CD861A4461E5FC', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
 --password tesla
-INSERT INTO "user" VALUES (5, 'muskT', 'Elon', 'Musk', 'muskT@hotmail.com', '921254552', 'Austin,Texas', '28/06/1971', '7358BD4EC877E1B622397AB4F9706B76680348A2886BFC0A675ED0555085D0EA', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1);
+INSERT INTO "user" (username, firstname, lastname, email, phonenumber, address, birthdate, passwordhash, createtimestamp, updatetimestamp, roleid)
+VALUES ('muskT', 'Elon', 'Musk', 'muskT@hotmail.com', '921254552', 'Austin,Texas', '28/06/1971', '7358BD4EC877E1B622397AB4F9706B76680348A2886BFC0A675ED0555085D0EA', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
 --password bezos123
-INSERT INTO "user" VALUES (6, 'jeffB', 'Jeff', 'Bezos', 'jeffbzs@hotmail.com', '931542511', 'Medina, Washington', '12/01/1964', 'E80DE29DBCF28194ABF4A85B8294B2D0600F39A93F293B3704D822481635B237', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1);
+INSERT INTO "user" (username, firstname, lastname, email, phonenumber, address, birthdate, passwordhash, createtimestamp, updatetimestamp, roleid)
+VALUES ('jeffB', 'Jeff', 'Bezos', 'jeffbzs@hotmail.com', '931542511', 'Medina, Washington', '12/01/1964', 'E80DE29DBCF28194ABF4A85B8294B2D0600F39A93F293B3704D822481635B237', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
 --password gatesMicro
-INSERT INTO "user" VALUES (7, 'BillyGaties', 'Bill', 'Gates', 'bill555@hotmail.com', '93545698', 'Seattle, Washington', '28/10/1955', '55911F0A09C674A3F8BCB854D433BB584B78078CC794A21BC35726CED046203B', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1);
+INSERT INTO "user" (username, firstname, lastname, email, phonenumber, address, birthdate, passwordhash, createtimestamp, updatetimestamp, roleid)
+VALUES ('BillyGaties', 'Bill', 'Gates', 'bill555@hotmail.com', '93545698', 'Seattle, Washington', '28/10/1955', '55911F0A09C674A3F8BCB854D433BB584B78078CC794A21BC35726CED046203B', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
 --password admin
-INSERT INTO "user" VALUES (8, 'SchedulerBot', 'Scheduler', 'Bot', 'admin@hotmail.com', '0', 'SERVER', '01/01/1900', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 3);
+INSERT INTO "user" (username, firstname, lastname, email, phonenumber, address, birthdate, passwordhash, createtimestamp, updatetimestamp, roleid)
+VALUES ('SchedulerBot', 'Scheduler', 'Bot', 'admin@hotmail.com', '0', 'SERVER', '01/01/1900', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3);
 --password admin
-INSERT INTO "user" VALUES (9, 'admin', 'admin', '', 'adminadmin@hotmail.com', '1', 'ADMIN', '01/01/1900', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 2);
+INSERT INTO "user" (username, firstname, lastname, email, phonenumber, address, birthdate, passwordhash, createtimestamp, updatetimestamp, roleid)
+VALUES ('admin', 'admin', '', 'adminadmin@hotmail.com', '1', 'ADMIN', '01/01/1900', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2);
 
 
-INSERT INTO Category VALUES (1, 'Music', 'Item category for music instruments, devices, etc.');
-INSERT INTO Category VALUES (2, 'Gaming', 'Item category for gaming computers and other devices, videogames, etc.');
-INSERT INTO Category VALUES (3, 'Furniture', 'Item category for furniture such as desks, chairs, wardrobes, etc.');
-INSERT INTO Category VALUES (4, 'Movies', 'Item category for movies memorabilia.');
-INSERT INTO Category VALUES (5, 'Art', 'Item category for Art work.');
-INSERT INTO Category VALUES (6, 'Vehicles', 'Item category for cars, bikes, etc.');
+INSERT INTO Category (categoryname, description)
+VALUES ('Music', 'Item category for music instruments, devices, etc.');
+INSERT INTO Category (categoryname, description)
+VALUES ('Gaming', 'Item category for gaming computers and other devices, videogames, etc.');
+INSERT INTO Category (categoryname, description)
+VALUES ('Furniture', 'Item category for furniture such as desks, chairs, wardrobes, etc.');
+INSERT INTO Category (categoryname, description)
+VALUES ('Movies', 'Item category for movies memorabilia.');
+INSERT INTO Category (categoryname, description)
+VALUES ('Art', 'Item category for Art work.');
+INSERT INTO Category (categoryname, description)
+VALUES ('Vehicles', 'Item category for cars, bikes, etc.');
 
-INSERT INTO Auction VALUES (1, 'First Auction', 'First auction to be done.', 1000, 1000, 0, 1234567890000,
-                            'MSIGT72VR Dominator Pro', 'Gaming PC from 2018 - PCMAG Readers choice', 'United States', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 4);
-INSERT INTO Auction VALUES (2, 'Second Auction', 'Second auction to be done.', 250, 250, 0, 4218954098322,
-                            'Golden slide trombone', 'j. Michael brand new slide trombone', 'UK', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 5);
-INSERT INTO Auction VALUES (3, 'Third Auction', 'Third auction to be done.', 200, 200, 0, 3174890723891,
-                            'Spruce wooden deask from the 18th century', 'Old spruce wooden desk well preserverd', 'France', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 4);
-INSERT INTO Auction VALUES (4, 'Forth Auction', 'Forth auction to be done.', 300000, 300000, 0, 5489589645645,
-                            'Shoes', 'pair of the ruby slippers from The Wizard of Oz', 'United States', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 4);
-INSERT INTO Auction VALUES (5, 'Fifht Auction', 'Fifht auction to be done.', 1000000, 1000000, 0, 894562131564,
-                            'Monalisa', 'Painting by Leonardo da Vinci', 'France', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 7);
-INSERT INTO Auction VALUES (6, 'Sixth Auction', 'Sixth auction to be done.', 199999, 199999, 0, 213546879645,
-                            'JAGUAR E-TYPE', 'Well preserverd car from 1966, recently restored', 'Portugal', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',NULL,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL, 6);
+INSERT INTO Auction (auctionname, description, initialvalue, itemean, itemname, itemdescription, itemorigin, expirationtimestamp, createtimestamp, updatetimestamp, hostuserid)
+VALUES ('First Auction', 'First auction to be done.',  1000, 1234567890000,
+        'MSIGT72VR Dominator Pro', 'Gaming PC from 2018 - PCMAG Readers choice', 'United States', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP, 4);
+INSERT INTO Auction (auctionname, description, initialvalue, itemean, itemname, itemdescription, itemorigin, expirationtimestamp, createtimestamp, updatetimestamp, hostuserid)
+VALUES ('Second Auction', 'Second auction to be done.', 250,  4218954098322,
+        'Golden slide trombone', 'j. Michael brand new slide trombone', 'UK', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP, 5);
+INSERT INTO Auction (auctionname, description, initialvalue, itemean, itemname, itemdescription, itemorigin, expirationtimestamp, createtimestamp, updatetimestamp, hostuserid)
+VALUES ('Third Auction', 'Third auction to be done.', 200, 3174890723891,
+        'Spruce wooden deask from the 18th century', 'Old spruce wooden desk well preserverd', 'France', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP, 4);
+INSERT INTO Auction (auctionname, description, initialvalue, itemean, itemname, itemdescription, itemorigin, expirationtimestamp, createtimestamp, updatetimestamp, hostuserid)
+VALUES ('Forth Auction', 'Forth auction to be done.', 300000, 5489589645645,
+        'Shoes', 'pair of the ruby slippers from The Wizard of Oz', 'United States', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP, 4);
+INSERT INTO Auction (auctionname, description, initialvalue, itemean, itemname, itemdescription, itemorigin, expirationtimestamp, createtimestamp, updatetimestamp, hostuserid)
+VALUES ('Fifht Auction', 'Fifht auction to be done.', 1000000,  894562131564,
+        'Monalisa', 'Painting by Leonardo da Vinci', 'France', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP, 7);
+INSERT INTO Auction (auctionname, description, initialvalue, itemean, itemname, itemdescription, itemorigin, expirationtimestamp, createtimestamp, updatetimestamp, hostuserid)
+VALUES ('Sixth Auction', 'Sixth auction to be done.', 199999,  213546879645,
+        'JAGUAR E-TYPE', 'Well preserverd car from 1966, recently restored', 'Portugal', CURRENT_TIMESTAMP+ INTERVAL '10 DAY',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP, 6);
 
 
 INSERT INTO AuctionCategory VALUES (1, 2);
@@ -267,26 +288,42 @@ INSERT INTO AuctionCategory VALUES (5, 5);
 INSERT INTO AuctionCategory VALUES (6, 6);
 
 --bids
-INSERT INTO Bid VALUES(1,'Quero isto',1500,CURRENT_TIMESTAMP,1,6,NULL);
-INSERT INTO Bid VALUES(2,'Quero isto',300,CURRENT_TIMESTAMP,2,4,NULL);
-INSERT INTO Bid VALUES(3,'Quero isto',250,CURRENT_TIMESTAMP,3,5,NULL);
-INSERT INTO Bid VALUES(4,'Quero isto',300500,CURRENT_TIMESTAMP,4,7,NULL);
-INSERT INTO Bid VALUES(5,'Quero isto',1500000,CURRENT_TIMESTAMP,5,6,NULL);
-INSERT INTO Bid VALUES(6,'Quero isto',250000,CURRENT_TIMESTAMP,6,7,NULL);
-INSERT INTO Bid VALUES(7,'Quero isto mais',3000,CURRENT_TIMESTAMP,1,5,NULL);
-INSERT INTO Bid VALUES(8,'Quero isto mais',400,CURRENT_TIMESTAMP,2,6,NULL);
-INSERT INTO Bid VALUES(9,'Quero isto mais',300,CURRENT_TIMESTAMP,3,7,NULL);
-INSERT INTO Bid VALUES(10,'Quero isto mais',350000,CURRENT_TIMESTAMP,4,5,NULL);
-INSERT INTO Bid VALUES(11,'Quero isto mais',2000000,CURRENT_TIMESTAMP,5,4,NULL);
-INSERT INTO Bid VALUES(12,'Quero isto mais',300000,CURRENT_TIMESTAMP,6,5,NULL);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto',1500,CURRENT_TIMESTAMP,1,6);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto',300,CURRENT_TIMESTAMP,2,4);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto',250,CURRENT_TIMESTAMP,3,5);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto',300500,CURRENT_TIMESTAMP,4,7);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto',1500000,CURRENT_TIMESTAMP,5,6);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto',250000,CURRENT_TIMESTAMP,6,7);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto mais',3000,CURRENT_TIMESTAMP,1,5);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto mais',400,CURRENT_TIMESTAMP,2,6);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto mais',300,CURRENT_TIMESTAMP,3,7);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto mais',350000,CURRENT_TIMESTAMP,4,5);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto mais',2000000,CURRENT_TIMESTAMP,5,4);
+INSERT INTO Bid (description, amount, createtimestamp, userid, auctionid)
+VALUES('Quero isto mais',300000,CURRENT_TIMESTAMP,6,5);
 
 --comments
-INSERT INTO "comment" VALUES (1,'Pode baixar o preco?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,5,1);
-INSERT INTO "comment" VALUES (2,'Bom artigo',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,3,3);
-INSERT INTO "comment" VALUES (3,'Tem mais?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,6,5);
-INSERT INTO "comment" VALUES (4,'Da para pagar as prestaçoes?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,4,6);
-INSERT INTO "comment" VALUES (5,'Nao presta',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,NULL,5,4);
-
+INSERT INTO "comment"(text,createtimestamp,updatetimestamp,userid,auctionid)
+VALUES ('Pode baixar o preco?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,5,1);
+INSERT INTO "comment"(text,createtimestamp,updatetimestamp,userid,auctionid)
+VALUES ('Bom artigo',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,3,3);
+INSERT INTO "comment"(text,createtimestamp,updatetimestamp,userid,auctionid)
+VALUES ('Tem mais?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,6,5);
+INSERT INTO "comment"(text,createtimestamp,updatetimestamp,userid,auctionid)
+VALUES ('Da para pagar as prestaçoes?',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,4,6);
+INSERT INTO "comment"(text,createtimestamp,updatetimestamp,userid,auctionid)
+VALUES ('Nao presta',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,5,4);
 
 --procedures/functions
 
