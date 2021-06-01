@@ -12,10 +12,10 @@ import java.util.List;
  */
 public class AuctionDetailsDTO {
     public Integer auctionId;
-    public Long hostUserId;
-    public String auctionName, description, itemEAN, itemName, itemDescription, itemOrigin;
+    public Long hostUserId, itemEAN;
+    public String auctionName, description, itemName, itemDescription, itemOrigin;
     public Double initialValue;
-    public Timestamp startTimestamp,
+    public Timestamp
             expirationTimestamp;
 
     @Subentity

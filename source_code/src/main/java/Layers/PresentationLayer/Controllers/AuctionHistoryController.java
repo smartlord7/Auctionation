@@ -11,7 +11,7 @@ import static Helpers.config.Authorization.ROLE_ADMIN;
 import static Helpers.config.Authorization.ROLE_USER;
 
 @RestController
-@RequestMapping("/history")
+@RequestMapping("/auctionation/api/history")
 public class AuctionHistoryController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuctionHistoryController.class);

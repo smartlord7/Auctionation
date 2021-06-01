@@ -55,7 +55,5 @@ BEGIN
         SET currentBidValue = maxUserBid
         WHERE auctionId = currAuction.auctionId;
     END LOOP;
-
-    COMMIT;
 END
 $$;
