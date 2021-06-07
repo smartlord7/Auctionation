@@ -1,0 +1,59 @@
+create procedure banuser(adminuserid integer, banneduserid integer, auctionmsg character varying)
+    language plpgsql
+as
+$$
+DECLARE
+    bannedUserHostedAuctions CURSOR FOR -- Cursor for the auctions hosted by the banned user.
+        SELECT a.auctionId
+        FROM Auction a
+        WHERE a.hostUserId = bannedUserId;
+    bannedUserEnrolledAuctions CURSOR FOR -- Cursor for the auctions in which the banned user is / was enrolled in.
+        SELECT DISTINCT b.auctionId
+        FROM Bid b
+        WHERE b.userId = bannedUserId;
+    maxUserBid Bid.amount%TYPE; -- Will hold the max bid done by the banned user in the current Auction.
+    maxAuctionBid Auction.currentBidValue%TYPE; -- Will hold the max bix performed in the current Auction.
+BEGIN
+    UPDATE "user" -- mark the specified user as banned.
+    SET banTimestamp = CURRENT_TIMESTAMP
+    WHERE userId = bannedUserId;
+
+    FOR currAuction IN bannedUserHostedAuctions
+    LOOP
+        UPDATE Auction
+        SET endTimestamp = CURRENT_TIMESTAMP, -- Cancel the current auction hosted by the banned user.
+            currentState = 2
+        WHERE auctionId = currAuction.auctionid;
+
+        INSERT INTO Comment (text, createTimestamp, updateTimestamp, userId, auctionId)
+        -- Warn all the enrolled users in the comments section that the auction has been cancelled.
+        VALUES (auctionMsg,
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, adminUserId, currAuction.auctionId);
+    END LOOP;
+
+    FOR currAuction IN bannedUserEnrolledAuctions
+    LOOP
+        SELECT a.currentBidValue -- Get the highest bid of the auction
+        INTO maxAuctionBid
+        FROM Auction a
+        WHERE a.auctionId = currAuction.auctionId;
+
+        UPDATE Bid
+        SET invalidationTimestamp = CURRENT_TIMESTAMP
+        -- Invalidate all the bids performed by the user and those which are smaller than the highest one of the Auction
+        WHERE auctionId = currAuction.auctionId AND
+              (userId = bannedUserId OR
+               amount < maxAuctionBid);
+
+        SELECT MAX(b.amount) -- Get the max bid done by the user done in the current auction.
+        INTO maxUserBid
+        FROM Bid b
+        WHERE b.auctionId = currAuction.auctionId AND
+              b.userId = bannedUserId;
+
+        UPDATE Auction -- The highest bid in the current auction is now the highest bid performed by banned user.
+        SET currentBidValue = maxUserBid
+        WHERE auctionId = currAuction.auctionId;
+    END LOOP;
+END
+$$;

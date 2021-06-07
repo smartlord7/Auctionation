@@ -1,0 +1,45 @@
+create function notifyusercomment() returns trigger
+    language plpgsql
+as
+$$
+DECLARE
+    userName VARCHAR(128);
+    auctionName VARCHAR(128);
+    usersToNotify CURSOR FOR
+        SELECT DISTINCT b.userId
+        FROM Bid b
+        WHERE b.auctionId = NEW.auctionId AND b.userId != NEW.userId
+        UNION
+        SELECT DISTINCT c.userId
+        FROM Comment c
+        WHERE c.auctionId = NEW.auctionId AND c.userId != NEW.userId;
+BEGIN
+    SELECT u.userName INTO userName
+    FROM "user" u
+    WHERE u.userId = NEW.userId;
+
+    SELECT a.auctionName INTO auctionName
+    FROM auction a
+             JOIN comment ON NEW.auctionId = a.auctionId;
+
+    FOR userToNotify IN usersToNotify
+        LOOP
+            INSERT INTO notification
+            (notificationTitle, description, createTimestamp, updatetimestamp, userId)
+            VALUES (FORMAT('New comment in auction %s', auctionName),
+                    FORMAT('User [%s] has commented in auction %s', userName, auctionName),
+                    CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, userToNotify.userId);
+
+            INSERT INTO commentnotification
+            VALUES (NEW.auctionId, CURRVAL(PG_GET_SERIAL_SEQUENCE('notification', 'notificationid')));
+        END LOOP;
+
+    RETURN NEW;
+END
+$$;
+
+create trigger oninsertcomment
+    after insert
+    on comment
+    for each row
+execute procedure notifyusercomment();

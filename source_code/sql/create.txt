@@ -1,0 +1,216 @@
+create table if not exists exception
+(
+	exceptionid serial not null
+		constraint exception_pkey
+			primary key,
+	errorcode integer not null,
+	errorstate varchar(16) not null,
+	description varchar(1024),
+	errortimestamp timestamp not null
+);
+
+alter table exception owner to postgres;
+
+create table if not exists role
+(
+	roleid serial not null
+		constraint role_pkey
+			primary key,
+	rolename varchar(128) not null
+		constraint role_rolename_key
+			unique,
+	description varchar(1024)
+);
+
+create table if not exists "user"
+(
+	userid serial not null
+		constraint "User_pkey"
+			primary key,
+	username varchar(128) not null
+		constraint "User_username_key"
+			unique,
+	firstname varchar(64) not null,
+	lastname varchar(64),
+	email varchar(128) not null
+		constraint "User_email_key"
+			unique,
+	phonenumber varchar(32) not null
+		constraint "User_phonenumber_key"
+			unique,
+	address varchar(256) not null,
+	birthdate date not null,
+	passwordhash varchar(512) not null,
+	bantimestamp timestamp,
+	createtimestamp timestamp not null,
+	updatetimestamp timestamp not null,
+	deletetimestamp timestamp,
+	roleid bigint not null
+		constraint user_fk1
+			references role
+);
+
+
+create index if not exists usernameidx
+	on "user" (username);
+
+create table if not exists comment
+(
+	commentid serial not null
+		constraint comment_pkey
+			primary key,
+	text varchar(1024) not null,
+	createtimestamp timestamp not null,
+	updatetimestamp timestamp not null,
+	deletetimestamp timestamp,
+	userid bigint not null
+		constraint comment_fk1
+			references "user",
+	auctionid bigint not null
+);
+
+
+create index if not exists commentauctionididx
+	on comment (auctionid);
+
+
+create table if not exists notification
+(
+	notificationid serial not null
+		constraint notification_pkey
+			primary key,
+	notificationtitle varchar(128) not null,
+	description varchar(1024),
+	seentimestamp timestamp,
+	createtimestamp timestamp not null,
+	deletetimestamp timestamp,
+	userid bigint not null
+		constraint notification_fk1
+			references "user",
+	updatetimestamp timestamp not null
+);
+
+
+create index if not exists notificationuserididx
+	on notification (userid);
+
+create index if not exists biduserididx
+	on notification (userid);
+
+create table if not exists commentnotification
+(
+	auctionid bigint not null,
+	notificationid bigint not null
+		constraint commentsnotification_pkey
+			primary key
+		constraint commentsnotification_fk2
+			references notification
+);
+
+
+create table if not exists auctionnotification
+(
+	auctionid bigint not null,
+	notificationid bigint not null
+		constraint auctionnotification_pkey
+			primary key
+		constraint auctionnotification_fk2
+			references notification
+);
+
+
+create table if not exists category
+(
+	categoryid serial not null
+		constraint "Category_pkey"
+			primary key,
+	categoryname varchar(128) not null
+		constraint "Category_categoryname_key"
+			unique,
+	description varchar(1024)
+);
+
+
+create table if not exists auctionedithistory
+(
+	auctionedithistoryid serial not null
+		constraint auctionedithistory_pkey1
+			primary key,
+	version smallint default 0,
+	auctionname varchar(128) not null,
+	description varchar(1024),
+	edittimestamp timestamp not null,
+	itemname varchar(128) not null,
+	itemdescription varchar(1024),
+	itemorigin varchar(128) not null,
+	auctionid bigint
+);
+
+
+create table if not exists auction
+(
+	auctionid serial not null
+		constraint "Auction_pkey"
+			primary key,
+	auctionname varchar(128) not null,
+	description varchar(1024),
+	currentbidvalue double precision default 0 not null,
+	initialvalue double precision not null,
+	currentstate integer default 0 not null,
+	itemean bigint not null
+		constraint "Auction_itemean_key"
+			unique,
+	itemname varchar(128) not null,
+	itemdescription varchar(1024),
+	itemorigin varchar(128) not null,
+	expirationtimestamp timestamp not null,
+	endtimestamp timestamp,
+	createtimestamp timestamp not null,
+	updatetimestamp timestamp not null,
+	deletetimestamp timestamp,
+	hostuserid bigint not null
+		constraint auction_fk1
+			references "user"
+);
+
+
+create table if not exists bid
+(
+	bidid serial not null
+		constraint bid_pkey
+			primary key,
+	description varchar(1024),
+	amount double precision not null,
+	createtimestamp timestamp not null,
+	auctionid bigint not null
+		constraint bid_auction__fk
+			references auction,
+	userid bigint not null
+		constraint bid_fk2
+			references "user",
+	invalidationtimestamp timestamp
+);
+
+
+create table if not exists auctioncategory
+(
+	auctionid bigint not null
+		constraint auction_category_fk1
+			references auction,
+	categoryid bigint not null
+		constraint auction_category_fk2
+			references category,
+	constraint "AuctionCategory_pkey"
+		primary key (auctionid, categoryid)
+);
+
+
+create unique index if not exists auctionitemeanidx
+	on auction (itemean);
+
+create index if not exists auctionitemdescriptionidx
+	on auction (itemdescription);
+
+create index if not exists auctionuserididx
+	on auction (hostuserid);
+

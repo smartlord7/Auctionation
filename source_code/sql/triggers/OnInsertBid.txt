@@ -1,0 +1,40 @@
+CREATE OR REPLACE FUNCTION updateCurrentBid() RETURNS TRIGGER
+    language plpgsql
+AS
+$$
+DECLARE
+    userToNotify INTEGER;
+    auctionName VARCHAR(128);
+    oldAmount INTEGER;
+BEGIN
+
+    select b.userid, a.auctionname,b.amount INTO userToNotify,auctionName,oldAmount
+    from auction a inner join bid b on (currentbidvalue = amount) AND (a.auctionid=b.auctionid)
+    WHERE a.auctionid=NEW.auctionid;
+
+
+
+    if found and oldAmount!=NEW.amount
+    then
+        INSERT INTO notification
+        (notificationTitle, description, createTimestamp, updatetimestamp, userId)
+        VALUES (FORMAT('Bid surpassed in auction %s', auctionName),
+                FORMAT('Your bid of %s in auction %s was surpassed, Current Bid=%s', oldAmount,auctionName, NEW.amount),
+                CURRENT_TIMESTAMP,
+                CURRENT_TIMESTAMP,
+                userToNotify);
+    end if;
+
+    UPDATE auction
+    SET currentbidvalue=NEW.amount
+      ,updateTimeStamp=CURRENT_TIMESTAMP
+    WHERE NEW.auctionId = auctionId;
+
+    RETURN NEW;
+END
+$$;
+CREATE TRIGGER OnInsertBid
+    AFTER INSERT
+    ON bid
+    FOR EACH ROW
+EXECUTE PROCEDURE updateCurrentBid();

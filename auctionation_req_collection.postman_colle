@@ -1,0 +1,602 @@
+{
+	"info": {
+		"_postman_id": "b9e5a2f7-4484-44bc-a086-0d99b041906c",
+		"name": "Projeto BD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auction",
+			"item": [
+				{
+					"name": "auction_list_by_user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Custom-Token",
+								"value": "EUgEBpyP0RAeSzn8X3bHtqFarQmoTDXGYo7enwTkJfDyfzYebMWaBzrIMeEDEbIoGSJ76BJInQib6V7lSa9AeO5OphzoDv4Ui9AbPRnu1upPVKpjyFq6c6WgsHZSyyKmQpRkWOWw1IV7fzUOhb2hdbaRQKZxbqM7ur8Oksye1fzO1nHwoXwnZprANvf5H8VdZUOUKkG4iSsC7BHOV4QketisDBH2nJcLbgJOlokS020sMaMuSVWSvYK8UtquNFp7",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:9000/auctionation/api/auction/user/3",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"auction",
+								"user",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auction_list",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/plain",
+								"type": "text"
+							},
+							{
+								"key": "Custom-Token",
+								"value": "2137DB2934BAFBD934BAF7EA36E74BC7BDD14312EFF006D14878B98851C2E605",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:9000/auctionation/api/auction/list",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"auction",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auction_create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostUserId\": \"2\",\r\n    \"auctionName\": \"Charity Auction - SpaceX\",\r\n    \"description\": \"An auction made in order to raise funds for the poor people living in NY.\",\r\n    \"itemEAN\": \"3215\",\r\n    \"itemName\": \"Tesla X2\",\r\n    \"itemDescription\": \"Latest Tesla car announced!\",\r\n    \"itemOrigin\": \"USA\",\r\n    \"initialValue\": \"3000000\",\r\n    \"startTimestamp\": \"1622334538\",\r\n    \"expirationTimestamp\": \"16223365034\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9000/auctionation/api/auction/create",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"auction",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auction_update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Custom-Token",
+								"value": "cfid8QKofpaAUR0cgaCNEiRBYd6tFdd2vKBKreyKgd9ol46156KSUvpCdec48gTMSS3CXkksi2sTHirBObEgmED04CXyzOViGWkCvBbYp3gUkmGzaaHg5iSRmx3gSOobFfZP26YEma6SWKrEbEimCp6ZnirHXA7cS1EIPqG5I7DbEEpesjBFlfRUAmIqIsh0RwKQkJd8AcwxrX80px2pDwB356s0NbygMkzgbmNfss3GTwXopKY8c8SbSk6q6WDQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostUserId\": \"1\",\r\n    \"auctionName\": \"Charity Auction - SpaceX\",\r\n    \"description\": \"An auction made in order to raise funds for the poor people living in NY.\",\r\n    \"itemEAN\": \"2\",\r\n    \"itemName\": \"Tesla X2 - 2021\",\r\n    \"itemDescription\": \"Latest Tesla car announced!\",\r\n    \"itemOrigin\": \"USA\",\r\n    \"initialValue\": \"3000000\",\r\n    \"expirationTimestamp\": \"16223365034\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9000/auctionation/api/auction/edit/3",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"auction",
+								"edit",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auction_search",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/plain",
+								"type": "text"
+							},
+							{
+								"key": "Custom-Token",
+								"value": "98E062A65A4338786C3A6B0EDF92E2CB6BE33762B209C24400EDC8E311AEA6EC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Old spruce wooden desk well preserverd"
+						},
+						"url": {
+							"raw": "localhost:9000/auction/search/itemdescription",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auction",
+								"search",
+								"itemdescription"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auction_delete",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/auctionation/api/auction/delete/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"auction",
+								"delete",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auction_details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9000/auctionation/api/auction/details/1",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"auction",
+								"details",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auction_cancel",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Custom-Token",
+								"value": "TOvqgU3vtrk0i94IUF0bz7Li9aeN2kiCt9m0J9LD2CLen3aFMFGgfEMZM6tF7Gp9RHCdJIsn1WZC5CgR7xUuLjNtN46pCncpiM5JbCr6nQZpG7cQErXsRzfcsPXWWMfCOvkfSOlYok1inzycmzzUk46mpa97KF7alkdLdPpN4EkW5dFhLhCQKfhjyAVYYJuTXkhuFOCuHAW1FM9jQvLWGl2vg1rUkVXTKOdrGkMAExNiBXOjH67bDg3UYjavGx5W",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:9000/auctionation/api/auction/cancel/1/1",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"auction",
+								"cancel",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "user_list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Custom-Token",
+								"value": "SP1QIt2ffBUmbCAuWWCCM4VWBrcs2180uRP5grPKsgjZaslQ8kZiP3i349TIO1h7LcFXe1nB8wIlQaZj3cFmkVohXf4gOb8utlCBYPo6tyLc5KgubnenP882SaGTA0XI8YT3GjtsnJjhXknR2M5hlshDg0wZqTTqk0HTLzvHelLOBx2tduJeeKonI2jrWjAm18E5oPTu9eyhI7Zq4qsvVpcF7Getye1V6gFGSzPW0xzW4fkZb5gCRyv8TvVOKCa5",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:9000/auctionation/api/user/list",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"user",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Custom-Token",
+								"value": "$2a$10$IUvpBkR9klOhss9vnBJ/Uu3q4l9Qqer0NM6EIIKZkdLRbfX6I/IFm",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"admin\",\r\n    \"firstName\": \"admin\",\r\n    \"lastName\": \"admin\",\r\n    \"email\": \"admin@hotmail.com\",\r\n    \"phoneNumber\": \"111111111\",\r\n    \"address\": \"Adminland\",\r\n    \"birthdate\": \"2001-06-23\",\r\n    \"password\": \"admin123\",\r\n    \"roleId\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9000/auctionation/api/user/create",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:9000/auctionation/api/user/delete/3",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"user",
+								"delete",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login_user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Token",
+								"value": "$2a$10$8jyRNkwbC1q3E0O6iVWkAOOdl1Cz.N7yveuC.EyTBOkabTuPUjiAa",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9000/auctionation/api/user/login",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bid",
+			"item": [
+				{
+					"name": "bid_list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Custom-Token",
+								"value": "FEEE0E7B70DA17B1B37D382D7DC6ED8B33EF55CF4983D50F528386BCCD831661",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:9000/auctionation/api/bid/list",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"bid",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bid_create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Custom-Token",
+								"value": "CdnnzRu7rgtf6dMiOHKFpW8OhLAmDfMb78V5YfVHMvYrQMkwxRKmvFVQh1JpTVbhenSXrgkdu9cGCqLkZHw18efOE9VHeo3lwBeWgzl3Nw2MstHvVqxh0O68X8vvLHM4CgS6SGGP7JGdMw01D3wJwzx3yuNxZ4Y9vIC67oY8RdPUyGfqyvRF2CYputP46ZvLEq7px3tgDBBNG3koQT5wgjvd87LRSgeqXTN6haMrSSOsi4Qrh13MZSZOTqmnf77V",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\":\"Bid by me\",\r\n    \"amount\":\"3500\",\r\n    \"auctionId\":\"1\",\r\n    \"userId\":\"6\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9000/auctionation/api/bid/create",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"bid",
+								"create"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "stats_list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Custom-Token",
+								"value": "rZuVf4Xj0CM41OlIkFVfA0pBrQXwZzCNFQ7mJvhaxhVwIT547DhMsagKxEQ4xXRa714lMYc1sL5yw4SGvMnibpRJyyzelYpYWb6bW6IufmDfW871RtqZ7s9ildQnBMKxLKJp5NGZnM10BWzuoBTzRb945nL160WTeU1Qh7dBIIE99QuZU5m2iTMEiUBJ1HxWQLctzQwxI5li91rTtajgqTjGIMR5ndYVqXSNYOI8exZ8jw11a3XnhxCK9Riz8XJ0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:9000/auctionation/api/user/stats",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"user",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ban_user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Custom-Token",
+								"value": "N1CSoCkUVa5yZXcHMXL5b0QHm13w5zVtPQ6qTGVRst8jUYLmPm8i8IVIzW5lyRGGBLi7MM2aIzE9PPGHnlEuyXM9GXP04TfK4ElwXUv2dV0UQTcPapLInugSdZnNpDsPwZNBLk7xofQj3UY42qVz5EGJX835owmBX4sTB42RFMpWUfUQWiJGWqTZg8C42unNNDJV4atlZyQPoafLSc2Zk2Zls7wW5WVBzyfGu6uaSdxFA1t12LCKY0i6lJ2T4QW3",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:9000/auctionation/api/user/ban/12/9",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"user",
+								"ban",
+								"12",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "list_notification",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Custom-Token",
+								"value": "tYit9Sj4pHy8suQkcCge4k053aDsCMfeWbTqRLQLtYWUB5vRNurBDb0PtfeW4we4lAoPwPBMlQKE9QV1RtapGeCF2OFeAiTLrfKVI8iNF3OGM4Y5uw7DfysbnSjlGkbzrer7eFdAuWCUxZmAhKpu1uh8YO9ovUnVBnw1CbroCYc9PVdAyRBfvklwz2LJO9K997Cb3NttaaGN627xTZHSg5ElAGGPHr2f2iukootFJa5ZNBv7UI7ZJ6ZnEg7e95w2",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:9000/auctionation/api/notification/listByUser/6",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"notification",
+								"listByUser",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "comment_create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Custom-Token",
+								"value": "vmu3sfOgsqSyATQnZEaTytAo4PZ7OnECAMW4G47KQHvkqn5ZNDT8b8RHs7uH1Du0HNkn67b9QLUaAjdII91xLN51YOQu9OlUOyMSV1H2cvG0lssZZGqtpUJ1GFQsUsIo28mryZomSuu5PXM1vgRjn127PW7isdyCUSnQ30tFgZ4zzJEzoT4P2K0pAFRebgxy9ydfGisqZK143Wv7WyypU5eBDr7pd6h8ZJ1JAZqZoFn5mEgVjaPVsrZvkOsxdS3R",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\":\"teste\",\r\n    \"auctionId\":\"1\",\r\n    \"userId\":\"4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9000/auctionation/api/comment/create",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auctionation",
+								"api",
+								"comment",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
