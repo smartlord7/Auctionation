@@ -1,10 +1,14 @@
 package Layers.BusinessLayer.UserBusiness.DTO;
 
 import Layers.BusinessLayer.Base.DTO.BaseEditDTO;
+import Layers.BusinessLayer.Base.InsertIgnore;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 
+/**
+ * DTO object to transfer data of an user.
+ */
 public class UserEditDTO extends BaseEditDTO {
     public String userName,
             firstName,
@@ -13,7 +17,9 @@ public class UserEditDTO extends BaseEditDTO {
             phoneNumber,
             address,
             passwordHash;
-    public Date birthDate;
-    public Float wallet;
-    public Timestamp banTimestamp;
+    public Timestamp birthdate;
+    public Integer roleId;
+
+    @InsertIgnore
+    public String password;
 }

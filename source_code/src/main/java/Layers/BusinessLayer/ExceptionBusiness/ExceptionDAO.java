@@ -6,9 +6,13 @@ import Layers.BusinessLayer.ExceptionBusiness.DTO.ExceptionListDTO;
 
 import java.sql.Connection;
 
+
+/**
+ * DAO object to access data of an exception.
+ */
 public class ExceptionDAO extends BaseDAO<ExceptionEditDTO, ExceptionListDTO> {
 
     public ExceptionDAO(Connection conn) {
-        super(conn, "Exception", false);
+        super("Exception", false);
     }
 }

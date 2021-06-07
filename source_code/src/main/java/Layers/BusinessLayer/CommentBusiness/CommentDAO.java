@@ -2,10 +2,14 @@ package Layers.BusinessLayer.CommentBusiness;
 
 import Layers.BusinessLayer.Base.BaseDAO;
 
-import java.sql.Connection;
 
+import static Layers.BusinessLayer.Base.TableNames.COMMENT;
+
+/**
+ * DAO object to access data of a comment.
+ */
 public class CommentDAO extends BaseDAO<CommentEditDTO,CommentListDTO>{
-    public CommentDAO(Connection conn) {
-        super(conn, "Comment", true);
+    public CommentDAO() {
+        super(COMMENT, true);
     }
 }

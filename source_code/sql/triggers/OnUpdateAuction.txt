@@ -21,9 +21,10 @@ BEGIN
 END
 $$;
 
-CREATE TRIGGER OnUpdateAuction
-    AFTER UPDATE
-    ON "Auction"
+CREATE TRIGGER onUpdateAuction
+    AFTER UPDATE OF auctionName, description, itemEAN, itemName, itemdescription, itemOrigin
+    ON Auction
     FOR EACH ROW
-EXECUTE PROCEDURE updateAuctionEditHistory();
+EXECUTE PROCEDURE updateauctionEditHistory();
+
 
