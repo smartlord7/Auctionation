@@ -1,163 +1,216 @@
-CREATE TABLE Exception (
-                           exceptionId BIGINT NOT NULL,
-                           errorCode INTEGER NOT NULL,
-                           errorState INTEGER NOT NULL,
-                           description VARCHAR(1024),
-                           createTimestamp TIMESTAMP NOT NULL,
-
-                           PRIMARY KEY(exceptionId)
+create table if not exists exception
+(
+	exceptionid serial not null
+		constraint exception_pkey
+			primary key,
+	errorcode integer not null,
+	errorstate varchar(16) not null,
+	description varchar(1024),
+	errortimestamp timestamp not null
 );
 
-CREATE TABLE "User" (
-                      userId		 BIGINT,
-                      userName	 VARCHAR(128) UNIQUE NOT NULL,
-                      firstName	 VARCHAR(64) NOT NULL,
-                      lastName	 VARCHAR(64),
-                      email		 VARCHAR(128) UNIQUE NOT NULL,
-                      phoneNumber	 VARCHAR(32) UNIQUE NOT NULL,
-                      address	 VARCHAR(256) NOT NULL,
-                      birthDate	 DATE NOT NULL,
-                      wallet		 FLOAT(32) NOT NULL DEFAULT 0,
-                      passwordHash	 VARCHAR(512) UNIQUE NOT NULL,
-                      banTimestamp	 TIMESTAMP,
-                      createTimestamp TIMESTAMP NOT NULL,
-                      updateTimestamp TIMESTAMP NOT NULL,
-                      deleteTimestamp TIMESTAMP,
-                      roleId	 BIGINT NOT NULL,
-                      PRIMARY KEY(userId)
+alter table exception owner to postgres;
+
+create table if not exists role
+(
+	roleid serial not null
+		constraint role_pkey
+			primary key,
+	rolename varchar(128) not null
+		constraint role_rolename_key
+			unique,
+	description varchar(1024)
 );
 
-CREATE TABLE Role (
-                      roleId	 BIGINT,
-                      roleName	 VARCHAR(128) UNIQUE NOT NULL,
-                      description   VARCHAR(1024),
-                      PRIMARY KEY(roleId)
+create table if not exists "user"
+(
+	userid serial not null
+		constraint "User_pkey"
+			primary key,
+	username varchar(128) not null
+		constraint "User_username_key"
+			unique,
+	firstname varchar(64) not null,
+	lastname varchar(64),
+	email varchar(128) not null
+		constraint "User_email_key"
+			unique,
+	phonenumber varchar(32) not null
+		constraint "User_phonenumber_key"
+			unique,
+	address varchar(256) not null,
+	birthdate date not null,
+	passwordhash varchar(512) not null,
+	bantimestamp timestamp,
+	createtimestamp timestamp not null,
+	updatetimestamp timestamp not null,
+	deletetimestamp timestamp,
+	roleid bigint not null
+		constraint user_fk1
+			references role
 );
 
-CREATE TABLE Item (
-                      itemId		 BIGINT,
-                      EAN		 VARCHAR(13) UNIQUE NOT NULL,
-                      itemName	 VARCHAR(128) NOT NULL,
-                      description	 VARCHAR(1024),
-                      quantity	 SMALLINT NOT NULL DEFAULT 1,
-                      origin		 VARCHAR(128) NOT NULL,
-                      createTimestamp TIMESTAMP NOT NULL,
-                      updateTimestamp TIMESTAMP NOT NULL,
-                      deleteTimestamp TIMESTAMP,
-                      PRIMARY KEY(itemId)
+
+create index if not exists usernameidx
+	on "user" (username);
+
+create table if not exists comment
+(
+	commentid serial not null
+		constraint comment_pkey
+			primary key,
+	text varchar(1024) not null,
+	createtimestamp timestamp not null,
+	updatetimestamp timestamp not null,
+	deletetimestamp timestamp,
+	userid bigint not null
+		constraint comment_fk1
+			references "user",
+	auctionid bigint not null
 );
 
-CREATE TABLE Auction (
-                         auctionId		 BIGINT,
-                         auctionName	 VARCHAR(128) NOT NULL,
-                         description	 VARCHAR(1024),
-                         currentBidValue	 FLOAT(32) NOT NULL,
-                         initialValue	 FLOAT(32) NOT NULL,
-                         currentState	 INTEGER NOT NULL DEFAULT 0,
-                         startTimestamp	 TIMESTAMP NOT NULL,
-                         expirationTimestamp TIMESTAMP NOT NULL,
-                         endTimestamp	 TIMESTAMP NOT NULL,
-                         createTimestamp	 TIMESTAMP NOT NULL,
-                         updateTimestamp	 TIMESTAMP NOT NULL,
-                         deleteTimestamp	 TIMESTAMP,
-                         hostId	 BIGINT NOT NULL,
-                         itemId	 BIGINT NOT NULL,
-                         PRIMARY KEY(auctionId)
+
+create index if not exists commentauctionididx
+	on comment (auctionid);
+
+
+create table if not exists notification
+(
+	notificationid serial not null
+		constraint notification_pkey
+			primary key,
+	notificationtitle varchar(128) not null,
+	description varchar(1024),
+	seentimestamp timestamp,
+	createtimestamp timestamp not null,
+	deletetimestamp timestamp,
+	userid bigint not null
+		constraint notification_fk1
+			references "user",
+	updatetimestamp timestamp not null
 );
 
-CREATE TABLE "AuctionCategory" (
-                                  auctionId	 BIGINT,
-                                  categoryId BIGINT,
-                                  PRIMARY KEY(auctionId, categoryId)
+
+create index if not exists notificationuserididx
+	on notification (userid);
+
+create index if not exists biduserididx
+	on notification (userid);
+
+create table if not exists commentnotification
+(
+	auctionid bigint not null,
+	notificationid bigint not null
+		constraint commentsnotification_pkey
+			primary key
+		constraint commentsnotification_fk2
+			references notification
 );
 
-CREATE TABLE "Category" (
-                          categoryId	 SERIAL,
-                          categoryName VARCHAR(128) UNIQUE NOT NULL,
-                          description	 VARCHAR(1024),
-                          PRIMARY KEY(categoryId)
+
+create table if not exists auctionnotification
+(
+	auctionid bigint not null,
+	notificationid bigint not null
+		constraint auctionnotification_pkey
+			primary key
+		constraint auctionnotification_fk2
+			references notification
 );
 
-CREATE TABLE Bid (
-                     bidId		 BIGINT,
-                     description	 VARCHAR(1024),
-                     amount		 FLOAT(32) NOT NULL,
-                     createTimestamp	 TIMESTAMP NOT NULL,
-                     auctionId BIGINT NOT NULL,
-                     userId	 BIGINT NOT NULL,
-                     PRIMARY KEY(bidId)
+
+create table if not exists category
+(
+	categoryid serial not null
+		constraint "Category_pkey"
+			primary key,
+	categoryname varchar(128) not null
+		constraint "Category_categoryname_key"
+			unique,
+	description varchar(1024)
 );
 
-CREATE TABLE Comment (
-                         commentId	 BIGINT,
-                         text		 VARCHAR(1024) NOT NULL,
-                         createTimestamp	 TIMESTAMP NOT NULL,
-                         updateTimestamp	 TIMESTAMP NOT NULL,
-                         deleteTimestamp	 TIMESTAMP,
-                         userId	 BIGINT NOT NULL,
-                         auctionId BIGINT NOT NULL,
-                         PRIMARY KEY(commentId)
+
+create table if not exists auctionedithistory
+(
+	auctionedithistoryid serial not null
+		constraint auctionedithistory_pkey1
+			primary key,
+	version smallint default 0,
+	auctionname varchar(128) not null,
+	description varchar(1024),
+	edittimestamp timestamp not null,
+	itemname varchar(128) not null,
+	itemdescription varchar(1024),
+	itemorigin varchar(128) not null,
+	auctionid bigint
 );
 
-CREATE TABLE Notification (
-                              notificationId	 BIGINT,
-                              notificationTitle VARCHAR(128) NOT NULL,
-                              description	 VARCHAR(1024),
-                              seenTimestamp	 TIMESTAMP,
-                              createTimestamp	 TIMESTAMP NOT NULL,
-                              deleteTimestamp	 TIMESTAMP,
-                              userId	 BIGINT NOT NULL,
-                              PRIMARY KEY(notificationId)
+
+create table if not exists auction
+(
+	auctionid serial not null
+		constraint "Auction_pkey"
+			primary key,
+	auctionname varchar(128) not null,
+	description varchar(1024),
+	currentbidvalue double precision default 0 not null,
+	initialvalue double precision not null,
+	currentstate integer default 0 not null,
+	itemean bigint not null
+		constraint "Auction_itemean_key"
+			unique,
+	itemname varchar(128) not null,
+	itemdescription varchar(1024),
+	itemorigin varchar(128) not null,
+	expirationtimestamp timestamp not null,
+	endtimestamp timestamp,
+	createtimestamp timestamp not null,
+	updatetimestamp timestamp not null,
+	deletetimestamp timestamp,
+	hostuserid bigint not null
+		constraint auction_fk1
+			references "user"
 );
 
-CREATE TABLE AuctionEditHistory (
-	auctionEditHistoryId SERIAL,
-	version		 SMALLINT DEFAULT 0,
-	auctionName		 VARCHAR(128) NOT NULL,
-	description		 VARCHAR(1024),
-	editTimestamp	 TIMESTAMP NOT NULL,
-	itemName		 VARCHAR(128) NOT NULL,
-	itemDescription	 VARCHAR(1024),
-	itemOrigin		 VARCHAR(128) NOT NULL,
-	auctionId	 BIGINT,
-	PRIMARY KEY(auctionEditHistoryId)
+
+create table if not exists bid
+(
+	bidid serial not null
+		constraint bid_pkey
+			primary key,
+	description varchar(1024),
+	amount double precision not null,
+	createtimestamp timestamp not null,
+	auctionid bigint not null
+		constraint bid_auction__fk
+			references auction,
+	userid bigint not null
+		constraint bid_fk2
+			references "user",
+	invalidationtimestamp timestamp
 );
 
+
+create table if not exists auctioncategory
+(
+	auctionid bigint not null
+		constraint auction_category_fk1
+			references auction,
+	categoryid bigint not null
+		constraint auction_category_fk2
+			references category,
+	constraint "AuctionCategory_pkey"
+		primary key (auctionid, categoryid)
 );
 
-CREATE TABLE CommentsNotification (
-                                      auctionId		 BIGINT NOT NULL,
-                                      notificationId BIGINT,
-                                      PRIMARY KEY(notificationId)
-);
 
-CREATE TABLE AuctionNotification (
-                                     auctionId		 BIGINT NOT NULL,
-                                     notificationId BIGINT,
-                                     PRIMARY KEY(notificationId)
-);
+create unique index if not exists auctionitemeanidx
+	on auction (itemean);
 
-CREATE TABLE UserAuction (
-                              userId	 BIGINT,
-                              auctionId BIGINT,
-                              PRIMARY KEY(userId,auctionId)
-);
+create index if not exists auctionitemdescriptionidx
+	on auction (itemdescription);
 
-ALTER TABLE "Auction" ADD CONSTRAINT auction_fk1 FOREIGN KEY (hostUserId) REFERENCES "User"(userId);
-ALTER TABLE "AuctionEditHistory" ADD CONSTRAINT auctionedithistory_fk1 FOREIGN KEY (auctionId) REFERENCES "Auction"(auctionId);
-ALTER TABLE "AuctionCategory" ADD CONSTRAINT auction_category_fk1 FOREIGN KEY (auctionId) REFERENCES "Auction"(auctionId);
-ALTER TABLE "AuctionCategory" ADD CONSTRAINT auction_category_fk2 FOREIGN KEY (categoryId) REFERENCES "Category"(categoryId);
-ALTER TABLE "User" ADD CONSTRAINT user_fk1 FOREIGN KEY (roleId) REFERENCES role(roleId);
-ALTER TABLE bid ADD CONSTRAINT bid_fk1 FOREIGN KEY (auctionId) REFERENCES auction(auctionid);
-ALTER TABLE bid ADD CONSTRAINT bid_fk2 FOREIGN KEY (userId) REFERENCES "User"(userId);
-ALTER TABLE comment ADD CONSTRAINT comment_fk1 FOREIGN KEY (userId) REFERENCES "User"(userId);
-ALTER TABLE comment ADD CONSTRAINT comment_fk2 FOREIGN KEY (auctionId) REFERENCES auction(auctionid);
-ALTER TABLE notification ADD CONSTRAINT notification_fk1 FOREIGN KEY (userId) REFERENCES "User"(userId);
-ALTER TABLE commentsnotification ADD CONSTRAINT commentsnotification_fk1 FOREIGN KEY (auctionId) REFERENCES auction(auctionid);
-ALTER TABLE commentsnotification ADD CONSTRAINT commentsnotification_fk2 FOREIGN KEY (notificationId) REFERENCES notification(notificationid);
-ALTER TABLE auctionnotification ADD CONSTRAINT auctionnotification_fk1 FOREIGN KEY (notificationId) REFERENCES auction(auctionid);
-ALTER TABLE auctionnotification ADD CONSTRAINT auctionnotification_fk2 FOREIGN KEY (notificationId) REFERENCES notification(notificationid);
-ALTER TABLE UserAuction ADD CONSTRAINT user_auction_fk1 FOREIGN KEY (userId) REFERENCES "User"(userId);
-ALTER TABLE UserAuction ADD CONSTRAINT user_auction_fk2 FOREIGN KEY (auctionId) REFERENCES auction(auctionid);
-
+create index if not exists auctionuserididx
+	on auction (hostuserid);
 

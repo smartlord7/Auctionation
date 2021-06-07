@@ -6,33 +6,40 @@ DECLARE
     userName VARCHAR(128);
     auctionName VARCHAR(128);
     usersToNotify CURSOR FOR
-        SELECT ua.userId
-        FROM "UserAuction" ua
-        WHERE ua.auctionId = NEW.auctionId AND ua.userId != NEW.userId;
+        SELECT DISTINCT b.userId
+        FROM Bid b
+        WHERE b.auctionId = NEW.auctionId AND b.userId != NEW.userId
+        UNION
+        SELECT DISTINCT c.userId
+        FROM Comment c
+        WHERE c.auctionId = NEW.auctionId AND c.userId != NEW.userId;
 BEGIN
     SELECT u.userName INTO userName
-    FROM "User" u
+    FROM "user" u
     WHERE u.userId = NEW.userId;
 
     SELECT a.auctionName INTO auctionName
-    FROM "Auction" a
-             JOIN "Comment" ON NEW.auctionId = a.auctionId;
+    FROM auction a
+             JOIN comment ON NEW.auctionId = a.auctionId;
 
     FOR userToNotify IN usersToNotify
         LOOP
-            INSERT INTO "Notification"
-            (notificationTitle, description, createTimestamp, userId)
+            INSERT INTO notification
+            (notificationTitle, description, createTimestamp, updatetimestamp, userId)
             VALUES (FORMAT('New comment in auction %s', auctionName),
                     FORMAT('User [%s] has commented in auction %s', userName, auctionName),
-                    CURRENT_TIMESTAMP, userToNotify.userId);
+                    CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, userToNotify.userId);
 
-            INSERT INTO "CommentNotification"
-            VALUES (NEW.auctionId, CURRVAL(PG_GET_SERIAL_SEQUENCE('"Notification"', 'notificationid')));
+            INSERT INTO commentnotification
+            VALUES (NEW.auctionId, CURRVAL(PG_GET_SERIAL_SEQUENCE('notification', 'notificationid')));
         END LOOP;
 
     RETURN NEW;
 END
 $$;
 
-alter function notifyusercomment() owner to postgres;
-
+create trigger oninsertcomment
+    after insert
+    on comment
+    for each row
+execute procedure notifyusercomment();
